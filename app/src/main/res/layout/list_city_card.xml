@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:cardView="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    cardView:cardElevation="4dp"
+    cardView:cardCornerRadius="8dp"
+    cardView:cardUseCompatPadding="true"
+    android:background="@color/colorBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="?android:attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/listCard_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            cardView:layout_constraintStart_toStartOf="parent"
+            cardView:layout_constraintTop_toTopOf="parent"
+            tools:text="Санкт-Петербург"
+            android:textSize="24sp"
+            />
+
+        <TextView
+            android:id="@+id/listCard_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            cardView:layout_constraintStart_toStartOf="@id/listCard_name"
+            cardView:layout_constraintTop_toBottomOf="@id/listCard_name"
+            tools:text="4 'C"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/listCard_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            cardView:layout_constraintStart_toEndOf="@id/listCard_temp"
+            cardView:layout_constraintBottom_toBottomOf="@id/listCard_temp"
+            android:layout_marginStart="8dp"
+            android:textSize="20sp"
+
+            tools:text="O"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

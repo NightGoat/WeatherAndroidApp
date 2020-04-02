@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Weather icons -->
+    <string name="weather_sunny" translatable="false">&#xf00d;</string>
+    <string name="weather_clear_night" translatable="false">&#xf02e;</string>
+    <string name="weather_foggy" translatable="false">&#xf014;</string>
+    <string name="weather_cloudy" translatable="false">&#xf013;</string>
+    <string name="weather_rainy" translatable="false">&#xf019;</string>
+    <string name="weather_snowy" translatable="false">&#xf01b;</string>
+    <string name="weather_thunder" translatable="false">&#xf01e;</string>
+    <string name="weather_drizzle" translatable="false">&#xf01c;</string>
+    <!-- Symbols -->
+    <string name="celsius" translatable="false">&#8451;</string>
+    <string name="fahrenheit" translatable="false">&#8457;</string>
+    <string name="percent" translatable="false">&#37;</string>
+    <!-- App strings -->
+    <string name="app_name" translatable="false">Weather</string>
+
+    <string name="open_weather_map_app_id" translatable="false">ebde5f527ee721df0d5898fc5049493b</string>
+    <string name="cities_list">Список городов</string>
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
+    <string name="temperature">Температура: </string>
+    <string name="show_humidity">Показывать влажность</string>
+    <string name="show_overcast">Показывать облачность</string>
+    <string name="humidity">Влажность:</string>
+    <string name="overcast">Облачность:</string>
+    <string name="get_temp">Получить температуру</string>
+    <string name="sunny">Солнечно</string>
+    <string name="cloudy">Облачно</string>
+    <string name="partly_cloudy">Частичная облачность</string>
+    <string name="photo_of_a_city">Фотография города</string>
+
+    <string name="change_city_button">Кнопка смены города</string>
+    <string name="choose_city">Выберите город</string>
+    <string name="add_city">Добавить город</string>
+    <string name="update_weather">Обновить погоду</string>
+    <string name="settings">Настройки</string>
+    <string name="city_not_found">Город не найден</string>
+    <string name="empty_list">Пустой список</string>
+    <string name="updating">Обновляем погоду…</string>
+    <string name="moscow">Москва</string>
+    <string name="spb">Санкт-Петербург</string>
+    <string name="kazan">Казань</string>
+    <string name="ptz">Петрозаводск</string>
+    <string name="add">Добавить</string>
+    <string name="remove">Убрать</string>
+    <string name="choose_city_better_english">Название города (*лучше на английском)</string>
+    <string name="city_name_hint">*Если не получилось найти город на русском языке, попробуйте на английском. OpenWeatherMap лучше понимает ангилийские названия городов</string>
+
+    <string name="weather_last_week">Погода на прошлой неделе:</string>
+    <string name="go_back">Назад</string>
+    <string name="delete_city">Удалить город</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="cancel">Отмена</string>
+    <string name="city_added">Город добавлен</string>
+    <string name="ms">м/с</string>
+    <string name="pressure">Давление: </string>
+    <string name="hPa">гПа</string>
+    <string name="last_update">Последние обновление: </string>
+    <string name="mmHg">мм рт.ст.</string>
+    <string name="wind">Ветер: </string>
+    <string name="city_is_already_in_list">уже в списке</string>
+    <string name="github_repository">GitHub репозиторий</string>
+    <string name="my_cv">Мое резюме</string>
+    <string name="about">О разработчике</string>
+    <string name="send_feedback">Отправить отзыв</string>
+    <string name="app_logo">Логотип приложения</string>
+    <string name="communicate">Связаться</string>
+    <string name="made_by">разработчик: Асадуллин Наиль</string>
+    <string name="CV">Резюме</string>
+    <string name="degree_word">Градусы: </string>
+    <string name="send_me_email">Отправить мне письмо</string>
+    <string name="background_gif">Background Gif</string>
+    <string name="cant_find_GPS">Не могу получить данные от GPS</string>
+    <string name="get_city_name_by_gps">Получить ваше местоположение через GPS</string>
+    <string name="now">Сейчас</string>
+    <string name="account">Аккаунт</string>
+    <string name="exit">EXIT</string>
+    <string name="yes">Да</string>
+    <string name="icon">Иконка погоды</string>
+    <string name="max">max: %1$s</string>
+    <string name="min">min: %1$s</string>
+    <string name="feelsLike">Чувствуется как: %1$s</string>
+    <string name="title_weather">Погода</string>
+</resources>
