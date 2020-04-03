@@ -1,4 +1,4 @@
-package ru.nightgoat.weather.model
+package ru.nightgoat.weather.network.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -11,11 +11,11 @@ data class CityModel(
 
     @SerializedName("main")
     @Expose
-    var main: Main?,
+    var main: Main,
 
     @SerializedName("wind")
     @Expose
-    var wind: Wind?,
+    var wind: Wind,
 
     @SerializedName("dt")
     @Expose
@@ -23,7 +23,7 @@ data class CityModel(
 
     @SerializedName("sys")
     @Expose
-    var sys: Sys?,
+    var sys: Sys,
 
     @SerializedName("id")
     @Expose
@@ -31,7 +31,7 @@ data class CityModel(
 
     @SerializedName("name")
     @Expose
-    var name: String?,
+    var name: String,
 
     @SerializedName("list")
     @Expose
@@ -40,7 +40,7 @@ data class CityModel(
     @SerializedName("city")
     @Expose
     var city: CityModel? = null
-)
+    )
 
 data class Wind(
     @SerializedName("speed")
@@ -55,11 +55,11 @@ data class Weather(
 
     @SerializedName("description")
     @Expose
-    var description: String?,
+    var description: String,
 
     @SerializedName("icon")
     @Expose
-    var icon: String?
+    var icon: String
 )
 
 data class Main(
@@ -95,15 +95,15 @@ data class Sys(
 
     @SerializedName("country")
     @Expose
-    var country: String?,
+    var country: String,
 
     @SerializedName("sunrise")
     @Expose
-    var sunrise: Int,
+    var sunrise: Long,
 
     @SerializedName("sunset")
     @Expose
-    var sunset: Int
+    var sunset: Long
 )
 
 data class TimeGap (
@@ -114,4 +114,4 @@ data class TimeGap (
 
     @SerializedName("main")
     @Expose
-    var main: Main?)
+    var main: Main)

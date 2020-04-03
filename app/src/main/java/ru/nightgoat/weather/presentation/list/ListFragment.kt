@@ -1,17 +1,20 @@
 package ru.nightgoat.weather.presentation.list
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.core.view.marginStart
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_list.*
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.di.components.DaggerListFragmentComponent
@@ -23,7 +26,7 @@ class ListFragment : Fragment(), ListFragmentCallbacks {
     @Inject
     lateinit var viewModel: ListViewModel
 
-    private val sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)
+    private lateinit var sharedPreferences: SharedPreferences
     private val adapter: ListAdapter = ListAdapter(this)
 
     private val injector: ListFragmentComponent = DaggerListFragmentComponent
@@ -43,7 +46,9 @@ class ListFragment : Fragment(), ListFragmentCallbacks {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
         initList()
+        subscribeViewModel()
         listFabListener()
     }
 
@@ -59,11 +64,13 @@ class ListFragment : Fragment(), ListFragmentCallbacks {
             with(alertDialog) {
                 setTitle(getString(R.string.add_city))
                 val layout = LinearLayout(context)
+                layout.orientation = LinearLayout.VERTICAL
                 val editText = EditText(context)
                 layout.addView(editText)
                 setView(layout)
-                setPositiveButton(getString(R.string.add)) { _: DialogInterface, _: Int ->
+                setPositiveButton(getString(R.string.add)) { dialog: DialogInterface, _: Int ->
                     viewModel.addCity(editText.text.toString())
+                    dialog.dismiss()
                 }
                 setNegativeButton(getString(R.string.cancel)) { dialog: DialogInterface, _: Int ->
                     dialog.cancel()
@@ -72,12 +79,19 @@ class ListFragment : Fragment(), ListFragmentCallbacks {
                 show()
             }
         }
+    }
 
-
+    private fun subscribeViewModel() {
+        viewModel.cityListLiveData.observe(viewLifecycleOwner, Observer {
+            adapter.setList(it)
+        })
+        viewModel.snackBarLiveData.observe(viewLifecycleOwner, Observer {
+            Snackbar.make(list_fab, it, Snackbar.LENGTH_SHORT).show()
+        })
     }
 
     override fun setCurrentCityAndCallCityFragment(cityName: String) {
-        sharedPreferences?.edit()?.putString("cityName", cityName)?.apply()
+        sharedPreferences.edit().putString("cityName", cityName).apply()
         findNavController().navigate(R.id.action_navigation_list_to_navigation_city)
     }
 }

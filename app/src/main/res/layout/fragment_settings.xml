@@ -69,10 +69,10 @@
             android:id="@+id/settings_radGrpPressure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checkedButton="@id/radBtnMmHg">
+            android:checkedButton="@id/settings_radBtnMmHg">
 
             <RadioButton
-                android:id="@+id/radBtnMmHg"
+                android:id="@+id/settings_radBtnMmHg"
                 android:text="@string/mmHg"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"

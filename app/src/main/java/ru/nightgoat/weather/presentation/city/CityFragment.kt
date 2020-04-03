@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.di.components.CityFragmentComponent
 import ru.nightgoat.weather.di.components.DaggerCityFragmentComponent
+import ru.nightgoat.weather.utils.getNormalDateTime
 import ru.nightgoat.weather.utils.pressureFromHPaToMmHg
 import java.text.DateFormat
 import java.util.*
@@ -23,7 +24,7 @@ class CityFragment : Fragment() {
     @Inject
     lateinit var viewModel: CityViewModel
 
-    private val sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)
+    lateinit var sharedPreferences: SharedPreferences
 
     private val injector: CityFragmentComponent = DaggerCityFragmentComponent
         .builder()
@@ -37,40 +38,52 @@ class CityFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_city, container, false)
         injector.inject(this)
-        viewModel.units = sharedPreferences?.getString("cityName", "Kazan").toString()
+        sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
+        viewModel.cityName = sharedPreferences.getString("cityName", "Kazan").toString()
         viewModel.units = chooseUnits()
-        observeViewModel()
+        viewModel.loadWeather()
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeViewModel()
+    }
+
     private fun chooseUnits(): String {
-        return if (sharedPreferences?.getInt("degree", 0) == 0) "metric"
+        return if (sharedPreferences.getInt("degree", R.id.settings_radBtnCelsius) == R.id.settings_radBtnCelsius) "metric"
         else "imperial"
     }
 
-    private fun choosePressure(value: Int) : String {
-        return if (sharedPreferences?.getInt("pressure", 0) == 0) pressureFromHPaToMmHg(value).plus(getString(R.string.mmHg))
+    private fun choosePressure(value: Int): String {
+        return if (sharedPreferences.getInt("pressure", R.id.settings_radBtnMmHg)
+            == R.id.settings_radBtnMmHg) pressureFromHPaToMmHg(value).plus(getString(R.string.mmHg)
+        )
         else value.toString().plus(getString(R.string.hPa))
     }
 
     private fun observeViewModel() {
-        viewModel.city.observe(viewLifecycleOwner, androidx.lifecycle.Observer{
+        viewModel.city.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             text_name.text = it.name
-            text_temp.text = it.main?.temp.toString()
-            text_feelsLike.text = resources.getString(R.string.feelsLike, it.main?.feelsLike.toString())
-            text_temp_max.text = resources.getString(R.string.max, it.main?.tempMax.toString())
-            text_temp_min.text = resources.getString(R.string.min, it.main?.tempMin.toString())
+            text_temp.text = it.main.temp.toString()
+            text_feelsLike.text =
+                resources.getString(R.string.feelsLike, it.main.feelsLike.toString())
+            text_temp_max.text = resources.getString(R.string.max, it.main.tempMax.toString())
+            text_temp_min.text = resources.getString(R.string.min, it.main.tempMin.toString())
             Glide.with(this)
                 .load("https://openweathermap.org/img/wn/${it.weather[0].icon}@2x.png")
                 .into(city_image_icon)
-            text_date.text = DateFormat.getDateTimeInstance(
-                DateFormat.SHORT,
-                DateFormat.SHORT,
-                Locale.getDefault()
-            ).format(Date(it.dt * 1000))
-            text_humidity.text = it.main?.humidity.toString()
-            text_pressure.text = it.main?.pressure?.let { pressureValue -> choosePressure(pressureValue) }
-            text_wind.text = it.wind?.speed.toString()
+            text_date.text = getNormalDateTime(it.dt)
+//            text_date.text = DateFormat.getDateTimeInstance(
+//                DateFormat.SHORT,
+//                DateFormat.SHORT,
+//                Locale.getDefault()
+//            ).format(Date(it.dt * 1000))
+            text_humidity.text = it.main.humidity.toString()
+            text_pressure.text =
+                it.main.pressure.let { pressureValue -> choosePressure(pressureValue) }
+            text_wind.text = it.wind.speed.toString()
         })
     }
 }
