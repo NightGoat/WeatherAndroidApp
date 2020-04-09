@@ -2,6 +2,8 @@ package ru.nightgoat.weather.network.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import org.intellij.lang.annotations.JdkConstants
+import ru.nightgoat.weather.data.entity.CityEntity
 
 data class CityModel(
 
@@ -39,8 +41,29 @@ data class CityModel(
 
     @SerializedName("city")
     @Expose
-    var city: CityModel? = null
-    )
+    var city: CityModel? = null,
+
+    var position: Int
+) {
+    fun convertToCityEntity(): CityEntity {
+        return CityEntity(
+            cityId = id,
+            position = position,
+            date = dt*1000,
+            name = name,
+            temp = main.temp.toInt(),
+            feelsTemp = main.feelsLike.toInt(),
+            maxTemp = main.tempMax.toInt(),
+            minTemp = main.tempMin.toInt(),
+            humidity = main.humidity,
+            pressure = main.pressure,
+            wind = wind.speed.toInt(),
+            description = weather[0].description,
+            iconId = weather[0].id,
+            sunrise = sys.sunrise,
+            sunset = sys.sunset)
+    }
+}
 
 data class Wind(
     @SerializedName("speed")
@@ -106,7 +129,7 @@ data class Sys(
     var sunset: Long
 )
 
-data class TimeGap (
+data class TimeGap(
 
     @SerializedName("dt")
     @Expose
@@ -114,4 +137,5 @@ data class TimeGap (
 
     @SerializedName("main")
     @Expose
-    var main: Main)
+    var main: Main
+)

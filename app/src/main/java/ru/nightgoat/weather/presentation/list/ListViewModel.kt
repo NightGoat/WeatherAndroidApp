@@ -3,96 +3,94 @@ package ru.nightgoat.weather.presentation.list
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import ru.nightgoat.weather.data.entity.CityEntity
-import ru.nightgoat.weather.network.API
+import ru.nightgoat.weather.domain.Interactor
 import ru.nightgoat.weather.presentation.BaseViewModel
-import ru.nightgoat.weather.utils.API_ID
-import ru.nightgoat.weather.utils.getCurrentDate
-import java.util.*
 import javax.inject.Inject
 
-class ListViewModel : BaseViewModel() {
-
-    @Inject
-    lateinit var api: API
+class ListViewModel @Inject constructor(private val interactor: Interactor) : BaseViewModel() {
 
     var units = "metric"
     val cityListLiveData = MutableLiveData<MutableList<CityEntity>>()
     val snackBarLiveData = MutableLiveData<String>()
-    var cityList: MutableList<CityEntity> = mutableListOf()
-    val disposable: CompositeDisposable = CompositeDisposable()
+    val refreshLiveData = MutableLiveData<Boolean>()
 
     init {
-        update()
-    }
-
-    fun addCity(name: String) {
-        disposable.add(
-            api.getCurrentWeather(name, API_ID, units, Locale.getDefault().country)
-                .subscribeOn(Schedulers.io())
+        compositeDisposable.add(
+            interactor
+                .getAllCities()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    cityList.add(
-                        CityEntity(
-                            it.id,
-                            getCurrentDate(),
-                            it.name,
-                            it.main.temp.toInt(),
-                            it.main.humidity,
-                            it.main.pressure,
-                            it.wind.speed.toInt(),
-                            it.weather[0].description,
-                            it.weather[0].id,
-                            it.sys.sunrise,
-                            it.sys.sunset
-                        )
-                    )
-                    cityListLiveData.value = cityList
-                }, { throwable ->
-                    snackBarLiveData.value = "city not found"
-                    Log.e("ListViewModel addCity", throwable.message.toString())
+                .subscribe({ listOfCities ->
+                    cityListLiveData.value = listOfCities
+                }, {
+                    Log.e(TAG, it.message!!)
                 })
         )
     }
 
-    fun update() {
-        if (cityList.isNotEmpty()) {
-            val newList = mutableListOf<CityEntity>()
-            for (cityEntity in cityList) {
-                disposable.add(api.getCurrentWeather(cityEntity.name, API_ID, units, Locale.getDefault().country)
+    fun getCityFromApiAndPutInDB(name: String, units: String) {
+        compositeDisposable.add(
+            interactor.getCityFromApiAndPutInDB(name, units)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({}, {
+                    if (it.message!!.contains("404", ignoreCase = true))
+                        snackBarLiveData.value = "nf"
+                    else snackBarLiveData.value = it.message
+                })
+        )
+    }
+
+    fun deleteCity(cityEntity: CityEntity) {
+        compositeDisposable
+            .add(
+                interactor.deleteCity(cityEntity)
                     .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        newList.add(
-                            CityEntity(
-                                it.id,
-                                getCurrentDate(),
-                                it.name,
-                                it.main.temp.toInt(),
-                                it.main.humidity,
-                                it.main.pressure,
-                                it.wind.speed.toInt(),
-                                it.weather[0].description,
-                                it.weather[0].id,
-                                it.sys.sunrise,
-                                it.sys.sunset
-                            )
-                        )
-                    }, {
-                        Log.e("listviewmodel update: ", it.message.toString())
-                    }))
-            }
-            cityList.clear()
-            cityList.addAll(newList)
-            cityListLiveData.value = cityList
+                    .subscribe()
+            )
+    }
+
+    fun updateAllFromApi(units: String) {
+        Log.d(TAG, "update() call")
+        compositeDisposable.add(
+            interactor.updateAllFromApi(units).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    refreshLiveData.value = false
+                }, {
+                    Log.e(TAG, it.printStackTrace().toString())
+                })
+        )
+    }
+
+    fun updateAllInRepository(list: MutableList<CityEntity>) {
+        for (city in list) {
+            compositeDisposable.add(
+                interactor
+                    .updateCityInDB(city)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe()
+            )
         }
+    }
+
+    fun updateCityInDB(city: CityEntity) {
+        compositeDisposable.add(
+            interactor.updateCityInDB(city).subscribe()
+        )
+    }
+
+    fun swapPositionWithFirst(city: CityEntity) {
+        compositeDisposable.add(interactor.swapPositionWithFirst(city).subscribe())
     }
 
     override fun onCleared() {
         super.onCleared()
-        disposable.clear()
+        compositeDisposable.clear()
+    }
+
+    companion object {
+        @JvmStatic
+        val TAG = ListViewModel::class.java.simpleName
     }
 }

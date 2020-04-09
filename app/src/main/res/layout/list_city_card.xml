@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:cardView="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/listCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     cardView:cardElevation="4dp"
     cardView:cardCornerRadius="8dp"
     cardView:cardUseCompatPadding="true"
-    android:background="@color/colorBackground">
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    app:cardBackgroundColor="@color/colorBackgroundDark">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:padding="16dp"
         android:background="?android:attr/selectableItemBackground">
 
         <TextView
@@ -29,21 +33,21 @@
             android:id="@+id/listCard_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            cardView:layout_constraintStart_toStartOf="@id/listCard_name"
-            cardView:layout_constraintTop_toBottomOf="@id/listCard_name"
+            cardView:layout_constraintEnd_toStartOf="@id/listCard_icon"
+            cardView:layout_constraintTop_toTopOf="@id/listCard_name"
             tools:text="4 'C"
-            android:textSize="20sp"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:textSize="37sp"/>
 
         <TextView
             android:id="@+id/listCard_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            cardView:layout_constraintStart_toEndOf="@id/listCard_temp"
+            cardView:layout_constraintTop_toTopOf="@id/listCard_temp"
+            cardView:layout_constraintEnd_toEndOf="parent"
             cardView:layout_constraintBottom_toBottomOf="@id/listCard_temp"
             android:layout_marginStart="8dp"
-            android:textSize="20sp"
-
+            android:textSize="37sp"
             tools:text="O"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

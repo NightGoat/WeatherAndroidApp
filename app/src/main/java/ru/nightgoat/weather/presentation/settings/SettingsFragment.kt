@@ -20,29 +20,27 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_settings, container, false)
-        return root
+        return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
-        settings_radGrpDegree.clearCheck()
-        settings_radGrpDegree.check(sharedPreferences.getInt("degree", 0))
+        settings_radGrpDegree.check(sharedPreferences.getInt("degree", R.id.settings_radBtnCelsius))
         settings_radGrpDegree.setOnCheckedChangeListener { _, checkedId ->
             sharedPreferences
                 .edit()
                 .putInt("degree", checkedId)
                 .apply()
         }
-        settings_radGrpPressure.clearCheck()
-        settings_radGrpPressure.check(sharedPreferences.getInt("pressure", 0))
+        settings_radGrpPressure.check(sharedPreferences.getInt("pressure", R.id.settings_radBtnMmHg))
         settings_radGrpPressure.setOnCheckedChangeListener { _, checkedId ->
             sharedPreferences
                 .edit()
                 .putInt("pressure", checkedId)
                 .apply()
         }
+
     }
 
 }

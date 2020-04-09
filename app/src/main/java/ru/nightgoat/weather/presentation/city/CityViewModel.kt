@@ -1,40 +1,37 @@
 package ru.nightgoat.weather.presentation.city
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import ru.nightgoat.weather.network.model.CityModel
-import ru.nightgoat.weather.network.API
+import ru.nightgoat.weather.data.entity.CityEntity
+import ru.nightgoat.weather.domain.Interactor
 import ru.nightgoat.weather.presentation.BaseViewModel
-import ru.nightgoat.weather.utils.API_ID
-import java.util.*
 import javax.inject.Inject
 
-class CityViewModel: BaseViewModel() {
-    @Inject
-    lateinit var api: API
+class CityViewModel @Inject constructor(private val interactor: Interactor) : BaseViewModel() {
 
-    val city: MutableLiveData<CityModel> = MutableLiveData()
-    lateinit var cityName: String
-    var units = "metric"
+    val cityLiveData: MutableLiveData<CityEntity> = MutableLiveData()
+    val refreshLiveData = MutableLiveData<Boolean>()
 
-    private lateinit var subscription: Disposable
-
-//    init {
-//        loadWeather()
-//    }
-
-    fun loadWeather(){
-        subscription = api.getCurrentWeather(cityName, API_ID, units, Locale.getDefault().country)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess { city.value = it }
-            .subscribe()
+    fun loadWeather(id: Int, units: String) {
+        compositeDisposable.add(
+            interactor.getCityFromDataBaseAndUpdateFromApi(id, units)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    refreshLiveData.value = true
+                }
+                .subscribe({
+                    cityLiveData.value = it
+                    refreshLiveData.value = false
+                }, {
+                    Log.e(TAG, it.message!!)
+                    refreshLiveData.value = false
+                })
+        )
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        subscription.dispose()
+    companion object {
+        @JvmStatic
+        val TAG = CityFragment::class.java.simpleName
     }
 }

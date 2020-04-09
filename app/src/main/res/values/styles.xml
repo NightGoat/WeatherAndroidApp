@@ -1,13 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents">
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/colorBackground</item>
-
     </style>
 
     <style name="rightRadioButton">
@@ -19,6 +18,11 @@
         <item name="android:layoutDirection">rtl</item>
         <item name="android:layout_gravity">start</item>
         <item name="android:textColor">@color/colorBackground</item>
+    </style>
+
+    <style name="BoxedEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="boxStrokeWidth">2dp</item>
     </style>
 
 </resources>

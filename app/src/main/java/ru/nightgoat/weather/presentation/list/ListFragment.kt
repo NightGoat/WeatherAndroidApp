@@ -1,47 +1,41 @@
 package ru.nightgoat.weather.presentation.list
 
 import android.content.Context
-import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
-import androidx.core.view.marginStart
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_list.*
 import ru.nightgoat.weather.R
-import ru.nightgoat.weather.di.components.DaggerListFragmentComponent
-import ru.nightgoat.weather.di.components.ListFragmentComponent
+import ru.nightgoat.weather.data.entity.CityEntity
+import ru.nightgoat.weather.presentation.base.BaseFragment
 import javax.inject.Inject
 
-class ListFragment : Fragment(), ListFragmentCallbacks {
+class ListFragment : BaseFragment(), ListFragmentCallbacks {
 
     @Inject
-    lateinit var viewModel: ListViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var sharedPreferences: SharedPreferences
+    private val viewModel: ListViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(ListViewModel::class.java)
+    }
+
     private val adapter: ListAdapter = ListAdapter(this)
-
-    private val injector: ListFragmentComponent = DaggerListFragmentComponent
-        .builder()
-        .setFragment(this)
-        .build()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_list, container, false)
-        injector.inject(this)
-        return root
+        return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,35 +44,59 @@ class ListFragment : Fragment(), ListFragmentCallbacks {
         initList()
         subscribeViewModel()
         listFabListener()
+        setSwipeListener()
+        arguments?.getString("name").let {
+            if (it != null) {
+                viewModel.getCityFromApiAndPutInDB(it, chooseUnits())
+            }
+        }
+        viewModel.updateAllFromApi(chooseUnits())
+    }
+
+    private fun setSwipeListener() {
+        list_swipeLayout.setOnRefreshListener { viewModel.updateAllFromApi(chooseUnits()) }
     }
 
     private fun initList() {
         val layoutManager = LinearLayoutManager(context)
         list_recyclerView.layoutManager = layoutManager
         list_recyclerView.adapter = adapter
+        initDragAndSwipe()
+    }
+
+    private fun initDragAndSwipe() {
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.DOWN or ItemTouchHelper.UP,
+            ItemTouchHelper.LEFT
+        ) {
+            var adapterList = mutableListOf<CityEntity>()
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                Log.d(TAG, "onMove from ${viewHolder.adapterPosition} to ${target.adapterPosition}")
+                adapterList = adapter.onRowMoved(viewHolder.adapterPosition, target.adapterPosition)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewModel.deleteCity(adapter.getEntity(viewHolder.adapterPosition))
+            }
+
+            override fun clearView(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ) {
+                super.clearView(recyclerView, viewHolder)
+                viewModel.updateAllInRepository(adapterList)
+            }
+        }).attachToRecyclerView(list_recyclerView)
     }
 
     private fun listFabListener() = list_fab.setOnClickListener {
-        context?.let { context ->
-            val alertDialog = androidx.appcompat.app.AlertDialog.Builder(context)
-            with(alertDialog) {
-                setTitle(getString(R.string.add_city))
-                val layout = LinearLayout(context)
-                layout.orientation = LinearLayout.VERTICAL
-                val editText = EditText(context)
-                layout.addView(editText)
-                setView(layout)
-                setPositiveButton(getString(R.string.add)) { dialog: DialogInterface, _: Int ->
-                    viewModel.addCity(editText.text.toString())
-                    dialog.dismiss()
-                }
-                setNegativeButton(getString(R.string.cancel)) { dialog: DialogInterface, _: Int ->
-                    dialog.cancel()
-                }
-                create()
-                show()
-            }
-        }
+        findNavController().navigate(R.id.action_navigation_list_to_navigation_addCity)
     }
 
     private fun subscribeViewModel() {
@@ -86,12 +104,41 @@ class ListFragment : Fragment(), ListFragmentCallbacks {
             adapter.setList(it)
         })
         viewModel.snackBarLiveData.observe(viewLifecycleOwner, Observer {
-            Snackbar.make(list_fab, it, Snackbar.LENGTH_SHORT).show()
+            if (it == "nf")
+                Snackbar.make(list_fab, R.string.city_not_found, Snackbar.LENGTH_SHORT).show()
+            else Snackbar.make(list_fab, it, Snackbar.LENGTH_SHORT).show()
+        })
+        viewModel.refreshLiveData.observe(viewLifecycleOwner, Observer {
+            list_swipeLayout.isRefreshing = it
         })
     }
 
-    override fun setCurrentCityAndCallCityFragment(cityName: String) {
-        sharedPreferences.edit().putString("cityName", cityName).apply()
+    override fun setCurrentCityAndCallCityFragment(cityName: String, cityId: Int) {
+        sharedPreferences.edit().putString("cityName", cityName).putInt("cityId", cityId).apply()
         findNavController().navigate(R.id.action_navigation_list_to_navigation_city)
+    }
+
+    override fun getWeatherIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
+        return chooseIcon(id, dt, sunrise, sunset)
+    }
+
+    override fun getColor(cityEntity: CityEntity): Int {
+        return when (sharedPreferences.getString("cityName", "Kazan'")) {
+            cityEntity.name -> R.color.colorPrimary
+            else -> R.color.colorBackgroundDark
+        }
+    }
+
+    override fun swapPositionWithFirst(city: CityEntity) {
+        viewModel.swapPositionWithFirst(city)
+    }
+
+    override fun updateCity(city: CityEntity) {
+        viewModel.updateCityInDB(city)
+    }
+
+    companion object {
+        @JvmStatic
+        val TAG = ListFragment::class.java.simpleName
     }
 }

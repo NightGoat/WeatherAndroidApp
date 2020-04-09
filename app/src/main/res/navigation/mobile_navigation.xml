@@ -9,10 +9,13 @@
         android:id="@+id/navigation_list"
         android:name="ru.nightgoat.weather.presentation.list.ListFragment"
         android:label="@string/cities_list"
-        tools:layout="@layout/fragment_list" >
+        tools:layout="@layout/fragment_list">
         <action
             android:id="@+id/action_navigation_list_to_navigation_city"
             app:destination="@id/navigation_city" />
+        <action
+            android:id="@+id/action_navigation_list_to_navigation_addCity"
+            app:destination="@id/navigation_addCity" />
     </fragment>
 
     <fragment
@@ -26,4 +29,18 @@
         android:name="ru.nightgoat.weather.presentation.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/navigation_addCity"
+        android:name="ru.nightgoat.weather.presentation.list.AddCityFragment"
+        android:label="@string/add_city"
+        tools:layout="@layout/fragment_add_city">
+        <action
+            android:id="@+id/action_navigation_addCity_to_navigation_list"
+            app:destination="@id/navigation_list">
+            <argument
+                android:name="city_to_add"
+                app:argType="string"/>
+        </action>
+    </fragment>
 </navigation>
