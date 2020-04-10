@@ -69,8 +69,9 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp">
-
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="42dp"
+                    >
 
                     <TextView
                         android:id="@+id/text_temp"
@@ -153,11 +154,10 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorBackgroundDark"
                 app:cardCornerRadius="8dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                app:cardElevation="4dp"
-                app:cardUseCompatPadding="true">
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="11dp"
+                app:cardElevation="4dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -171,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/humidityIcon"
                         android:textSize="20sp"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="16dp"
                         app:layout_constraintEnd_toStartOf="@id/text_humidity"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -196,7 +196,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/barometer"
                         android:textSize="20sp"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="16dp"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/text_pressure"
                         app:layout_constraintStart_toEndOf="@id/text_humidity" />
@@ -219,7 +219,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/weather_squall"
                         android:textSize="20sp"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="16dp"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/text_wind"
                         app:layout_constraintStart_toEndOf="@id/text_pressure" />
@@ -231,13 +231,32 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorPrimary"
                         android:textSize="20sp"
-                        android:layout_marginEnd="16dp"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/windIcon"
                         tools:text="2m/s" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/city_forecast_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorBackgroundDark"
+                app:cardCornerRadius="8dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/city_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/city_forecast_card"/>
+
             </androidx.cardview.widget.CardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

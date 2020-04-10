@@ -6,7 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.domain.Interactor
-import ru.nightgoat.weather.presentation.BaseViewModel
+import ru.nightgoat.weather.presentation.base.BaseViewModel
 import javax.inject.Inject
 
 class ListViewModel @Inject constructor(private val interactor: Interactor) : BaseViewModel() {
@@ -81,7 +81,11 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
     }
 
     fun swapPositionWithFirst(city: CityEntity) {
-        compositeDisposable.add(interactor.swapPositionWithFirst(city).subscribe())
+        compositeDisposable.add(interactor.swapPositionWithFirst(city).subscribe({
+
+        }, {
+            Log.e(TAG, it.message.toString())
+        }))
     }
 
     override fun onCleared() {

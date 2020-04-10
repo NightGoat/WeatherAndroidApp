@@ -17,8 +17,10 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
     private var cityList = mutableListOf<CityEntity>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        return ListViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_city_card, parent, false))
+        return ListViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.list_city_card, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -38,7 +40,7 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
         return cityList[adapterPosition]
     }
 
-    fun onRowMoved(fromPosition: Int, toPosition: Int) : MutableList<CityEntity> {
+    fun onRowMoved(fromPosition: Int, toPosition: Int): MutableList<CityEntity> {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(cityList, i, i + 1)
@@ -56,10 +58,13 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
         return cityList
     }
 
+    fun getList(): MutableList<CityEntity> {
+        return cityList
+    }
 
     companion object {
         @JvmStatic
         val TAG = ListAdapter::class.java.simpleName
     }
-    }
+}
 

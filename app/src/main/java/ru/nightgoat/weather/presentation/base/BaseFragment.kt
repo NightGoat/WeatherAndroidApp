@@ -4,10 +4,11 @@ import android.content.SharedPreferences
 import dagger.android.support.DaggerFragment
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.presentation.city.CityFragment
+import ru.nightgoat.weather.utils.getHour
 import ru.nightgoat.weather.utils.pressureFromHPaToMmHg
 import java.util.*
 
-abstract class BaseFragment: DaggerFragment() {
+abstract class BaseFragment : DaggerFragment() {
     lateinit var sharedPreferences: SharedPreferences
 
     fun chooseCityId(): Int {
@@ -15,19 +16,22 @@ abstract class BaseFragment: DaggerFragment() {
     }
 
     fun chooseUnits(): String {
-        return if (sharedPreferences.getInt("degree", R.id.settings_radBtnCelsius) == R.id.settings_radBtnCelsius) "metric"
+        return if (sharedPreferences.getInt("degree",R.id.settings_radBtnCelsius)
+            == R.id.settings_radBtnCelsius) "metric"
         else "imperial"
     }
 
     fun choosePressure(value: Int): String {
         return if (sharedPreferences.getInt("pressure", R.id.settings_radBtnMmHg)
-            == R.id.settings_radBtnMmHg) pressureFromHPaToMmHg(value).plus(getString(R.string.mmHg)
+            == R.id.settings_radBtnMmHg
+        ) pressureFromHPaToMmHg(value).plus(
+            getString(R.string.mmHg)
         )
         else value.toString().plus(getString(R.string.hPa))
     }
 
     fun chooseIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
-        return when(id) {
+        return when (id) {
             in 200..201 -> return getString(R.string.weather_thunder_lightRain) //Thunderstorm with light rain
             202 -> return getString(R.string.weather_thunder_heavyRain) // thunderstorm with heavy rain
             in 202..232 -> return getString(R.string.weather_thunder) //thunderstorm

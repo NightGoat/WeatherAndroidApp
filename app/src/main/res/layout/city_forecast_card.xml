@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cardView="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="16dp"
+    >
+
+    <TextView
+        android:id="@+id/cityCard_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        cardView:layout_constraintStart_toStartOf="parent"
+        cardView:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="01.01.1991 Пн"/>
+
+    <TextView
+        android:id="@+id/cityCard_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textSize="24sp"
+        cardView:layout_constraintEnd_toStartOf="@id/cityCard_icon"
+        cardView:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="4 'C" />
+
+    <TextView
+        android:id="@+id/cityCard_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="24sp"
+        cardView:layout_constraintBottom_toBottomOf="@id/cityCard_temp"
+        cardView:layout_constraintEnd_toEndOf="parent"
+        cardView:layout_constraintTop_toTopOf="@id/cityCard_temp"
+        tools:text="O" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

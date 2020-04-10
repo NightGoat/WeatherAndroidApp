@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.list.AddCityFragment">
+    tools:context=".presentation.addCity.AddCityFragment">
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/addCity_textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,6 +22,15 @@
             android:hint="@string/city"/>
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ListView
+        android:id="@+id/addCity_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/addCity_textInputLayout"
+        app:layout_constraintEnd_toEndOf="@id/addCity_textInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/addCity_textInputLayout"
+        app:layout_constraintBottom_toTopOf="@id/addCity_btn_cancel"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addCity_btn_cancel"

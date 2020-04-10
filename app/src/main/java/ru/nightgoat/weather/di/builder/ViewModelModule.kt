@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.nightgoat.weather.di.ViewModelKey
 import ru.nightgoat.weather.presentation.city.CityViewModel
-import ru.nightgoat.weather.presentation.list.AddCityViewModel
+import ru.nightgoat.weather.presentation.addCity.AddCityViewModel
 import ru.nightgoat.weather.presentation.list.ListViewModel
 
 @Module

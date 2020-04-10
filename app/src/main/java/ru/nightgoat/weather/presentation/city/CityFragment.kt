@@ -11,16 +11,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.presentation.base.BaseFragment
+import ru.nightgoat.weather.presentation.list.ListAdapter
 import ru.nightgoat.weather.utils.getNormalDateTime
 import ru.nightgoat.weather.utils.pressureFromHPaToMmHg
 import javax.inject.Inject
 
-class CityFragment : BaseFragment() {
+class CityFragment : BaseFragment(), CityFragmentCallbacks {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val adapter = ForecastAdapter(this)
 
     private val viewModel: CityViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(CityViewModel::class.java)
@@ -39,15 +44,29 @@ class CityFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        humidityIcon.typeface = Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
-        pressureIcon.typeface = Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
-        windIcon.typeface = Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
-        city_text_weatherIcon.typeface =
-            Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
+        setFont()
+        initList()
         observeViewModel()
         city_swipeRefreshLayout.setOnRefreshListener {
             viewModel.loadWeather(chooseCityId(), chooseUnits())
         }
+    }
+
+    private fun initList() {
+        city_recycler.layoutManager = LinearLayoutManager(context)
+        city_recycler.adapter = adapter
+        city_recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+    }
+
+    private fun setFont() {
+        humidityIcon.typeface =
+            Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
+        pressureIcon.typeface =
+            Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
+        windIcon.typeface =
+            Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
+        city_text_weatherIcon.typeface =
+            Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
     }
 
     private fun observeViewModel() {
@@ -72,6 +91,14 @@ class CityFragment : BaseFragment() {
         viewModel.refreshLiveData.observe(viewLifecycleOwner, Observer {
             city_swipeRefreshLayout.isRefreshing = it
         })
+
+        viewModel.forecastLiveData.observe(viewLifecycleOwner, Observer {
+            adapter.setList(it)
+        })
+    }
+
+    override fun getWeatherIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
+        return chooseIcon(id, dt, sunrise, sunset)
     }
 
     companion object {

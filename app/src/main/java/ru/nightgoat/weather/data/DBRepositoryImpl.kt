@@ -6,6 +6,7 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import ru.nightgoat.weather.data.db.CitiesDao
 import ru.nightgoat.weather.data.entity.CityEntity
+import ru.nightgoat.weather.data.entity.SearchEntity
 import ru.nightgoat.weather.domain.DBRepository
 
 class DBRepositoryImpl(val dao: CitiesDao): DBRepository {
@@ -36,5 +37,16 @@ class DBRepositoryImpl(val dao: CitiesDao): DBRepository {
 
     override fun updateCity(city: CityEntity): Completable {
         return dao.updateCity(city)
+    }
+
+    override fun getSearchList(): Single<MutableList<String>>{
+        return dao.getSearchList()
+    }
+
+    override fun insertSearchEntity(city: SearchEntity): Completable {
+        return dao.insertCitySearch(city)
+    }
+   override fun purgeSearchList(): Completable {
+        return dao.purgeCitySearch()
     }
 }

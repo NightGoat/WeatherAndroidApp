@@ -1,13 +1,15 @@
-package ru.nightgoat.weather.presentation.list
+package ru.nightgoat.weather.presentation.addCity
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_add_city.*
@@ -36,12 +38,17 @@ class AddCityFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val imgr = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         if (addCity_edit.requestFocus()) {
-            imgr.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            imgr.toggleSoftInput(
+                InputMethodManager.SHOW_IMPLICIT,
+                InputMethodManager.HIDE_IMPLICIT_ONLY
+            )
         }
         addCity_btn_add.setOnClickListener {
             val bundle = Bundle()
             addCity_edit.text.toString().let {
                 if (it.isNotEmpty()) {
+                    viewModel.addSearchEntity(it)
+                    viewModel.purgeList()
                     addCity_edit.clearFocus()
                     bundle.putString("name", it)
                     findNavController().navigate(
@@ -52,13 +59,34 @@ class AddCityFragment : BaseFragment() {
             }
         }
 
-
         addCity_btn_cancel.setOnClickListener {
+            viewModel.purgeList()
             addCity_edit.clearFocus()
             findNavController().navigate(R.id.action_navigation_addCity_to_navigation_list)
         }
+
+        initList()
+        observeViewModel()
     }
+
+    private fun initList() {
+        addCity_list.setOnItemClickListener { parent, view, position, id ->
+            addCity_edit.setText((view as TextView).text)
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.searchListLiveData.observe(viewLifecycleOwner, Observer { listOfSearches ->
+            Log.d(TAG, listOfSearches.toString())
+            val adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, listOfSearches)
+            addCity_list.adapter = adapter
+        })
+    }
+
     companion object {
-        fun newInstance() = AddCityFragment()
+        fun newInstance() =
+            AddCityFragment()
+
+        val TAG = AddCityFragment::class.java.simpleName
     }
 }

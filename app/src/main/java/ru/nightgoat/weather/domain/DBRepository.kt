@@ -5,6 +5,7 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import ru.nightgoat.weather.data.entity.CityEntity
+import ru.nightgoat.weather.data.entity.SearchEntity
 
 interface DBRepository {
 
@@ -15,4 +16,8 @@ interface DBRepository {
     fun insertCity(city: CityEntity): Completable
     fun deleteCity(city: CityEntity): Completable
     fun updateCity(city: CityEntity): Completable
+
+    fun getSearchList(): Single<MutableList<String>>
+    fun insertSearchEntity(city: SearchEntity): Completable
+    fun purgeSearchList(): Completable
 }

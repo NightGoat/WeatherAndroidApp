@@ -4,6 +4,7 @@ import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.nightgoat.weather.network.model.CityModel
+import ru.nightgoat.weather.network.model.TimeGap
 
 interface OpenWeatherAPI {
 
@@ -25,7 +26,7 @@ interface OpenWeatherAPI {
 
     @GET("data/2.5/forecast?")
     fun getForecast(
-        @Query("q") city: String,
+        @Query("id") id: Int,
         @Query("APPID") app_id: String,
         @Query("units") units: String,
         @Query("lang") lang: String

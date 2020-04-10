@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/navigation_addCity"
-        android:name="ru.nightgoat.weather.presentation.list.AddCityFragment"
+        android:name="ru.nightgoat.weather.presentation.addCity.AddCityFragment"
         android:label="@string/add_city"
         tools:layout="@layout/fragment_add_city">
         <action

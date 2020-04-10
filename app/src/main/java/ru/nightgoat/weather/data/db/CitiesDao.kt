@@ -7,6 +7,7 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import ru.nightgoat.weather.data.entity.CityEntity
+import ru.nightgoat.weather.data.entity.SearchEntity
 
 @Dao
 interface CitiesDao {
@@ -31,4 +32,13 @@ interface CitiesDao {
 
     @Query("SELECT * FROM CityEntity WHERE cityId = :cityId")
     fun getCityById(cityId: Int) : Maybe<CityEntity>
+
+    @Insert
+    fun insertCitySearch(city: SearchEntity): Completable
+
+    @Query("SELECT name FROM SearchEntity ORDER BY id DESC")
+    fun getSearchList(): Single<MutableList<String>>
+
+    @Query("DELETE FROM SearchEntity where id NOT IN (SELECT id from SearchEntity ORDER BY id DESC LIMIT 10)")
+    fun purgeCitySearch() : Completable
 }

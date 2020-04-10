@@ -28,7 +28,7 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
         ViewModelProvider(this, viewModelFactory).get(ListViewModel::class.java)
     }
 
-    private val adapter: ListAdapter = ListAdapter(this)
+    private val adapter = ListAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,8 +58,7 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     private fun initList() {
-        val layoutManager = LinearLayoutManager(context)
-        list_recyclerView.layoutManager = layoutManager
+        list_recyclerView.layoutManager = LinearLayoutManager(context)
         list_recyclerView.adapter = adapter
         initDragAndSwipe()
     }
@@ -83,6 +82,7 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewModel.deleteCity(adapter.getEntity(viewHolder.adapterPosition))
+                Log.d(TAG, "onSwiped: ${viewHolder.adapterPosition}")
             }
 
             override fun clearView(

@@ -1,4 +1,4 @@
-package ru.nightgoat.weather.presentation
+package ru.nightgoat.weather.presentation.base
 
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
