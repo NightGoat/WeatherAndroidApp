@@ -58,7 +58,7 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
                 .subscribe({
                     refreshLiveData.value = false
                 }, {
-                    Log.e(TAG, it.printStackTrace().toString())
+                    Log.e(TAG, it.message.toString())
                 })
         )
     }

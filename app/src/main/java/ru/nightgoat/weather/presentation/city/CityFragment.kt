@@ -38,7 +38,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_city, container, false)
         sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
-        viewModel.loadWeather(chooseCityId(), chooseUnits())
+
         return root
     }
 
@@ -47,6 +47,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         setFont()
         initList()
         observeViewModel()
+        viewModel.loadWeather(chooseCityId(), chooseUnits())
         city_swipeRefreshLayout.setOnRefreshListener {
             viewModel.loadWeather(chooseCityId(), chooseUnits())
         }

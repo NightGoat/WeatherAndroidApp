@@ -25,10 +25,11 @@ class CityViewModel @Inject constructor(private val interactor: Interactor) : Ba
                     refreshLiveData.value = true
                 }
                 .subscribe({
+                    Log.d(TAG, "subscribe: $it")
                     cityLiveData.value = it
                     refreshLiveData.value = false
                 }, {
-                    Log.e(TAG, it.message!!)
+                    Log.e(TAG, "city ${it.message!!}")
                     refreshLiveData.value = false
                 })
         )
@@ -39,6 +40,7 @@ class CityViewModel @Inject constructor(private val interactor: Interactor) : Ba
                 .subscribe({
                     val forecastList = mutableListOf<TimeGap>()
                     val gapList = it.list
+                    Log.d(TAG, it.list.size.toString())
                     for (gap in gapList) {
                         if (getHour(gap.dt*1000) == 12) {
                             gap.sunrise = it.city.sunrise
@@ -48,7 +50,7 @@ class CityViewModel @Inject constructor(private val interactor: Interactor) : Ba
                     }
                     forecastLiveData.value = forecastList
                 }, {
-                    Log.e(TAG, it.message!!)
+                    Log.e(TAG, "forecast ${it.message!!}")
                 })
         )
     }
