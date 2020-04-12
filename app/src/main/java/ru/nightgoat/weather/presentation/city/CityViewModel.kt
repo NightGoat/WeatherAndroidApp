@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.domain.Interactor
-import ru.nightgoat.weather.network.model.CityModel
 import ru.nightgoat.weather.network.model.TimeGap
 import ru.nightgoat.weather.presentation.base.BaseViewModel
 import ru.nightgoat.weather.utils.getHour
@@ -20,7 +19,7 @@ class CityViewModel @Inject constructor(private val interactor: Interactor) : Ba
     fun loadWeather(id: Int, units: String) {
         compositeDisposable.add(
             interactor.getCityFromDataBaseAndUpdateFromApi(id, units)
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread(), true)
                 .doOnSubscribe {
                     refreshLiveData.value = true
                 }

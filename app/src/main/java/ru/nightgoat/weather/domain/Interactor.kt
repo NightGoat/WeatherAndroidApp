@@ -1,10 +1,8 @@
 package ru.nightgoat.weather.domain
 
 import android.util.Log
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import io.reactivex.*
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.internal.operators.flowable.FlowableToListSingle
 import io.reactivex.internal.operators.single.SingleToFlowable
 import io.reactivex.schedulers.Schedulers
@@ -87,46 +85,25 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
         return repository.insertCity(city).subscribeOn(Schedulers.io())
     }
 
-//    fun getCityFromDataBaseAndUpdateFromApi(cityId: Int, units: String): Flowable<CityEntity> {
-//        return repository.getCityById(cityId).toSingle()
-//            .concatWith(api.getCurrentWeatherById(
-//                id = cityId,
-//                app_id = API_ID,
-//                units = units,
-//                lang = Locale.getDefault().country
-//            ).map {
-//                Log.d(TAG, it.name)
-//                it.convertToCityEntity() }
-//                .doOnSuccess {
-//                    repository.insertCity(it).subscribeOn(Schedulers.io()).subscribe()
-//                }
-//                .doOnError {
-//                    Log.e(TAG, it.message!!)
-//                })
-//            .subscribeOn(Schedulers.io())
-//    }
-
-    fun getCityFromDataBaseAndUpdateFromApi(cityId: Int, units: String): Single<CityEntity> {
-        val a: Single<CityEntity> = repository.getCityById(cityId).toSingle()
-        val b: Single<CityEntity> = api.getCurrentWeatherById(
-            id = cityId,
-            app_id = API_ID,
-            units = units,
-            lang = Locale.getDefault().country
-        ).map {
-            Log.d(TAG, it.name)
-            it.convertToCityEntity()
-        }
-            .doOnSuccess {
-                repository.insertCity(it).subscribeOn(Schedulers.io()).subscribe()
-            }
-        return b.onErrorResumeNext(a).subscribeOn(Schedulers.io())
+    fun getCityFromDataBaseAndUpdateFromApi(cityId: Int, units: String): Flowable<CityEntity> {
+        return repository.getCityById(cityId)
+            .concatWith(api.getCurrentWeatherById(
+                id = cityId,
+                app_id = API_ID,
+                units = units,
+                lang = Locale.getDefault().country
+            ).map {
+                Log.d(TAG, it.name)
+                it.convertToCityEntity() }
+                .toMaybe()
+                .doOnSuccess {
+                    repository.insertCity(it).subscribeOn(Schedulers.io()).subscribe()
+                }
+                .doOnError {
+                    Log.e(TAG, it.message!!)
+                })
+            .subscribeOn(Schedulers.io())
     }
-
-//    fun getCityFromDataBaseAndUpdateFromApi(cityId: Int, units: String): Single<CityEntity> {
-//        return repository.getCityById(cityId).toSingle()
-//            .subscribeOn(Schedulers.io())
-//    }
 
     fun getSearchList(): Single<MutableList<String>> {
         return repository.getSearchList().subscribeOn(Schedulers.io())
