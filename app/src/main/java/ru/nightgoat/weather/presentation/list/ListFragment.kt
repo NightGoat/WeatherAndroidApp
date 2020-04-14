@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_list.*
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.presentation.base.BaseFragment
+import ru.nightgoat.weather.utils.getApiKey
 import javax.inject.Inject
 
 class ListFragment : BaseFragment(), ListFragmentCallbacks {
@@ -29,6 +30,7 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     private val adapter = ListAdapter(this)
+    private lateinit var API_KEY : String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,20 +43,21 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
+        API_KEY = getApiKey(sharedPreferences)
         initList()
         subscribeViewModel()
         listFabListener()
         setSwipeListener()
         arguments?.getString("name").let {
             if (it != null) {
-                viewModel.getCityFromApiAndPutInDB(it, chooseUnits())
+                viewModel.getCityFromApiAndPutInDB(it, chooseUnits(), API_KEY)
             }
         }
-        viewModel.updateAllFromApi(chooseUnits())
+        viewModel.updateAllFromApi(chooseUnits(), API_KEY)
     }
 
     private fun setSwipeListener() {
-        list_swipeLayout.setOnRefreshListener { viewModel.updateAllFromApi(chooseUnits()) }
+        list_swipeLayout.setOnRefreshListener { viewModel.updateAllFromApi(chooseUnits(), API_KEY) }
     }
 
     private fun initList() {
@@ -100,17 +103,26 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     private fun subscribeViewModel() {
-        viewModel.cityListLiveData.observe(viewLifecycleOwner, Observer {
-            adapter.setList(it)
-        })
-        viewModel.snackBarLiveData.observe(viewLifecycleOwner, Observer {
-            if (it == "nf")
-                Snackbar.make(list_fab, R.string.city_not_found, Snackbar.LENGTH_SHORT).show()
-            else Snackbar.make(list_fab, it, Snackbar.LENGTH_SHORT).show()
-        })
-        viewModel.refreshLiveData.observe(viewLifecycleOwner, Observer {
-            list_swipeLayout.isRefreshing = it
-        })
+        with (viewModel) {
+            cityListLiveData.observe(viewLifecycleOwner, Observer {
+                adapter.setList(it)
+            })
+
+            snackBarLiveData.observe(viewLifecycleOwner, Observer {
+                if (it == "nf")
+                    Snackbar.make(list_fab, R.string.city_not_found, Snackbar.LENGTH_SHORT).show()
+                else Snackbar.make(list_fab, it, Snackbar.LENGTH_SHORT).show()
+            })
+
+            refreshLiveData.observe(viewLifecycleOwner, Observer {
+                list_swipeLayout.isRefreshing = it
+            })
+
+            cityIdLiveData.observe(viewLifecycleOwner, Observer {
+                sharedPreferences.edit().putInt("cityId", it).apply()
+            })
+        }
+
     }
 
     override fun setCurrentCityAndCallCityFragment(cityName: String, cityId: Int) {
@@ -123,8 +135,8 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     override fun getColor(cityEntity: CityEntity): Int {
-        return when (sharedPreferences.getString("cityName", "Kazan'")) {
-            cityEntity.name -> R.color.colorPrimary
+        return when (sharedPreferences.getInt("cityId", 0)) {
+            cityEntity.cityId -> R.color.colorPrimary
             else -> R.color.colorBackgroundDark
         }
     }

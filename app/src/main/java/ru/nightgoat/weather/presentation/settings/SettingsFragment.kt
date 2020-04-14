@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import ru.nightgoat.weather.R
 
@@ -26,6 +27,40 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
+        checkRadioGroupDegreeAndSetListener()
+        checkRadioGroupPressureAndSetListener()
+        putApiKeyAndSetClickListenerInEdit()
+
+    }
+
+    private fun putApiKeyAndSetClickListenerInEdit() {
+        settings_edit_api.setText(sharedPreferences.getString("api_key", ""))
+        settings_edit_api.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                settings_edit_api.clearFocus()
+                sharedPreferences.edit()
+                    .putString("api_key", settings_edit_api.text.toString()).apply()
+            }
+            false
+        }
+    }
+
+    private fun checkRadioGroupPressureAndSetListener() {
+        settings_radGrpPressure.check(
+            sharedPreferences.getInt(
+                "pressure",
+                R.id.settings_radBtnMmHg
+            )
+        )
+        settings_radGrpPressure.setOnCheckedChangeListener { _, checkedId ->
+            sharedPreferences
+                .edit()
+                .putInt("pressure", checkedId)
+                .apply()
+        }
+    }
+
+    private fun checkRadioGroupDegreeAndSetListener() {
         settings_radGrpDegree.check(sharedPreferences.getInt("degree", R.id.settings_radBtnCelsius))
         settings_radGrpDegree.setOnCheckedChangeListener { _, checkedId ->
             sharedPreferences
@@ -33,14 +68,6 @@ class SettingsFragment : Fragment() {
                 .putInt("degree", checkedId)
                 .apply()
         }
-        settings_radGrpPressure.check(sharedPreferences.getInt("pressure", R.id.settings_radBtnMmHg))
-        settings_radGrpPressure.setOnCheckedChangeListener { _, checkedId ->
-            sharedPreferences
-                .edit()
-                .putInt("pressure", checkedId)
-                .apply()
-        }
-
     }
 
 }

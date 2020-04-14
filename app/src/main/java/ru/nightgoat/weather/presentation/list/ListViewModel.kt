@@ -7,14 +7,15 @@ import io.reactivex.schedulers.Schedulers
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.domain.Interactor
 import ru.nightgoat.weather.presentation.base.BaseViewModel
+import ru.nightgoat.weather.utils.getApiKey
 import javax.inject.Inject
 
 class ListViewModel @Inject constructor(private val interactor: Interactor) : BaseViewModel() {
 
-    var units = "metric"
     val cityListLiveData = MutableLiveData<MutableList<CityEntity>>()
     val snackBarLiveData = MutableLiveData<String>()
     val refreshLiveData = MutableLiveData<Boolean>()
+    val cityIdLiveData = MutableLiveData<Int>()
 
     init {
         compositeDisposable.add(
@@ -29,11 +30,13 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
         )
     }
 
-    fun getCityFromApiAndPutInDB(name: String, units: String) {
+    fun getCityFromApiAndPutInDB(name: String, units: String, api_key: String) {
         compositeDisposable.add(
-            interactor.getCityFromApiAndPutInDB(name, units)
+            interactor.getCityFromApiAndPutInDB(name, units, api_key)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({}, {
+                .subscribe({
+                    cityIdLiveData.value = it.cityId
+                }, {
                     if (it.message!!.contains("404", ignoreCase = true))
                         snackBarLiveData.value = "nf"
                     else snackBarLiveData.value = it.message
@@ -50,10 +53,10 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
             )
     }
 
-    fun updateAllFromApi(units: String) {
+    fun updateAllFromApi(units: String, API_KEY : String) {
         Log.d(TAG, "update() call")
         compositeDisposable.add(
-            interactor.updateAllFromApi(units).subscribeOn(Schedulers.io())
+            interactor.updateAllFromApi(units, API_KEY).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     refreshLiveData.value = false

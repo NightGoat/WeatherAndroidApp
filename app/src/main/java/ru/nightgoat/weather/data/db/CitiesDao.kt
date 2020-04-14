@@ -7,10 +7,13 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import ru.nightgoat.weather.data.entity.CityEntity
+import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
 
 @Dao
 interface CitiesDao {
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //City
 
     @Query("SELECT * FROM CityEntity ORDER BY position")
     fun getAllCities(): Flowable<MutableList<CityEntity>>
@@ -33,6 +36,20 @@ interface CitiesDao {
     @Query("SELECT * FROM CityEntity WHERE cityId = :cityId")
     fun getCityById(cityId: Int) : Maybe<CityEntity>
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //Forecast
+
+    @Query("SELECT * FROM ForecastEntity WHERE cityId = :cityId ORDER BY date DESC LIMIT 5")
+    fun getForecast(cityId: Int) : Flowable<MutableList<ForecastEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertForecast(forecast: ForecastEntity): Completable
+
+    @Query("DELETE FROM ForecastEntity WHERE cityId = :cityId")
+    fun deleteForecast(cityId: Int): Completable
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //Search
     @Insert
     fun insertCitySearch(city: SearchEntity): Completable
 

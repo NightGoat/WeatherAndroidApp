@@ -6,10 +6,11 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import ru.nightgoat.weather.data.db.CitiesDao
 import ru.nightgoat.weather.data.entity.CityEntity
+import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
 import ru.nightgoat.weather.domain.DBRepository
 
-class DBRepositoryImpl(val dao: CitiesDao): DBRepository {
+class DBRepositoryImpl(val dao: CitiesDao) : DBRepository {
 
     override fun getAllCities(): Flowable<MutableList<CityEntity>> {
         return dao.getAllCities()
@@ -39,14 +40,28 @@ class DBRepositoryImpl(val dao: CitiesDao): DBRepository {
         return dao.updateCity(city)
     }
 
-    override fun getSearchList(): Single<MutableList<String>>{
+    override fun getSearchList(): Single<MutableList<String>> {
         return dao.getSearchList()
     }
 
     override fun insertSearchEntity(city: SearchEntity): Completable {
         return dao.insertCitySearch(city)
     }
-   override fun purgeSearchList(): Completable {
+
+    override fun purgeSearchList(): Completable {
         return dao.purgeCitySearch()
     }
+
+    override fun getForecast(cityId: Int): Flowable<MutableList<ForecastEntity>> {
+        return dao.getForecast(cityId = cityId)
+    }
+
+    override fun insertForecast(forecast: ForecastEntity): Completable {
+        return dao.insertForecast(forecast)
+    }
+
+    override fun deleteAllForecastForCity(cityId: Int): Completable {
+        return dao.deleteForecast(cityId)
+    }
+
 }

@@ -15,7 +15,7 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(CityViewModel::class)
-    abstract fun bindCityViewModel(newsViewModel: CityViewModel): ViewModel
+    abstract fun bindCityViewModel(cityViewModel: CityViewModel): ViewModel
 
     @Binds
     @IntoMap

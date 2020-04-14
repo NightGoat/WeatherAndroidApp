@@ -35,7 +35,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addCity_btn_cancel"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/addCity_btn_add"
@@ -47,7 +47,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addCity_btn_add"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:strokeColor="@color/colorPrimary"
         app:layout_constraintStart_toEndOf="@id/addCity_btn_cancel"

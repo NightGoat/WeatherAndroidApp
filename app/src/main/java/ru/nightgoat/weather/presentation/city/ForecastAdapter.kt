@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.city_forecast_card.view.*
 import kotlinx.android.synthetic.main.fragment_city.view.*
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.network.model.TimeGap
 import ru.nightgoat.weather.utils.getDayOfWeekAndDate
 import kotlin.math.roundToInt
@@ -15,7 +16,7 @@ import kotlin.math.roundToInt
 class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
     RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder>() {
 
-    private var timeGaps = mutableListOf<TimeGap>()
+    private var timeGaps = mutableListOf<ForecastEntity>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastViewHolder {
         return ForecastViewHolder(
@@ -33,7 +34,7 @@ class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
         holder.bind(item = timeGaps[position], fragment = fragment)
     }
 
-    fun setList(list: MutableList<TimeGap>) {
+    fun setList(list: MutableList<ForecastEntity>) {
         this.timeGaps = list
         notifyDataSetChanged()
     }
@@ -41,15 +42,15 @@ class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
     inner class ForecastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         @ExperimentalStdlibApi
-        fun bind(item: TimeGap, fragment: CityFragmentCallbacks) {
-            itemView.cityCard_date.text = getDayOfWeekAndDate(item.dt*1000)
-            itemView.cityCard_temp.text = item.main.temp.roundToInt().toString()
+        fun bind(item: ForecastEntity, fragment: CityFragmentCallbacks) {
+            itemView.cityCard_date.text = getDayOfWeekAndDate(item.date*1000)
+            itemView.cityCard_temp.text = item.temp.toString()
                 .plus(itemView.context.getString(R.string.degree))
             itemView.cityCard_icon.typeface =
                 Typeface.createFromAsset(itemView.context.assets, "fonts/weathericons.ttf")
             itemView.cityCard_icon.text = fragment.getWeatherIcon(
-                item.weather[0].id,
-                item.dt,
+                item.iconId,
+                item.date,
                 item.sunrise,
                 item.sunset
             )

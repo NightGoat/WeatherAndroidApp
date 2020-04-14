@@ -8,7 +8,7 @@ import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
 
-@Database(entities = [CityEntity::class, SearchEntity::class, ForecastEntity::class], version = 8, exportSchema = false)
+@Database(entities = [CityEntity::class, SearchEntity::class, ForecastEntity::class], version = 10, exportSchema = false)
 abstract class CitiesDatabase : RoomDatabase() {
     abstract fun dao(): CitiesDao
 

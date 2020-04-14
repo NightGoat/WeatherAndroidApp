@@ -7,34 +7,43 @@
     android:orientation="horizontal"
     >
 
-    <TextView
-        android:id="@+id/oneLineWidget_date"
+
+    <TextClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Sunday, Feb 10"
-        style="@style/OneLineWidgetText"/>
+        android:format12Hour="EEEE, MMM dd"
+        android:format24Hour="EEE, dd MMM "
+        style="@style/OneLineWidgetText"
+        android:textColor="@android:color/white"
+        />
 
-    <View
+    <TextView
+        android:id="@+id/line"
+        android:gravity="center_horizontal"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:background="@android:color/white" />
+        android:layout_marginStart="16dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:background="@android:color/white"
+        android:textColor="@android:color/white"/>
 
-    <TextView
+    <ImageView
         android:id="@+id/oneLineWidget_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        tools:text="&#9728;"
-        style="@style/OneLineWidgetText"/>
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/weather_icon"
+        android:contentDescription="@string/icon" />
 
     <TextView
         android:id="@+id/oneLineWidget_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         tools:text="32&#8451;"
-        style="@style/OneLineWidgetText"/>
+        style="@style/OneLineWidgetText"
+        android:textColor="@android:color/white"/>
 
 </LinearLayout>

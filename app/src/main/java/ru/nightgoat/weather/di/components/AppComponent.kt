@@ -3,8 +3,6 @@ package ru.nightgoat.weather.di.components
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import ru.nightgoat.weather.App

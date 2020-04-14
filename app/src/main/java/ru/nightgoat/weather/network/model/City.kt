@@ -10,5 +10,14 @@ data class City(
 
     @SerializedName("sunset")
     @Expose
-    var sunset: Long
+    var sunset: Long,
+
+    @SerializedName("id")
+    @Expose
+    var cityId: Int,
+
+    @SerializedName("name")
+    @Expose
+    var name: String
+
 )

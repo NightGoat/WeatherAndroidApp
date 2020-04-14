@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.presentation.base.BaseFragment
 import ru.nightgoat.weather.presentation.list.ListAdapter
+import ru.nightgoat.weather.utils.getApiKey
 import ru.nightgoat.weather.utils.getNormalDateTime
 import ru.nightgoat.weather.utils.pressureFromHPaToMmHg
 import javax.inject.Inject
@@ -26,6 +27,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private val adapter = ForecastAdapter(this)
+    private lateinit var api_key : String
 
     private val viewModel: CityViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(CityViewModel::class.java)
@@ -38,7 +40,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_city, container, false)
         sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
-
+        api_key = getApiKey(sharedPreferences)
         return root
     }
 
@@ -47,9 +49,11 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         setFont()
         initList()
         observeViewModel()
-        viewModel.loadWeather(chooseCityId(), chooseUnits())
-        city_swipeRefreshLayout.setOnRefreshListener {
-            viewModel.loadWeather(chooseCityId(), chooseUnits())
+        with (viewModel) {
+            loadWeather(chooseCityId(), chooseUnits(), api_key)
+            city_swipeRefreshLayout.setOnRefreshListener {
+                loadWeather(chooseCityId(), chooseUnits(), api_key)
+            }
         }
     }
 
@@ -72,30 +76,32 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
 
     private fun observeViewModel() {
         lateinit var degree: String
-        viewModel.cityLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            text_name.text = it.name
-            degree = if (chooseUnits() == "metric") context?.getString(R.string.celsius).toString()
-            else context?.getString(R.string.fahrenheit).toString()
-            text_temp.text = it.temp.toString().plus(degree)
-            text_feelsLike.text =
-                resources.getString(R.string.feelsLike, it.feelsTemp.toString()).plus(degree)
-            text_temp_max.text = resources.getString(R.string.max, it.maxTemp.toString()).plus(degree)
-            text_temp_min.text = resources.getString(R.string.min, it.minTemp.toString()).plus(degree)
-            text_date.text = getNormalDateTime(it.date)
-            text_humidity.text = it.humidity.toString().plus("%")
-            text_pressure.text =
-                it.pressure.let { pressureValue -> choosePressure(pressureValue) }
-            text_wind.text = it.wind.toString().plus(context?.getString(R.string.ms))
-            city_text_description.text = it.description
-            city_text_weatherIcon.text = chooseIcon(it.iconId, it.date, it.sunrise, it.sunset)
-        })
-        viewModel.refreshLiveData.observe(viewLifecycleOwner, Observer {
-            city_swipeRefreshLayout.isRefreshing = it
-        })
+        with (viewModel) {
+            cityLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                text_name.text = it.name
+                degree = if (chooseUnits() == "metric") context?.getString(R.string.celsius).toString()
+                else context?.getString(R.string.fahrenheit).toString()
+                text_temp.text = it.temp.toString().plus(degree)
+                text_feelsLike.text =
+                    resources.getString(R.string.feelsLike, it.feelsTemp.toString()).plus(degree)
+                text_temp_max.text = resources.getString(R.string.max, it.maxTemp.toString()).plus(degree)
+                text_temp_min.text = resources.getString(R.string.min, it.minTemp.toString()).plus(degree)
+                text_date.text = getNormalDateTime(it.date)
+                text_humidity.text = it.humidity.toString().plus("%")
+                text_pressure.text =
+                    it.pressure.let { pressureValue -> choosePressure(pressureValue) }
+                text_wind.text = it.wind.toString().plus(context?.getString(R.string.ms))
+                city_text_description.text = it.description
+                city_text_weatherIcon.text = chooseIcon(it.iconId, it.date, it.sunrise, it.sunset)
+            })
+            refreshLiveData.observe(viewLifecycleOwner, Observer {
+                city_swipeRefreshLayout.isRefreshing = it
+            })
 
-        viewModel.forecastLiveData.observe(viewLifecycleOwner, Observer {
-            adapter.setList(it)
-        })
+            forecastLiveData.observe(viewLifecycleOwner, Observer {
+                adapter.setList(it)
+            })
+        }
     }
 
     override fun getWeatherIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
@@ -105,10 +111,5 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     companion object {
         @JvmStatic
         val TAG = CityFragment::class.java.simpleName
-
-        @JvmStatic
-        fun newInstance() = CityFragment().apply {
-            arguments = Bundle()
-        }
     }
 }
