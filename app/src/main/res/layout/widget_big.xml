@@ -1,22 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <TextClock
+        android:id="@+id/twoLineWidget_clock"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:format12Hour="hh:mm"
-        android:format24Hour="hh:mm"
-        android:text="12"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textSize="30sp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        android:format24Hour="HH:mm"
+        style="@style/OneLineWidgetText"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="94sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <TextClock
+            android:id="@+id/twoLineWidget_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format12Hour="EEE, MMM dd"
+            android:format24Hour="EEE, dd MMM "
+            style="@style/OneLineWidgetText"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textAllCaps="true"
+            />
+
+        <ImageView
+            android:id="@+id/twoLineWidget_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/weather_icon"
+            android:contentDescription="@string/icon" />
+
+        <TextView
+            android:id="@+id/twoLineWidget_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="32&#8451;"
+            style="@style/OneLineWidgetText"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

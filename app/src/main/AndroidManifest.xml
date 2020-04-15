@@ -6,7 +6,8 @@
 
     <application
         android:name=".App"
-        android:allowBackup="false"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/my_backup_rules"
         android:icon="@mipmap/weather_icon_square"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/weather_icon_round"
@@ -25,11 +26,21 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_google_like" />
         </receiver>
+        <receiver
+            android:name=".widget.BigWidgetProvider"
+            android:label="@string/twoLineWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_big" />
+        </receiver>
+        <activity android:name=".presentation.WelcomeActivity"/>
     </application>
 
 </manifest>

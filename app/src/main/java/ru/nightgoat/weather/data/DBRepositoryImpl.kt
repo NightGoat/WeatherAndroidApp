@@ -10,7 +10,7 @@ import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
 import ru.nightgoat.weather.domain.DBRepository
 
-class DBRepositoryImpl(val dao: CitiesDao) : DBRepository {
+class DBRepositoryImpl(private val dao: CitiesDao) : DBRepository {
 
     override fun getAllCities(): Flowable<MutableList<CityEntity>> {
         return dao.getAllCities()
@@ -62,6 +62,10 @@ class DBRepositoryImpl(val dao: CitiesDao) : DBRepository {
 
     override fun deleteAllForecastForCity(cityId: Int): Completable {
         return dao.deleteForecast(cityId)
+    }
+
+    override fun purgeForecast(cityId: Int): Completable {
+        return dao.purgeForecast(cityId)
     }
 
 }

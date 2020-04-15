@@ -6,12 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.city_forecast_card.view.*
-import kotlinx.android.synthetic.main.fragment_city.view.*
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.data.entity.ForecastEntity
-import ru.nightgoat.weather.network.model.TimeGap
 import ru.nightgoat.weather.utils.getDayOfWeekAndDate
-import kotlin.math.roundToInt
 
 class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
     RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder>() {

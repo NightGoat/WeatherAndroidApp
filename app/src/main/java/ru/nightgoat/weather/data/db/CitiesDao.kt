@@ -12,9 +12,9 @@ import ru.nightgoat.weather.data.entity.SearchEntity
 
 @Dao
 interface CitiesDao {
+
     /////////////////////////////////////////////////////////////////////////////////////////////
     //City
-
     @Query("SELECT * FROM CityEntity ORDER BY position")
     fun getAllCities(): Flowable<MutableList<CityEntity>>
 
@@ -47,6 +47,9 @@ interface CitiesDao {
 
     @Query("DELETE FROM ForecastEntity WHERE cityId = :cityId")
     fun deleteForecast(cityId: Int): Completable
+
+    @Query("DELETE FROM ForecastEntity where date not in (SELECT date FROM ForecastEntity where cityId = :cityID order by date limit 10)")
+    fun purgeForecast(cityID: Int) : Completable
 
     /////////////////////////////////////////////////////////////////////////////////////////////
     //Search

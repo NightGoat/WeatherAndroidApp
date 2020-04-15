@@ -1,7 +1,6 @@
 package ru.nightgoat.weather.data.entity
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity

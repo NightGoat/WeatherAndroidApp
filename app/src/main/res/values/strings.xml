@@ -59,8 +59,6 @@
     <string name="add">Добавить</string>
     <string name="add_api">Добавить ключ API</string>
     <string name="remove">Убрать</string>
-    <string name="city_name_hint">*Если не получилось найти город на русском языке, попробуйте на английском. OpenWeatherMap лучше понимает ангилийские названия городов</string>
-
     <string name="weather_last_week">Погода на прошлой неделе:</string>
     <string name="go_back">Назад</string>
     <string name="delete_city">Удалить город</string>
@@ -82,7 +80,6 @@
     <string name="made_by">разработчик: Асадуллин Наиль</string>
     <string name="degree_word">Градусы: </string>
     <string name="send_me_email">Отправить мне письмо</string>
-    <string name="background_gif">Background Gif</string>
     <string name="cant_find_GPS">Не могу получить данные от GPS</string>
     <string name="get_city_name_by_gps">Получить ваше местоположение через GPS</string>
     <string name="now">Сейчас</string>
@@ -95,5 +92,18 @@
     <string name="feelsLike">Чувствуется как: %1$s</string>
     <string name="title_weather">Погода</string>
     <string name="oneLineWidget">Виджет в 1 строку</string>
+    <string name="twoLineWidget">Большой виджет</string>
     <string name="api_key">Ключ</string>
+    <string name="hello">Привет!</string>
+    <string name="intro_text_1">Это приложение использует данные с сайта:</string>
+    <string name="intro_text_2">https://openweathermap.org</string>
+    <string name="intro_text_3">Для того чтобы им пользоваться нужно зарегистрироваться по адресу:</string>
+    <string name="intro_text_4">https://openweathermap.org/home/sign_up</string>
+    <string name="intro_text_5">Затем нужно скопировать ключ со страницы:</string>
+    <string name="intro_text_6">https://home.openweathermap.org/api_keys</string>
+    <string name="intro_text_7">После этого ключ надо вставить в настройках</string>
+    <string name="openweather_logo">OpenWeather logo</string>
+    <string name="first_settings">Настройки: шаг 1</string>
+    <string name="second_settings">Настройки: шаг 2</string>
+    <string name="third_settings">Настройки: шаг 3</string>
 </resources>

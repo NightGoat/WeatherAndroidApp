@@ -4,7 +4,6 @@ import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.nightgoat.weather.network.model.CityModel
-import ru.nightgoat.weather.network.model.TimeGap
 
 interface OpenWeatherAPI {
 

@@ -1,7 +1,6 @@
 package ru.nightgoat.weather.presentation.city
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Typeface
 import kotlinx.android.synthetic.main.fragment_city.*
 
@@ -13,13 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.presentation.base.BaseFragment
-import ru.nightgoat.weather.presentation.list.ListAdapter
 import ru.nightgoat.weather.utils.getApiKey
 import ru.nightgoat.weather.utils.getNormalDateTime
-import ru.nightgoat.weather.utils.pressureFromHPaToMmHg
 import javax.inject.Inject
 
 class CityFragment : BaseFragment(), CityFragmentCallbacks {
@@ -44,6 +40,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         return root
     }
 
+    @ExperimentalStdlibApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFont()
@@ -74,6 +71,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
             Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
     }
 
+    @ExperimentalStdlibApi
     private fun observeViewModel() {
         lateinit var degree: String
         with (viewModel) {
@@ -106,6 +104,11 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
 
     override fun getWeatherIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
         return chooseIcon(id, dt, sunrise, sunset)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.purgeForecast(chooseCityId())
     }
 
     companion object {

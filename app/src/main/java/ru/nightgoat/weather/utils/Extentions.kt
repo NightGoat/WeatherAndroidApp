@@ -31,7 +31,8 @@ fun chooseIcon(
             if (dt in sunrise until sunset) context.getString(R.string.weather_sunny) //sunny
             else context.getString(R.string.weather_clear_night) //night
         }
-        else -> return context.getString(R.string.weather_clouds) //clouds
+        in 801..804 -> return context.getString(R.string.weather_clouds) //clouds
+        else -> "nope"
     }
 }
 
@@ -42,14 +43,14 @@ fun chooseUnits(sharedPreferences: SharedPreferences): String {
     else "imperial"
 }
 
-fun convertToImg(text: String, context: Context): Bitmap {
+fun convertToImg(text: String, context: Context, textSize: Float): Bitmap {
     val paint = Paint()
     paint.isAntiAlias = true
     paint.isSubpixelText = true
     paint.typeface = Typeface.createFromAsset(context.assets, "fonts/weathericons.ttf")
     paint.style = Paint.Style.FILL
     paint.color = Color.WHITE
-    paint.textSize = 30F
+    paint.textSize = textSize
     paint.textAlign = Paint.Align.LEFT
     val baseline = -paint.ascent()
     val btmText = Bitmap.createBitmap((paint.measureText(text) + 0.5f).toInt(),

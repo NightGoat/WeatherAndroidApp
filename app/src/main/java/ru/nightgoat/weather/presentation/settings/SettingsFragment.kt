@@ -1,6 +1,7 @@
 package ru.nightgoat.weather.presentation.settings
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.presentation.WelcomeActivity
 
 class SettingsFragment : Fragment() {
 
@@ -30,7 +32,10 @@ class SettingsFragment : Fragment() {
         checkRadioGroupDegreeAndSetListener()
         checkRadioGroupPressureAndSetListener()
         putApiKeyAndSetClickListenerInEdit()
-
+        settings_textInputLayout_api.setEndIconOnClickListener {
+            val intent = Intent(activity, WelcomeActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun putApiKeyAndSetClickListenerInEdit() {

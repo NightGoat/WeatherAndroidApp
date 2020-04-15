@@ -4,7 +4,6 @@ import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import io.reactivex.exceptions.UndeliverableException
-import io.reactivex.internal.functions.Functions
 import io.reactivex.plugins.RxJavaPlugins
 import net.danlew.android.joda.JodaTimeAndroid
 import ru.nightgoat.weather.di.components.DaggerAppComponent

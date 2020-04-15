@@ -4,13 +4,15 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.provider.AlarmClock
+import android.provider.CalendarContract
 import android.util.Log
 import android.widget.RemoteViews
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subscribers.DisposableSubscriber
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.di.components.DaggerBroadcastReceiverProvider
 import ru.nightgoat.weather.domain.Interactor
@@ -21,7 +23,7 @@ import ru.nightgoat.weather.utils.convertToImg
 import ru.nightgoat.weather.utils.getApiKey
 import javax.inject.Inject
 
-class GoogleLikeWidgetProvider : AppWidgetProvider() {
+class BigWidgetProvider : AppWidgetProvider() {
     private lateinit var sharedPreferences: SharedPreferences
 
     @Inject
@@ -36,40 +38,55 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
             DaggerBroadcastReceiverProvider.builder().context(context).build().inject(this)
         }
         sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
-        
+
         if (appWidgetIds != null) {
             for (appWidgetId in appWidgetIds) {
                 val views = RemoteViews(
                     context.packageName,
-                    R.layout.widget_google_like
+                    R.layout.widget_big
                 )
                 onTempClickListener(views, context)
                 onIconClickListener(views, context)
                 onDateClickListener(views, context)
+                onTimeClickListener(views, context)
                 updateWeather(views, context, appWidgetManager, appWidgetId)
                 appWidgetManager?.updateAppWidget(appWidgetId, views)
             }
-
         }
     }
 
-    private fun onDateClickListener(views: RemoteViews, context: Context) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.type = "vnd.android.cursor.item/event"
+    private fun onTimeClickListener(views: RemoteViews, context: Context) {
         views.setOnClickPendingIntent(
-            R.id.oneLineWidget_date,
+            R.id.twoLineWidget_clock,
             PendingIntent.getActivity(
-                    context,
-                    0,
-                    intent,
-                    0
-                )
+                context,
+                0,
+                Intent(AlarmClock.ACTION_SHOW_ALARMS),
+                0
+            )
+        )
+    }
+
+    private fun onDateClickListener(views: RemoteViews, context: Context) {
+
+        val builder = CalendarContract.CONTENT_URI.buildUpon()
+        builder.appendPath("time")
+        ContentUris.appendId(builder, System.currentTimeMillis())
+        val intent = Intent(Intent.ACTION_VIEW).setData(builder.build())
+        views.setOnClickPendingIntent(
+            R.id.twoLineWidget_date,
+            PendingIntent.getActivity(
+                context,
+                0,
+                intent,
+                0
+            )
         )
     }
 
     private fun onIconClickListener(views: RemoteViews, context: Context) {
         views.setOnClickPendingIntent(
-            R.id.oneLineWidget_icon,
+            R.id.twoLineWidget_icon,
             PendingIntent
                 .getActivity(
                     context,
@@ -82,7 +99,7 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
 
     private fun onTempClickListener(views : RemoteViews, context: Context) {
         views.setOnClickPendingIntent(
-            R.id.oneLineWidget_temp,
+            R.id.twoLineWidget_temp,
             PendingIntent
                 .getActivity(
                     context,
@@ -107,11 +124,11 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
             .observeOn(AndroidSchedulers.mainThread(), true)
             .subscribe({
                 views.setTextViewText(
-                    R.id.oneLineWidget_temp,
+                    R.id.twoLineWidget_temp,
                     it.temp.toString().plus(degree)
                 )
                 views.setImageViewBitmap(
-                    R.id.oneLineWidget_icon,
+                    R.id.twoLineWidget_icon,
                     convertToImg(
                         chooseIcon(
                             it.iconId,
@@ -119,12 +136,12 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
                             it.sunrise,
                             it.sunset,
                             context
-                        ), context, 30F
+                        ), context, 128F
                     )
                 )
                 appWidgetManager?.updateAppWidget(appWidgetId, views)
             }, {
-                Log.e("WIDGET", it.message.toString())
+                Log.e("big WIDGET", it.message.toString())
             })
     }
 }

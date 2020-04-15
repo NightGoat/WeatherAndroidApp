@@ -3,10 +3,7 @@ package ru.nightgoat.weather.presentation.base
 import android.content.SharedPreferences
 import dagger.android.support.DaggerFragment
 import ru.nightgoat.weather.R
-import ru.nightgoat.weather.presentation.city.CityFragment
-import ru.nightgoat.weather.utils.getHour
 import ru.nightgoat.weather.utils.pressureFromHPaToMmHg
-import java.util.*
 
 abstract class BaseFragment : DaggerFragment() {
     lateinit var sharedPreferences: SharedPreferences

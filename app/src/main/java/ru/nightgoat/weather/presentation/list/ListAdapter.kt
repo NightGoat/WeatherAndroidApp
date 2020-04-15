@@ -2,11 +2,9 @@ package ru.nightgoat.weather.presentation.list
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-import kotlinx.android.synthetic.main.list_city_card.view.*
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.data.entity.CityEntity
 import java.util.*

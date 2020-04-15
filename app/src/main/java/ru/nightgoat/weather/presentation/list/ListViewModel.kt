@@ -7,7 +7,6 @@ import io.reactivex.schedulers.Schedulers
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.domain.Interactor
 import ru.nightgoat.weather.presentation.base.BaseViewModel
-import ru.nightgoat.weather.utils.getApiKey
 import javax.inject.Inject
 
 class ListViewModel @Inject constructor(private val interactor: Interactor) : BaseViewModel() {

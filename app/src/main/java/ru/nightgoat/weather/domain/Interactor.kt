@@ -149,6 +149,10 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
                 })
     }
 
+    fun purgeForecast(cityId: Int) : Completable{
+        return repository.purgeForecast(cityId)
+    }
+
     companion object {
         @JvmStatic
         val TAG = Interactor::class.java.simpleName

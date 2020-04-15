@@ -25,4 +25,5 @@ interface DBRepository {
     fun getForecast(cityId: Int): Flowable<MutableList<ForecastEntity>>
     fun insertForecast(forecast: ForecastEntity): Completable
     fun deleteAllForecastForCity(cityId: Int): Completable
+    fun purgeForecast(cityId: Int): Completable
 }

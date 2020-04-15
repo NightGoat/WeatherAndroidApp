@@ -2,7 +2,6 @@ package ru.nightgoat.weather.network.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import org.intellij.lang.annotations.JdkConstants
 import ru.nightgoat.weather.data.entity.CityEntity
 
 data class CityModel(

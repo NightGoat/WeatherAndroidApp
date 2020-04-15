@@ -30,7 +30,6 @@ abstract class CitiesDatabase : RoomDatabase() {
                 context,
                 CitiesDatabase::class.java, "Cities.db"
             )
-                .fallbackToDestructiveMigration()
                 .build()
         }
     }
