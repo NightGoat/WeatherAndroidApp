@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Weather icons -->
+    <string name="weather_sunny" translatable="false">&#xf00d;</string>
+    <string name="weather_clear_night" translatable="false">&#xf02e;</string>
+    <string name="weather_fog" translatable="false">&#xf014;</string>
+    <string name="weather_clouds" translatable="false">&#xf013;</string>
+    <string name="weather_rain" translatable="false">&#xf019;</string>
+    <string name="weather_showerRain" translatable="false">&#xf01a;</string>
+    <string name="weather_snow" translatable="false">&#xf01b;</string>
+    <string name="weather_thunder" translatable="false">&#xf016;</string>
+    <string name="weather_thunder_lightRain" translatable="false">&#xf01d;</string>
+    <string name="weather_thunder_heavyRain" translatable="false">&#xf01e;</string>
+    <string name="weather_drizzle" translatable="false">&#xf01c;</string>
+    <string name="weather_smoke" translatable="false">&#xf062;</string>
+    <string name="weather_sand" translatable="false">&#xf082;</string>
+    <string name="weather_dust" translatable="false">&#xf063;</string>
+    <string name="weather_volcano" translatable="false">&#xf0c8;</string>
+    <string name="weather_squall" translatable="false">&#xf050;</string>
+    <string name="weather_tornado" translatable="false">&#xf056;</string>
+    <!-- Symbols -->
+    <string name="celsius" translatable="false">&#8451;</string>
+    <string name="fahrenheit" translatable="false">&#8457;</string>
+    <string name="percent" translatable="false">&#37;</string>
+    <string name="barometer" translatable="false">&#xf079;</string>
+    <string name="humidityIcon" translatable="false">&#xf07a;</string>
+    <string name="degree" translatable="false">&#186;</string>
+
+    <!-- App strings -->
+    <string name="app_name" translatable="false">Weather</string>
+    <string name="cities_list">Cities list</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="temperature">Temperature:</string>
+    <string name="humidity">Humidity:</string>
+    <string name="overcast">Overcast:</string>
+    <string name="choose_city">Choose city</string>
+    <string name="city">City</string>
+    <string name="add_city">Add city</string>
+    <string name="update_weather">Update weather</string>
+    <string name="settings">Settings</string>
+    <string name="city_not_found">City not found</string>
+    <string name="empty_list">Empty list</string>
+    <string name="updating">Updating…</string>
+    <string name="add">Add</string>
+    <string name="add_api">Add API key</string>
+    <string name="remove">Remove</string>
+    <string name="weather_last_week">Weather last week:</string>
+    <string name="go_back">Go back</string>
+    <string name="delete_city">Delete city</string>
+    <string name="cancel">Cancel</string>
+    <string name="city_added">City added</string>
+    <string name="ms">m/s</string>
+    <string name="pressure">Pressure:</string>
+    <string name="hPa">hPa</string>
+    <string name="last_update">Last update:</string>
+    <string name="mmHg">mm Hg</string>
+    <string name="wind">Wind:</string>
+    <string name="city_is_already_in_list">City already is in list</string>
+    <string name="github_repository">GitHub rep</string>
+    <string name="app_logo">App logo</string>
+    <string name="degree_word">Degree:</string>
+    <string name="now">Now</string>
+    <string name="exit">EXIT</string>
+    <string name="yes">Yes</string>
+    <string name="icon">Weather icon</string>
+    <string name="max">max: %1$s</string>
+    <string name="min">min: %1$s</string>
+    <string name="feelsLike">Feels like: %1$s</string>
+    <string name="title_weather">Weather</string>
+    <string name="oneLineWidget">One line widget</string>
+    <string name="twoLineWidget">Big widget</string>
+    <string name="api_key">Key</string>
+    <string name="hello">Hello!</string>
+    <string name="intro_text_1">This app uses data from:</string>
+    <string name="intro_text_2">https://openweathermap.org</string>
+    <string name="intro_text_3">In order to use it, you need to sign up at:</string>
+    <string name="intro_text_4">https://openweathermap.org/home/sign_up</string>
+    <string name="intro_text_5">Then you need to copy key from there:</string>
+    <string name="intro_text_6">https://home.openweathermap.org/api_keys</string>
+    <string name="intro_text_7">After that u need to put that key in settings</string>
+    <string name="openweather_logo">OpenWeather logo</string>
+    <string name="first_settings">Settings: step 1</string>
+    <string name="second_settings">Settings: step 2</string>
+    <string name="third_settings">Settings: step 3</string>
+</resources>
