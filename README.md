@@ -1,5 +1,5 @@
 ## Timesheet android app.
-![App logo](/gitImages/WeatherEngCard.png)
+![App logo](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/WeatherEngCard.png)
 ##### Features:
 * Kotlin
 * MVVM
