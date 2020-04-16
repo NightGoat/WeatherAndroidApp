@@ -9,7 +9,7 @@
 * RxJava2
 * Joda time
 ##### Links:
-* [Screenshot 1](https://github.com/NightGoat/WeatherAndroidApp/blob/master/gitImages/Screenshot_1.png)
-* [Screenshot 2](https://github.com/NightGoat/WeatherAndroidApp/blob/master/gitImages/Screenshot_2.png)
-* [Screenshot 3](https://github.com/NightGoat/WeatherAndroidApp/blob/master/gitImages/Screenshot_3.png)
+* [Screenshot 1](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_1.png)
+* [Screenshot 2](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_2.png)
+* [Screenshot 3](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_3.png)
 * [GooglePlayStore](-)
