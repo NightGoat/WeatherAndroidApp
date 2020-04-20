@@ -35,11 +35,20 @@
                         android:id="@+id/text_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/choose_city"
                         android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Saint-Petersburg" />
+                        tools:text="Санкт-Петербург" />
+
+                    <TextView
+                        android:id="@+id/city_text_country"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:layout_marginStart="2dp"
+                        app:layout_constraintStart_toEndOf="@id/text_name"
+                        app:layout_constraintTop_toTopOf="@id/text_name"
+                        tools:text="RU" />
 
                     <TextView
                         android:id="@+id/text_date"

@@ -30,6 +30,17 @@
             />
 
         <TextView
+            android:id="@+id/listCard_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/choose_city"
+            android:textSize="12sp"
+            android:layout_marginStart="2dp"
+            app:layout_constraintStart_toEndOf="@id/listCard_name"
+            app:layout_constraintTop_toTopOf="@id/listCard_name"
+            tools:text="RU" />
+
+        <TextView
             android:id="@+id/listCard_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
