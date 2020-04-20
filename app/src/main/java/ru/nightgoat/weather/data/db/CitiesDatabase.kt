@@ -10,7 +10,7 @@ import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
 
-@Database(entities = [CityEntity::class, SearchEntity::class, ForecastEntity::class], version = 11, exportSchema = false)
+@Database(entities = [CityEntity::class, SearchEntity::class, ForecastEntity::class], version = 12, exportSchema = false)
 abstract class CitiesDatabase : RoomDatabase() {
     abstract fun dao(): CitiesDao
 
@@ -32,7 +32,7 @@ abstract class CitiesDatabase : RoomDatabase() {
                 context,
                 CitiesDatabase::class.java, "Cities.db"
             )
-                .addMigrations(MIGRATION_10_11)
+                .addMigrations(MIGRATION_10_11, MIGRATION_11_12)
                 .build()
         }
 
@@ -47,6 +47,12 @@ abstract class CitiesDatabase : RoomDatabase() {
                             "temp INTEGER NOT NULL, " +
                             "iconId INTEGER NOT NULL, " +
                             "PRIMARY KEY(cityId, date))")
+            }
+        }
+
+        private val MIGRATION_11_12 = object : Migration(11, 12) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE CityEntity ADD COLUMN country TEXT")
             }
         }
     }

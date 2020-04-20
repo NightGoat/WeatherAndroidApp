@@ -10,6 +10,7 @@ data class CityEntity(
     var position: Int,
     var date: Long,
     var name: String,
+    var country: String?,
     var temp: Int,
     var feelsTemp: Int,
     var maxTemp: Int,

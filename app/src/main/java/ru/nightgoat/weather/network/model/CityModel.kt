@@ -50,6 +50,7 @@ data class CityModel(
             position = position,
             date = dt*1000,
             name = name,
+            country = sys.country,
             temp = main.temp.toInt(),
             feelsTemp = main.feelsLike.toInt(),
             maxTemp = main.tempMax.toInt(),

@@ -76,7 +76,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         lateinit var degree: String
         with (viewModel) {
             cityLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                text_name.text = it.name
+                text_name.text = it.name.plus(", ${it.country}")
                 degree = if (chooseUnits() == "metric") context?.getString(R.string.celsius).toString()
                 else context?.getString(R.string.fahrenheit).toString()
                 text_temp.text = it.temp.toString().plus(degree)
