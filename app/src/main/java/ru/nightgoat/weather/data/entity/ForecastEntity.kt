@@ -8,7 +8,5 @@ data class ForecastEntity(
     var name: String,
     var date: Long,
     var temp: Int,
-    var iconId: Int,
-    var sunrise: Long,
-    var sunset: Long
+    var iconId: Int
 )

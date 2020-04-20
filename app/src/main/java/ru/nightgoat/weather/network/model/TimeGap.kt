@@ -17,6 +17,10 @@ data class TimeGap(
     @Expose
     var weather: List<Weather>,
 
+    @SerializedName("dt_txt")
+    @Expose
+    var dtTxt: String,
+
     var sunrise: Long,
     var sunset: Long
 )

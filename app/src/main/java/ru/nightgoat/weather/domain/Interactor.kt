@@ -9,7 +9,7 @@ import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
 import ru.nightgoat.weather.network.OpenWeatherAPI
 import ru.nightgoat.weather.network.model.CityModel
-import ru.nightgoat.weather.utils.getHour
+import ru.nightgoat.weather.utils.getNormalDateTimeNotCapitalized
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
@@ -130,16 +130,15 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
             .subscribe(
                 {
                     for (gap in it.list) {
-                        if (getHour(gap.dt*1000) == 12) {
+                        if (gap.dtTxt.contains("12:00:00")) {
+                            Log.d(TAG, "gap: ${it.city} ${getNormalDateTimeNotCapitalized(gap.dt*1000)}, ${gap.main.temp}, ${gap.weather[0].icon}, ${gap.weather[0].id}")
                             repository.insertForecast(
                                 ForecastEntity(
                                     it.city.cityId,
                                     it.city.name,
-                                    gap.dt,
+                                    gap.dt*1000,
                                     gap.main.temp.roundToInt(),
-                                    gap.weather[0].id,
-                                    it.city.sunrise,
-                                    it.city.sunset
+                                    gap.weather[0].id
                                 )
                             ).subscribe()
                         }

@@ -40,7 +40,7 @@ class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
 
         @ExperimentalStdlibApi
         fun bind(item: ForecastEntity, fragment: CityFragmentCallbacks) {
-            itemView.cityCard_date.text = getDayOfWeekAndDate(item.date*1000)
+            itemView.cityCard_date.text = getDayOfWeekAndDate(item.date)
             itemView.cityCard_temp.text = item.temp.toString()
                 .plus(itemView.context.getString(R.string.degree))
             itemView.cityCard_icon.typeface =
@@ -48,8 +48,7 @@ class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
             itemView.cityCard_icon.text = fragment.getWeatherIcon(
                 item.iconId,
                 item.date,
-                item.sunrise,
-                item.sunset
+                0, 0
             )
         }
     }
