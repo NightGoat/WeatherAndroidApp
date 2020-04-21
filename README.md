@@ -12,4 +12,4 @@
 * [Screenshot 1](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_1.png)
 * [Screenshot 2](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_2.png)
 * [Screenshot 3](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_3.png)
-* [GooglePlayStore](-)
+* [GooglePlayStore](https://play.google.com/store/apps/details?id=ru.nightgoat.weather)
