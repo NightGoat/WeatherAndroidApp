@@ -40,7 +40,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:src="@drawable/weather_icon"
             android:contentDescription="@string/icon" />
 
         <TextView

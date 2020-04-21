@@ -34,7 +34,6 @@
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/weather_icon"
         android:contentDescription="@string/icon" />
 
     <TextView

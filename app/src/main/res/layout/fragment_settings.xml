@@ -10,13 +10,7 @@
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="11dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="11dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            style="@style/Card">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/settings_textInputLayout_api"
@@ -40,14 +34,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="11dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="11dp"
-            android:backgroundTint="@color/colorBackgroundDark"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            style="@style/Card">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,14 +42,9 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:padding="8dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
                     android:text="@string/degree_word"
-                    android:textSize="14sp" />
+                    style="@style/SettingsItem.Header"
+                    />
 
                 <RadioGroup
                     android:id="@+id/settings_radGrpDegree"
@@ -71,41 +53,25 @@
 
                     <RadioButton
                         android:id="@+id/settings_radBtnCelsius"
-                        style="@style/rightRadioButton"
-                        android:layout_marginStart="16dp"
                         android:gravity="center|end"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:text="@string/celsius" />
+                        android:text="@string/celsius"
+                        style="@style/SettingsItem.RadBtn"/>
 
                     <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@color/colorGrey" />
+                        style="@style/SettingsLine" />
 
                     <RadioButton
                         android:id="@+id/settings_radBtnFahrenheit"
-                        style="@style/rightRadioButton"
-                        android:layout_marginStart="16dp"
                         android:gravity="center|end"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:text="@string/fahrenheit" />
+                        android:text="@string/fahrenheit"
+                        style="@style/SettingsItem.RadBtn"/>
+
                 </RadioGroup>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="11dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="11dp"
-            android:backgroundTint="@color/colorBackgroundDark"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            style="@style/Card">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,15 +79,8 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:drawablePadding="8dp"
-                    android:padding="8dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
                     android:text="@string/pressure"
-                    android:textSize="14sp" />
+                    style="@style/SettingsItem.Header" />
 
                 <RadioGroup
                     android:id="@+id/settings_radGrpPressure"
@@ -130,26 +89,17 @@
 
                     <RadioButton
                         android:id="@+id/settings_radBtnMmHg"
-                        style="@style/rightRadioButton"
-                        android:layout_marginStart="16dp"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:text="@string/mmHg" />
+                        android:text="@string/mmHg"
+                        style="@style/SettingsItem.RadBtn"/>
 
                     <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@color/colorGrey" />
+                        style="@style/SettingsLine" />
 
                     <RadioButton
                         android:id="@+id/settings_radBtnHPa"
-                        style="@style/rightRadioButton"
-                        android:layout_marginStart="16dp"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:text="@string/hPa" />
+                        android:text="@string/hPa"
+                        style="@style/SettingsItem.RadBtn"/>
+
                 </RadioGroup>
             </LinearLayout>
         </androidx.cardview.widget.CardView>

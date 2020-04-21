@@ -27,7 +27,7 @@
     <string name="degree" translatable="false">&#186;</string>
 
     <!-- App strings -->
-    <string name="app_name" translatable="false">Weather</string>
+    <string name="app_name">Weather</string>
     <string name="cities_list">Cities list</string>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>

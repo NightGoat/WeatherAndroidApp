@@ -8,11 +8,8 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/addCity_textInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="8dp"
         style="@style/BoxedEditText">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -34,27 +31,19 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addCity_btn_cancel"
-        android:layout_width="0dp"
-        android:layout_height="64dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/addCity_btn_add"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:strokeColor="@color/colorPrimary"
-        android:text="@string/cancel"/>
+        android:text="@string/cancel"
+        style="@style/AddCityButton"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addCity_btn_add"
-        android:layout_width="0dp"
-        android:layout_height="64dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        app:strokeColor="@color/colorPrimary"
         app:layout_constraintStart_toEndOf="@id/addCity_btn_cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/add_city"/>
+        android:text="@string/add_city"
+        style="@style/AddCityButton"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

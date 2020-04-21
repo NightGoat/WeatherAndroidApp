@@ -33,9 +33,8 @@
             android:id="@+id/listCard_country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/choose_city"
             android:textSize="12sp"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="4dp"
             app:layout_constraintStart_toEndOf="@id/listCard_name"
             app:layout_constraintTop_toTopOf="@id/listCard_name"
             tools:text="RU" />
@@ -46,7 +45,7 @@
             android:layout_height="wrap_content"
             cardView:layout_constraintEnd_toStartOf="@id/listCard_icon"
             cardView:layout_constraintTop_toTopOf="@id/listCard_name"
-            tools:text="4 'C"
+            tools:text="4&#8451;"
             android:layout_marginEnd="8dp"
             android:textSize="37sp"/>
 
@@ -59,7 +58,7 @@
             cardView:layout_constraintBottom_toBottomOf="@id/listCard_temp"
             android:layout_marginStart="8dp"
             android:textSize="37sp"
-            tools:text="O"/>
+            tools:text="❆"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

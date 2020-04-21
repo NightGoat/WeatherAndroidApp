@@ -17,14 +17,9 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
                 android:layout_marginTop="17dp"
-                android:layout_marginEnd="11dp"
                 android:backgroundTint="@color/colorPrimary"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                style="@style/Card">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -45,7 +40,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:layout_marginStart="2dp"
+                        android:layout_marginStart="4dp"
                         app:layout_constraintStart_toEndOf="@id/text_name"
                         app:layout_constraintTop_toTopOf="@id/text_name"
                         tools:text="RU" />
@@ -57,7 +52,7 @@
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="@id/text_name"
                         app:layout_constraintTop_toBottomOf="@id/text_name"
-                        tools:text="31 дек. 1999 Ср. 23.49" />
+                        tools:text="Вторник 21.04.2020 10:28" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -66,14 +61,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/city_topCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="11dp"
-                android:backgroundTint="@color/colorBackgroundDark"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                style="@style/Card">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -104,7 +92,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/text_temp"
                         app:layout_constraintTop_toTopOf="@id/text_temp"
-                        tools:text="A" />
+                        tools:text="❅" />
 
                     <TextView
                         android:id="@+id/city_text_description"
@@ -116,7 +104,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/text_temp"
-                        tools:text="Частичная облачность" />
+                        tools:text="частичная облачность" />
 
                     <TextView
                         android:id="@+id/text_feelsLike"
@@ -158,14 +146,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/city_parameters_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="11dp"
-                android:backgroundTint="@color/colorBackgroundDark"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                style="@style/Card">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -175,89 +156,65 @@
 
                     <TextView
                         android:id="@+id/humidityIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
                         android:text="@string/humidityIcon"
-                        android:textSize="16sp"
                         app:layout_constraintEnd_toStartOf="@id/text_humidity"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        style="@style/WeatherProperties.Icon"/>
 
 
                     <TextView
                         android:id="@+id/text_humidity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/pressureIcon"
                         app:layout_constraintStart_toEndOf="@id/humidityIcon"
-                        tools:text="99&#37;" />
+                        tools:text="99&#37;"
+                        style="@style/WeatherProperties.Text"/>
 
                     <TextView
                         android:id="@+id/pressureIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
                         android:text="@string/barometer"
-                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/text_pressure"
-                        app:layout_constraintStart_toEndOf="@id/text_humidity" />
+                        app:layout_constraintStart_toEndOf="@id/text_humidity"
+                        style="@style/WeatherProperties.Icon"/>
 
                     <TextView
                         android:id="@+id/text_pressure"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/windIcon"
                         app:layout_constraintStart_toEndOf="@id/pressureIcon"
-                        tools:text="1014Pa" />
+                        tools:text="1014Pa"
+                        style="@style/WeatherProperties.Text"/>
 
                     <TextView
                         android:id="@+id/windIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
                         android:text="@string/weather_squall"
-                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/text_wind"
-                        app:layout_constraintStart_toEndOf="@id/text_pressure" />
-
+                        app:layout_constraintStart_toEndOf="@id/text_pressure"
+                        style="@style/WeatherProperties.Icon"/>
 
                     <TextView
                         android:id="@+id/text_wind"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/windIcon"
-                        tools:text="2m/s" />
+                        tools:text="2m/s"
+                        android:layout_marginEnd="0dp"
+                        style="@style/WeatherProperties.Text"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/city_forecast_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="7dp"
                 android:layout_marginEnd="4dp"
-                android:backgroundTint="@color/colorBackgroundDark"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp"
-                app:cardUseCompatPadding="true">
+                app:cardUseCompatPadding="true"
+                style="@style/Card">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/city_recycler"

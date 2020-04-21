@@ -18,28 +18,23 @@
         cardView:layout_constraintStart_toStartOf="parent"
         cardView:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="01.01.1991 Пн"/>
+        tools:text="Вторник, 21 апр."/>
 
     <TextView
         android:id="@+id/cityCard_temp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textSize="24sp"
         cardView:layout_constraintEnd_toStartOf="@id/cityCard_icon"
         cardView:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="4 'C" />
+        cardView:layout_constraintBottom_toBottomOf="parent"
+        tools:text="4&#8451;"
+        style="@style/ForecastCardItem"/>
 
     <TextView
         android:id="@+id/cityCard_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="24sp"
         cardView:layout_constraintBottom_toBottomOf="@id/cityCard_temp"
         cardView:layout_constraintEnd_toEndOf="parent"
         cardView:layout_constraintTop_toTopOf="@id/cityCard_temp"
-        tools:text="O" />
+        tools:text="❅"
+        style="@style/ForecastCardItem"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
