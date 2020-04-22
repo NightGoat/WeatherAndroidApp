@@ -61,14 +61,17 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     }
 
     private fun setFont() {
-        humidityIcon.typeface =
-            Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
-        pressureIcon.typeface =
-            Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
-        windIcon.typeface =
-            Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
-        city_text_weatherIcon.typeface =
-            Typeface.createFromAsset(context!!.assets, "fonts/weathericons.ttf")
+        context?.let {
+            humidityIcon.typeface =
+                Typeface.createFromAsset(it.assets, "fonts/weathericons.ttf")
+            pressureIcon.typeface =
+                Typeface.createFromAsset(it.assets, "fonts/weathericons.ttf")
+            windIcon.typeface =
+                Typeface.createFromAsset(it.assets, "fonts/weathericons.ttf")
+            city_text_weatherIcon.typeface =
+                Typeface.createFromAsset(it.assets, "fonts/weathericons.ttf")
+        }
+
     }
 
     @ExperimentalStdlibApi
@@ -110,10 +113,5 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     override fun onStop() {
         super.onStop()
         viewModel.purgeForecast(chooseCityId())
-    }
-
-    companion object {
-        @JvmStatic
-        val TAG = CityFragment::class.java.simpleName
     }
 }

@@ -1,6 +1,6 @@
 package ru.nightgoat.weather.presentation.list
 
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -49,20 +49,10 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
                 Collections.swap(cityList, i, i - 1)
             }
         }
-        Log.d(TAG, "onRowMoved")
         cityList[fromPosition].position = fromPosition
         cityList[toPosition].position = toPosition
         notifyItemMoved(fromPosition, toPosition)
         return cityList
-    }
-
-    fun getList(): MutableList<CityEntity> {
-        return cityList
-    }
-
-    companion object {
-        @JvmStatic
-        val TAG = ListAdapter::class.java.simpleName
     }
 }
 

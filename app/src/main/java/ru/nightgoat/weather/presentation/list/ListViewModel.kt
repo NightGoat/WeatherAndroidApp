@@ -1,12 +1,12 @@
 package ru.nightgoat.weather.presentation.list
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.domain.Interactor
 import ru.nightgoat.weather.presentation.base.BaseViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 class ListViewModel @Inject constructor(private val interactor: Interactor) : BaseViewModel() {
@@ -24,7 +24,7 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
                 .subscribe({ listOfCities ->
                     cityListLiveData.value = listOfCities
                 }, {
-                    Log.e(TAG, it.message!!)
+                    Timber.e(it.message!!)
                 })
         )
     }
@@ -36,6 +36,7 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
                 .subscribe({
                     cityIdLiveData.value = it.cityId
                 }, {
+                    Timber.e(it)
                     if (it.message!!.contains("404", ignoreCase = true))
                         snackBarLiveData.value = "nf"
                     else snackBarLiveData.value = it.message
@@ -52,15 +53,15 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
             )
     }
 
-    fun updateAllFromApi(units: String, API_KEY : String) {
-        Log.d(TAG, "update() call")
+    fun updateAllFromApi(units: String, API_KEY: String) {
+        Timber.d("update() call")
         compositeDisposable.add(
             interactor.updateAllFromApi(units, API_KEY).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     refreshLiveData.value = false
                 }, {
-                    Log.e(TAG, it.message.toString())
+                    Timber.e(it)
                 })
         )
     }
@@ -83,20 +84,15 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
     }
 
     fun swapPositionWithFirst(city: CityEntity) {
-        compositeDisposable.add(interactor.swapPositionWithFirst(city).subscribe({
-
-        }, {
-            Log.e(TAG, it.message.toString())
-        }))
+        compositeDisposable.add(
+            interactor.swapPositionWithFirst(city).subscribe(
+                {},
+                { Timber.e(it) })
+        )
     }
 
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
-    }
-
-    companion object {
-        @JvmStatic
-        val TAG = ListViewModel::class.java.simpleName
     }
 }

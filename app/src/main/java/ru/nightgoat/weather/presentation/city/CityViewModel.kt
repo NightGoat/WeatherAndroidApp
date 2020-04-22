@@ -8,6 +8,7 @@ import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.domain.Interactor
 import ru.nightgoat.weather.presentation.base.BaseViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 class CityViewModel @Inject constructor(private val interactor: Interactor) : BaseViewModel() {
@@ -28,11 +29,10 @@ class CityViewModel @Inject constructor(private val interactor: Interactor) : Ba
                 refreshLiveData.value = true
             }
             .subscribe({
-                Log.d(TAG, "subscribe: $it")
                 cityLiveData.value = it
                 refreshLiveData.value = false
             }, {
-                Log.e(TAG, "city ${it.message!!}")
+                Timber.e( "city ${it.message!!}")
                 refreshLiveData.value = false
             }),
 
@@ -41,7 +41,7 @@ class CityViewModel @Inject constructor(private val interactor: Interactor) : Ba
                 .subscribe({
                     forecastLiveData.value = it.asReversed()
                 }, {
-                    Log.e(TAG, "forecast ${it.message!!}")
+                    Timber.e( "forecast ${it.message!!}")
                 }),
 
             interactor.updateForecast(id, units, API_KEY)
@@ -50,10 +50,5 @@ class CityViewModel @Inject constructor(private val interactor: Interactor) : Ba
 
     fun purgeForecast(cityId: Int) {
         interactor.purgeForecast(cityId).subscribeOn(Schedulers.io()).subscribe()
-    }
-
-    companion object {
-        @JvmStatic
-        val TAG = CityViewModel::class.java.simpleName
     }
 }

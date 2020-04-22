@@ -40,7 +40,7 @@ class SettingsFragment : Fragment() {
 
     private fun putApiKeyAndSetClickListenerInEdit() {
         settings_edit_api.setText(sharedPreferences.getString("api_key", ""))
-        settings_edit_api.setOnEditorActionListener { v, actionId, event ->
+        settings_edit_api.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 settings_edit_api.clearFocus()
                 sharedPreferences.edit()

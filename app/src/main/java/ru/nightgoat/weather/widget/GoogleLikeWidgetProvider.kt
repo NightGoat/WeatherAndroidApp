@@ -7,10 +7,8 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.util.Log
 import android.widget.RemoteViews
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subscribers.DisposableSubscriber
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.di.components.DaggerBroadcastReceiverProvider
 import ru.nightgoat.weather.domain.Interactor
@@ -19,6 +17,7 @@ import ru.nightgoat.weather.utils.chooseIcon
 import ru.nightgoat.weather.utils.chooseUnits
 import ru.nightgoat.weather.utils.convertToImg
 import ru.nightgoat.weather.utils.getApiKey
+import timber.log.Timber
 import javax.inject.Inject
 
 class GoogleLikeWidgetProvider : AppWidgetProvider() {
@@ -124,7 +123,7 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
                 )
                 appWidgetManager?.updateAppWidget(appWidgetId, views)
             }, {
-                Log.e("WIDGET", it.message.toString())
+                Timber.e(it)
             })
     }
 }

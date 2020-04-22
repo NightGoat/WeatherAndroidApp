@@ -26,7 +26,6 @@ abstract class BaseFragment : DaggerFragment() {
     }
 
     fun chooseIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
-        return ru.nightgoat.weather.utils.chooseIcon(id, dt, sunrise, sunset, context!!)
+        return ru.nightgoat.weather.utils.chooseIcon(id, dt, sunrise, sunset, requireContext())
     }
-
 }

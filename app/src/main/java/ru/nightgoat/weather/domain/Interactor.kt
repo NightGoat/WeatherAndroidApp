@@ -10,6 +10,7 @@ import ru.nightgoat.weather.data.entity.SearchEntity
 import ru.nightgoat.weather.network.OpenWeatherAPI
 import ru.nightgoat.weather.network.model.CityModel
 import ru.nightgoat.weather.utils.getNormalDateTimeNotCapitalized
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
@@ -99,7 +100,7 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
                     repository.insertCity(it).subscribeOn(Schedulers.io()).subscribe()
                 }
                 .doOnError {
-                    Log.e(TAG, it.message!!)
+                    Timber.e(it)
                 })
             .subscribeOn(Schedulers.io())
     }
@@ -131,7 +132,6 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
                 {
                     for (gap in it.list) {
                         if (gap.dtTxt.contains("12:00:00")) {
-                            Log.d(TAG, "gap: ${it.city} ${getNormalDateTimeNotCapitalized(gap.dt*1000)}, ${gap.main.temp}, ${gap.weather[0].icon}, ${gap.weather[0].id}")
                             repository.insertForecast(
                                 ForecastEntity(
                                     it.city.cityId,
@@ -144,17 +144,12 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
                         }
                     }
                 }, {
-                    Log.e(TAG, it.message.toString())
+                    Timber.e(it)
                 })
     }
 
     fun purgeForecast(cityId: Int) : Completable{
         return repository.purgeForecast(cityId)
-    }
-
-    companion object {
-        @JvmStatic
-        val TAG = Interactor::class.java.simpleName
     }
 }
 

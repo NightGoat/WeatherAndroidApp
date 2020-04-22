@@ -11,7 +11,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.support.DaggerAppCompatActivity
 import ru.nightgoat.weather.R
-import ru.nightgoat.weather.widget.GoogleLikeWidgetProvider
 
 class MainActivity : DaggerAppCompatActivity() {
 
@@ -21,7 +20,9 @@ class MainActivity : DaggerAppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setupWithNavController(navController)
+
         val sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
+
         if (!sharedPreferences.getBoolean("first", false)) {
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putBoolean("first", true)

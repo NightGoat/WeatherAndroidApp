@@ -21,6 +21,7 @@ import ru.nightgoat.weather.utils.chooseIcon
 import ru.nightgoat.weather.utils.chooseUnits
 import ru.nightgoat.weather.utils.convertToImg
 import ru.nightgoat.weather.utils.getApiKey
+import timber.log.Timber
 import javax.inject.Inject
 
 class BigWidgetProvider : AppWidgetProvider() {
@@ -141,7 +142,7 @@ class BigWidgetProvider : AppWidgetProvider() {
                 )
                 appWidgetManager?.updateAppWidget(appWidgetId, views)
             }, {
-                Log.e("big WIDGET", it.message.toString())
+                Timber.e(it)
             })
     }
 }

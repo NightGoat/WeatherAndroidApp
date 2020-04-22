@@ -3,6 +3,7 @@ package ru.nightgoat.weather.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -23,7 +24,7 @@ class ViewModelFactory
             @Suppress("UNCHECKED_CAST")
             return creator.get() as T
         } catch (e: Exception) {
-            Log.e(TAG, "Error is here : " + e.message, e)
+            Timber.e(e)
             throw RuntimeException(e)
         }
     }

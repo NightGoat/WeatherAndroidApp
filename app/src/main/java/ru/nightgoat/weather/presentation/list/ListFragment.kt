@@ -2,7 +2,6 @@ package ru.nightgoat.weather.presentation.list
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,14 +77,12 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                Log.d(TAG, "onMove from ${viewHolder.adapterPosition} to ${target.adapterPosition}")
                 adapterList = adapter.onRowMoved(viewHolder.adapterPosition, target.adapterPosition)
                 return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewModel.deleteCity(adapter.getEntity(viewHolder.adapterPosition))
-                Log.d(TAG, "onSwiped: ${viewHolder.adapterPosition}")
             }
 
             override fun clearView(
@@ -147,10 +144,5 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
 
     override fun updateCity(city: CityEntity) {
         viewModel.updateCityInDB(city)
-    }
-
-    companion object {
-        @JvmStatic
-        val TAG = ListFragment::class.java.simpleName
     }
 }
