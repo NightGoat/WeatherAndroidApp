@@ -28,10 +28,14 @@ fun chooseIcon(
         771 -> return context.getString(R.string.weather_squall) //Squall
         781 -> return context.getString(R.string.weather_tornado) //Tornado
         800 -> {
-            if (sunrise == 0L || dt in sunrise until sunset) context.getString(R.string.weather_sunny) //sunny
+            if ((sunrise == 0L) or (dt in sunrise until sunset)) context.getString(R.string.weather_sunny) //sunny
             else context.getString(R.string.weather_clear_night) //night
         }
-        in 801..804 -> return context.getString(R.string.weather_clouds) //clouds
+        801 -> {
+            if ((sunrise == 0L) or (dt in sunrise until sunset)) context.getString(R.string.weather_sun_clouds)
+            else context.getString(R.string.weather_moon_clouds)
+        }
+        in 802..804 -> return context.getString(R.string.weather_clouds) //clouds
         else -> "nope"
     }
 }

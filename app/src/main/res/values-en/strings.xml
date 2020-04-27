@@ -1,31 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Weather icons -->
-    <string name="weather_sunny" translatable="false">&#xf00d;</string>
-    <string name="weather_clear_night" translatable="false">&#xf02e;</string>
-    <string name="weather_fog" translatable="false">&#xf014;</string>
-    <string name="weather_clouds" translatable="false">&#xf013;</string>
-    <string name="weather_rain" translatable="false">&#xf019;</string>
-    <string name="weather_showerRain" translatable="false">&#xf01a;</string>
-    <string name="weather_snow" translatable="false">&#xf01b;</string>
-    <string name="weather_thunder" translatable="false">&#xf016;</string>
-    <string name="weather_thunder_lightRain" translatable="false">&#xf01d;</string>
-    <string name="weather_thunder_heavyRain" translatable="false">&#xf01e;</string>
-    <string name="weather_drizzle" translatable="false">&#xf01c;</string>
-    <string name="weather_smoke" translatable="false">&#xf062;</string>
-    <string name="weather_sand" translatable="false">&#xf082;</string>
-    <string name="weather_dust" translatable="false">&#xf063;</string>
-    <string name="weather_volcano" translatable="false">&#xf0c8;</string>
-    <string name="weather_squall" translatable="false">&#xf050;</string>
-    <string name="weather_tornado" translatable="false">&#xf056;</string>
-    <!-- Symbols -->
-    <string name="celsius" translatable="false">&#8451;</string>
-    <string name="fahrenheit" translatable="false">&#8457;</string>
-    <string name="percent" translatable="false">&#37;</string>
-    <string name="barometer" translatable="false">&#xf079;</string>
-    <string name="humidityIcon" translatable="false">&#xf07a;</string>
-    <string name="degree" translatable="false">&#186;</string>
-
     <!-- App strings -->
     <string name="app_name">Weather</string>
     <string name="cities_list">Cities list</string>

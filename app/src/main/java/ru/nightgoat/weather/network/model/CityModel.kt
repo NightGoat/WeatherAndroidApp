@@ -60,8 +60,8 @@ data class CityModel(
             wind = wind.speed.toInt(),
             description = weather[0].description,
             iconId = weather[0].id,
-            sunrise = sys.sunrise,
-            sunset = sys.sunset)
+            sunrise = sys.sunrise*1000,
+            sunset = sys.sunset*1000)
     }
 }
 

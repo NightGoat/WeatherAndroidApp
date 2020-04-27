@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -70,23 +71,15 @@ class AddCityFragment : BaseFragment() {
     }
 
     private fun initList() {
-        addCity_list.setOnItemClickListener { parent, view, position, id ->
+        addCity_list.setOnItemClickListener { _, view, _, _ ->
             addCity_edit.setText((view as TextView).text)
         }
     }
 
     private fun observeViewModel() {
         viewModel.searchListLiveData.observe(viewLifecycleOwner, Observer { listOfSearches ->
-            Log.d(TAG, listOfSearches.toString())
-            val adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, listOfSearches)
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, listOfSearches)
             addCity_list.adapter = adapter
         })
-    }
-
-    companion object {
-        fun newInstance() =
-            AddCityFragment()
-
-        val TAG = AddCityFragment::class.java.simpleName
     }
 }

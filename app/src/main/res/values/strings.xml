@@ -5,6 +5,8 @@
     <string name="weather_clear_night" translatable="false">&#xf02e;</string>
     <string name="weather_fog" translatable="false">&#xf014;</string>
     <string name="weather_clouds" translatable="false">&#xf013;</string>
+    <string name="weather_sun_clouds" translatable="false">&#xf002;</string>
+    <string name="weather_moon_clouds" translatable="false">&#xf086;</string>
     <string name="weather_rain" translatable="false">&#xf019;</string>
     <string name="weather_showerRain" translatable="false">&#xf01a;</string>
     <string name="weather_snow" translatable="false">&#xf01b;</string>
