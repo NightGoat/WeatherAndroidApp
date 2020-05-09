@@ -1,6 +1,5 @@
 package ru.nightgoat.weather.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import timber.log.Timber

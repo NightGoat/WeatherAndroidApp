@@ -7,6 +7,7 @@
     <color name="colorPink">#D81B60</color>
     <color name="colorBackground">#EDE7F6</color>
     <color name="colorBackgroundDark">#212121</color>
+    <color name="colorBackgroundDarker">#121212</color>
     <color name="colorGrey">#424242</color>
     <color name="colorLightGrey">#313131</color>
     <color name="color_highlight">#efe5fd</color>

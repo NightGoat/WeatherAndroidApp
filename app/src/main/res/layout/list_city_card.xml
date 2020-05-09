@@ -11,13 +11,15 @@
     cardView:cardUseCompatPadding="true"
     android:layout_marginStart="4dp"
     android:layout_marginEnd="4dp"
-    app:cardBackgroundColor="@color/colorBackgroundDark">
+    app:cardBackgroundColor="@color/colorBackgroundDark"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:background="?android:attr/selectableItemBackground">
+        android:background="?android:attr/selectableItemBackground"
+        >
 
         <TextView
             android:id="@+id/listCard_name"
@@ -60,6 +62,9 @@
             android:textSize="37sp"
             tools:text="❆"/>
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </androidx.cardview.widget.CardView>

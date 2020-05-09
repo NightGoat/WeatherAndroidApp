@@ -2,6 +2,7 @@ package ru.nightgoat.weather.presentation.city
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import ru.nightgoat.weather.data.entity.CityEntity
@@ -28,9 +29,11 @@ class CityViewModel @Inject constructor(private val interactor: Interactor) : Ba
             .doOnSubscribe {
                 refreshLiveData.value = true
             }
-            .subscribe({
+            .subscribe(
+                {
                 cityLiveData.value = it
                 refreshLiveData.value = false
+
             }, {
                 Timber.e( "city ${it.message!!}")
                 refreshLiveData.value = false

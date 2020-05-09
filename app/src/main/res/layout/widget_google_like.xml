@@ -34,7 +34,8 @@
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
         android:scaleType="fitCenter"
-        android:contentDescription="@string/icon" />
+        android:contentDescription="@string/icon"
+        />
 
     <TextView
         android:id="@+id/oneLineWidget_temp"

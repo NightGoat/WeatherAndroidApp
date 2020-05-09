@@ -1,12 +1,14 @@
 package ru.nightgoat.weather.presentation.list
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +18,10 @@ import kotlinx.android.synthetic.main.fragment_list.*
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.presentation.base.BaseFragment
+import ru.nightgoat.weather.presentation.city.CityFragment
 import ru.nightgoat.weather.utils.getApiKey
+import ru.nightgoat.weather.widget.GoogleLikeWidgetProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 class ListFragment : BaseFragment(), ListFragmentCallbacks {

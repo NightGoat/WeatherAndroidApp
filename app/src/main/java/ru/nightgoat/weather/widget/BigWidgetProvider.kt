@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
-import android.content.ContentUris
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.provider.AlarmClock
 import android.provider.CalendarContract
 import android.util.Log
@@ -144,5 +141,30 @@ class BigWidgetProvider : AppWidgetProvider() {
             }, {
                 Timber.e(it)
             })
+    }
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        super.onReceive(context, intent)
+        context?.let { mContext ->
+            sharedPreferences = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            val temp = intent?.getIntExtra("temp", 0)
+            val icon = intent?.getStringExtra("icon").toString()
+            val views = RemoteViews(mContext.packageName, R.layout.widget_big)
+            val degree = when (chooseUnits(sharedPreferences)) {
+                "metric" -> context.getString(R.string.celsius)
+                else -> context.getString(R.string.fahrenheit)
+            }
+            views.setTextViewText(
+                R.id.twoLineWidget_temp,
+                temp.toString().plus(degree)
+            )
+            views.setImageViewBitmap(
+                R.id.twoLineWidget_icon,
+                convertToImg(icon, mContext, 30F)
+            )
+            AppWidgetManager.getInstance(mContext).updateAppWidget(
+                ComponentName(mContext, BigWidgetProvider::class.java), views
+            )
+        }
     }
 }

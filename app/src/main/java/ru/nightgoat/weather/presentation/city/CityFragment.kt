@@ -1,6 +1,7 @@
 package ru.nightgoat.weather.presentation.city
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
 import kotlinx.android.synthetic.main.fragment_city.*
 
@@ -10,12 +11,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.presentation.base.BaseFragment
 import ru.nightgoat.weather.utils.getApiKey
 import ru.nightgoat.weather.utils.getNormalDateTime
+import ru.nightgoat.weather.widget.BigWidgetProvider
+import ru.nightgoat.weather.widget.GoogleLikeWidgetProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 class CityFragment : BaseFragment(), CityFragmentCallbacks {
@@ -94,8 +99,17 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
                     it.pressure.let { pressureValue -> choosePressure(pressureValue) }
                 text_wind.text = it.wind.toString().plus(context?.getString(R.string.ms))
                 city_text_description.text = it.description
-                city_text_weatherIcon.text = chooseIcon(it.iconId, it.date, it.sunrise, it.sunset)
+                val icon = chooseIcon(it.iconId, it.date, it.sunrise, it.sunset)
+                city_text_weatherIcon.text = icon
+                val intentSmallWidget = Intent(requireContext(), GoogleLikeWidgetProvider::class.java)
+                val intentBigWidget = Intent(requireContext(), BigWidgetProvider::class.java)
+                intentSmallWidget.putExtra("temp", it.temp).putExtra("icon", icon)
+                intentBigWidget.putExtra("temp", it.temp).putExtra("icon", icon)
+                context?.sendBroadcast(intentSmallWidget)
+                context?.sendBroadcast(intentBigWidget)
+
             })
+
             refreshLiveData.observe(viewLifecycleOwner, Observer {
                 city_swipeRefreshLayout.isRefreshing = it
             })
@@ -113,5 +127,9 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     override fun onStop() {
         super.onStop()
         viewModel.purgeForecast(chooseCityId())
+    }
+
+    companion object {
+        val TAG = "CityFragment"
     }
 }

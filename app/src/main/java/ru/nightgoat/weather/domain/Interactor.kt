@@ -1,6 +1,5 @@
 package ru.nightgoat.weather.domain
 
-import android.util.Log
 import io.reactivex.*
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -9,7 +8,6 @@ import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
 import ru.nightgoat.weather.network.OpenWeatherAPI
 import ru.nightgoat.weather.network.model.CityModel
-import ru.nightgoat.weather.utils.getNormalDateTimeNotCapitalized
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -13,6 +14,7 @@ import ru.nightgoat.weather.R
 import ru.nightgoat.weather.di.components.DaggerBroadcastReceiverProvider
 import ru.nightgoat.weather.domain.Interactor
 import ru.nightgoat.weather.presentation.MainActivity
+import ru.nightgoat.weather.presentation.city.CityFragment
 import ru.nightgoat.weather.utils.chooseIcon
 import ru.nightgoat.weather.utils.chooseUnits
 import ru.nightgoat.weather.utils.convertToImg
@@ -35,7 +37,7 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
             DaggerBroadcastReceiverProvider.builder().context(context).build().inject(this)
         }
         sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
-        
+
         if (appWidgetIds != null) {
             for (appWidgetId in appWidgetIds) {
                 val views = RemoteViews(
@@ -58,11 +60,11 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
         views.setOnClickPendingIntent(
             R.id.oneLineWidget_date,
             PendingIntent.getActivity(
-                    context,
-                    0,
-                    intent,
-                    0
-                )
+                context,
+                0,
+                intent,
+                0
+            )
         )
     }
 
@@ -79,7 +81,7 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
         )
     }
 
-    private fun onTempClickListener(views : RemoteViews, context: Context) {
+    private fun onTempClickListener(views: RemoteViews, context: Context) {
         views.setOnClickPendingIntent(
             R.id.oneLineWidget_temp,
             PendingIntent
@@ -93,7 +95,13 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
     }
 
     @SuppressLint("CheckResult")
-    private fun updateWeather(views: RemoteViews, context: Context, appWidgetManager: AppWidgetManager?, appWidgetId: Int) {
+    private fun updateWeather(
+        views: RemoteViews,
+        context: Context,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetId: Int
+    ) {
+
         val degree = when (chooseUnits(sharedPreferences)) {
             "metric" -> context.getString(R.string.celsius)
             else -> context.getString(R.string.fahrenheit)
@@ -125,5 +133,35 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
             }, {
                 Timber.e(it)
             })
+    }
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        super.onReceive(context, intent)
+        Timber.tag(TAG).d("Broadcast received")
+        context?.let { mContext ->
+            sharedPreferences = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            val temp = intent?.getIntExtra("temp", 0)
+            val icon = intent?.getStringExtra("icon").toString()
+            val views = RemoteViews(mContext.packageName, R.layout.widget_google_like)
+            val degree = when (chooseUnits(sharedPreferences)) {
+                "metric" -> context.getString(R.string.celsius)
+                else -> context.getString(R.string.fahrenheit)
+            }
+            views.setTextViewText(
+                R.id.oneLineWidget_temp,
+                temp.toString().plus(degree)
+            )
+            views.setImageViewBitmap(
+                R.id.oneLineWidget_icon,
+                convertToImg(icon, mContext, 30F)
+            )
+            AppWidgetManager.getInstance(mContext).updateAppWidget(
+                ComponentName(mContext, GoogleLikeWidgetProvider::class.java), views
+            )
+        }
+    }
+
+    companion object {
+        val TAG = GoogleLikeWidgetProvider::class.java.simpleName
     }
 }

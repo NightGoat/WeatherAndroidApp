@@ -27,11 +27,6 @@ abstract class BaseFragment : DaggerFragment() {
     }
 
     fun chooseIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
-        Timber.e("dt: $dt, sunrise: $sunrise, sunset: $sunset, sunrise < dt < sunset: ${checkIf(dt, sunrise, sunset)}")
         return ru.nightgoat.weather.utils.chooseIcon(id, dt, sunrise, sunset, requireContext())
-    }
-
-    private fun checkIf(dt: Long, sunrise: Long, sunset: Long): Boolean {
-        return dt in sunrise until sunset
     }
 }
