@@ -6,20 +6,20 @@ import androidx.room.PrimaryKey
 @Entity
 data class CityEntity(
     @PrimaryKey
-    var cityId: Int,
-    var position: Int,
-    var date: Long,
-    var name: String,
-    var country: String?,
-    var temp: Int,
-    var feelsTemp: Int,
-    var maxTemp: Int,
-    var minTemp: Int,
-    var humidity: Int,
-    var pressure: Int,
-    var wind: Int,
-    var description: String,
-    var iconId: Int,
-    var sunrise: Long,
-    var sunset: Long
+    val cityId: Int,
+    val position: Int,
+    val date: Long,
+    val name: String,
+    val country: String?,
+    val temp: Int,
+    val feelsTemp: Int,
+    val maxTemp: Int,
+    val minTemp: Int,
+    val humidity: Int,
+    val pressure: Int,
+    val wind: Int,
+    val description: String,
+    val iconId: Int,
+    val sunrise: Long,
+    val sunset: Long
 )

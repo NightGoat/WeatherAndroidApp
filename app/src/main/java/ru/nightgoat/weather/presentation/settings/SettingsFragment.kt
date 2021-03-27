@@ -13,6 +13,10 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.presentation.WelcomeActivity
+import ru.nightgoat.weather.utils.API_KEY
+import ru.nightgoat.weather.utils.DEGREE_KEY
+import ru.nightgoat.weather.utils.PRESSURE_KEY
+import ru.nightgoat.weather.utils.SETTINGS_KEY
 
 class SettingsFragment : Fragment() {
 
@@ -28,7 +32,7 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
+        sharedPreferences = context?.getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)!!
         checkRadioGroupDegreeAndSetListener()
         checkRadioGroupPressureAndSetListener()
         putApiKeyAndSetClickListenerInEdit()
@@ -39,12 +43,12 @@ class SettingsFragment : Fragment() {
     }
 
     private fun putApiKeyAndSetClickListenerInEdit() {
-        settings_edit_api.setText(sharedPreferences.getString("api_key", ""))
+        settings_edit_api.setText(sharedPreferences.getString(API_KEY, ""))
         settings_edit_api.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 settings_edit_api.clearFocus()
                 sharedPreferences.edit()
-                    .putString("api_key", settings_edit_api.text.toString()).apply()
+                    .putString(API_KEY, settings_edit_api.text.toString()).apply()
             }
             false
         }
@@ -53,24 +57,24 @@ class SettingsFragment : Fragment() {
     private fun checkRadioGroupPressureAndSetListener() {
         settings_radGrpPressure.check(
             sharedPreferences.getInt(
-                "pressure",
+                PRESSURE_KEY,
                 R.id.settings_radBtnMmHg
             )
         )
         settings_radGrpPressure.setOnCheckedChangeListener { _, checkedId ->
             sharedPreferences
                 .edit()
-                .putInt("pressure", checkedId)
+                .putInt(PRESSURE_KEY, checkedId)
                 .apply()
         }
     }
 
     private fun checkRadioGroupDegreeAndSetListener() {
-        settings_radGrpDegree.check(sharedPreferences.getInt("degree", R.id.settings_radBtnCelsius))
+        settings_radGrpDegree.check(sharedPreferences.getInt(DEGREE_KEY, R.id.settings_radBtnCelsius))
         settings_radGrpDegree.setOnCheckedChangeListener { _, checkedId ->
             sharedPreferences
                 .edit()
-                .putInt("degree", checkedId)
+                .putInt(DEGREE_KEY, checkedId)
                 .apply()
         }
     }

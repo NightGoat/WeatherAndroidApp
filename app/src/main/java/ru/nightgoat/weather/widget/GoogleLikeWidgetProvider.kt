@@ -15,10 +15,7 @@ import ru.nightgoat.weather.di.components.DaggerBroadcastReceiverProvider
 import ru.nightgoat.weather.domain.Interactor
 import ru.nightgoat.weather.presentation.MainActivity
 import ru.nightgoat.weather.presentation.city.CityFragment
-import ru.nightgoat.weather.utils.chooseIcon
-import ru.nightgoat.weather.utils.chooseUnits
-import ru.nightgoat.weather.utils.convertToImg
-import ru.nightgoat.weather.utils.getApiKey
+import ru.nightgoat.weather.utils.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,30 +30,30 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager?,
         appWidgetIds: IntArray?
     ) {
-        if (context != null) {
+        context?.let {
             DaggerBroadcastReceiverProvider.builder().context(context).build().inject(this)
-        }
-        sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
+            sharedPreferences = context.getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)
 
-        if (appWidgetIds != null) {
-            for (appWidgetId in appWidgetIds) {
-                val views = RemoteViews(
-                    context.packageName,
-                    R.layout.widget_google_like
-                )
-                onTempClickListener(views, context)
-                onIconClickListener(views, context)
-                onDateClickListener(views, context)
-                updateWeather(views, context, appWidgetManager, appWidgetId)
-                appWidgetManager?.updateAppWidget(appWidgetId, views)
-            }
+            appWidgetIds?.let {
+                for (appWidgetId in appWidgetIds) {
+                    val views = RemoteViews(
+                        context.packageName,
+                        R.layout.widget_google_like
+                    )
+                    onTempClickListener(views, context)
+                    onIconClickListener(views, context)
+                    onDateClickListener(views, context)
+                    updateWeather(views, context, appWidgetManager, appWidgetId)
+                    appWidgetManager?.updateAppWidget(appWidgetId, views)
+                }
+            } ?: Timber.e("onUpdate: appWidgetIds null")
+        } ?: Timber.e("onUpdate: context null")
 
-        }
     }
 
     private fun onDateClickListener(views: RemoteViews, context: Context) {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.type = "vnd.android.cursor.item/event"
+        intent.type = DATE_CLICK_INTENT
         views.setOnClickPendingIntent(
             R.id.oneLineWidget_date,
             PendingIntent.getActivity(
@@ -103,11 +100,11 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
     ) {
 
         val degree = when (chooseUnits(sharedPreferences)) {
-            "metric" -> context.getString(R.string.celsius)
+            METRIC -> context.getString(R.string.celsius)
             else -> context.getString(R.string.fahrenheit)
         }
         interactor.getCityFromDataBaseAndUpdateFromApi(
-            sharedPreferences.getInt("cityId", 551487),
+            sharedPreferences.getInt(CITY_ID_KEY, 551487),
             chooseUnits(sharedPreferences),
             getApiKey(sharedPreferences)
         )
@@ -121,11 +118,11 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
                     R.id.oneLineWidget_icon,
                     convertToImg(
                         chooseIcon(
-                            it.iconId,
-                            it.date,
-                            it.sunrise,
-                            it.sunset,
-                            context
+                            id = it.iconId,
+                            dt = it.date,
+                            sunrise = it.sunrise,
+                            sunset = it.sunset,
+                            context = context
                         ), context, 30F
                     )
                 )
@@ -139,12 +136,12 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
         super.onReceive(context, intent)
         Timber.tag(TAG).d("Broadcast received")
         context?.let { mContext ->
-            sharedPreferences = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
-            val temp = intent?.getIntExtra("temp", 0)
-            val icon = intent?.getStringExtra("icon").toString()
+            sharedPreferences = mContext.getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)
+            val temp = intent?.getIntExtra(TEMP_KEY, 0)
+            val icon = intent?.getStringExtra(ICON_KEY).toString()
             val views = RemoteViews(mContext.packageName, R.layout.widget_google_like)
             val degree = when (chooseUnits(sharedPreferences)) {
-                "metric" -> context.getString(R.string.celsius)
+                METRIC -> context.getString(R.string.celsius)
                 else -> context.getString(R.string.fahrenheit)
             }
             views.setTextViewText(
@@ -163,5 +160,6 @@ class GoogleLikeWidgetProvider : AppWidgetProvider() {
 
     companion object {
         val TAG = GoogleLikeWidgetProvider::class.java.simpleName
+        private const val DATE_CLICK_INTENT = "vnd.android.cursor.item/event"
     }
 }

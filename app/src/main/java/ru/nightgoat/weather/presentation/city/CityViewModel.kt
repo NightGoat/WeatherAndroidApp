@@ -21,30 +21,30 @@ class CityViewModel @Inject constructor(private val interactor: Interactor) : Ba
     fun loadWeather(id: Int, units: String, API_KEY: String) {
         compositeDisposable.addAll(
             interactor.getCityFromDataBaseAndUpdateFromApi(
-            id,
-            units,
-            API_KEY
-        )
-            .observeOn(AndroidSchedulers.mainThread(), true)
-            .doOnSubscribe {
-                refreshLiveData.value = true
-            }
-            .subscribe(
-                {
-                cityLiveData.value = it
-                refreshLiveData.value = false
+                id,
+                units,
+                API_KEY
+            )
+                .observeOn(AndroidSchedulers.mainThread(), true)
+                .doOnSubscribe {
+                    refreshLiveData.value = true
+                }
+                .subscribe(
+                    {
+                        cityLiveData.value = it
+                        refreshLiveData.value = false
 
-            }, {
-                Timber.e( "city ${it.message!!}")
-                refreshLiveData.value = false
-            }),
+                    }, {
+                        Timber.e("city ${it.message}")
+                        refreshLiveData.value = false
+                    }),
 
             interactor.getForecast(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     forecastLiveData.value = it.asReversed()
                 }, {
-                    Timber.e( "forecast ${it.message!!}")
+                    Timber.e("forecast ${it.message}")
                 }),
 
             interactor.updateForecast(id, units, API_KEY)

@@ -6,18 +6,18 @@ import com.google.gson.annotations.SerializedName
 data class City(
     @SerializedName("sunrise")
     @Expose
-    var sunrise: Long,
+    val sunrise: Long,
 
     @SerializedName("sunset")
     @Expose
-    var sunset: Long,
+    val sunset: Long,
 
     @SerializedName("id")
     @Expose
-    var cityId: Int,
+    val cityId: Int,
 
     @SerializedName("name")
     @Expose
-    var name: String
+    val name: String
 
 )

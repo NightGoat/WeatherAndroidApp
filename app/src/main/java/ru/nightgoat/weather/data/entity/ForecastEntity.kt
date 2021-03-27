@@ -4,9 +4,9 @@ import androidx.room.Entity
 
 @Entity(primaryKeys = ["cityId", "date"])
 data class ForecastEntity(
-    var cityId: Int,
-    var name: String,
-    var date: Long,
-    var temp: Int,
-    var iconId: Int
+    val cityId: Int,
+    val name: String,
+    val date: Long,
+    val temp: Int,
+    val iconId: Int
 )

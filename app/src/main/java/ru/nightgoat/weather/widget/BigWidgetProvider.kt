@@ -14,10 +14,7 @@ import ru.nightgoat.weather.R
 import ru.nightgoat.weather.di.components.DaggerBroadcastReceiverProvider
 import ru.nightgoat.weather.domain.Interactor
 import ru.nightgoat.weather.presentation.MainActivity
-import ru.nightgoat.weather.utils.chooseIcon
-import ru.nightgoat.weather.utils.chooseUnits
-import ru.nightgoat.weather.utils.convertToImg
-import ru.nightgoat.weather.utils.getApiKey
+import ru.nightgoat.weather.utils.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -111,7 +108,7 @@ class BigWidgetProvider : AppWidgetProvider() {
     @SuppressLint("CheckResult")
     private fun updateWeather(views: RemoteViews, context: Context, appWidgetManager: AppWidgetManager?, appWidgetId: Int) {
         val degree = when (chooseUnits(sharedPreferences)) {
-            "metric" -> context.getString(R.string.celsius)
+            METRIC -> context.getString(R.string.celsius)
             else -> context.getString(R.string.fahrenheit)
         }
         interactor.getCityFromDataBaseAndUpdateFromApi(

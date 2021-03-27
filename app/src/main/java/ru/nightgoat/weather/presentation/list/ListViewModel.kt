@@ -6,6 +6,7 @@ import io.reactivex.schedulers.Schedulers
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.domain.Interactor
 import ru.nightgoat.weather.presentation.base.BaseViewModel
+import ru.nightgoat.weather.utils.NOT_FOUND_KEY
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -24,7 +25,7 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
                 .subscribe({ listOfCities ->
                     cityListLiveData.value = listOfCities
                 }, {
-                    Timber.e(it.message!!)
+                    Timber.e(it.message.orEmpty())
                 })
         )
     }
@@ -37,8 +38,8 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
                     cityIdLiveData.value = it.cityId
                 }, {
                     Timber.e(it)
-                    if (it.message!!.contains("404", ignoreCase = true))
-                        snackBarLiveData.value = "nf"
+                    if (it.message?.contains(BAD_ANSWER, ignoreCase = true) == true)
+                        snackBarLiveData.value = NOT_FOUND_KEY
                     else snackBarLiveData.value = it.message
                 })
         )
@@ -66,8 +67,8 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
         )
     }
 
-    fun updateAllInRepository(list: MutableList<CityEntity>) {
-        for (city in list) {
+    fun updateAllInRepository(cities: MutableList<CityEntity>) {
+        for (city in cities) {
             compositeDisposable.add(
                 interactor
                     .updateCityInDB(city)
@@ -94,5 +95,9 @@ class ListViewModel @Inject constructor(private val interactor: Interactor) : Ba
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
+    }
+
+    companion object {
+        private const val BAD_ANSWER = "404"
     }
 }

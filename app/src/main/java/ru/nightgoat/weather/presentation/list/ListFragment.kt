@@ -1,14 +1,11 @@
 package ru.nightgoat.weather.presentation.list
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,10 +15,7 @@ import kotlinx.android.synthetic.main.fragment_list.*
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.presentation.base.BaseFragment
-import ru.nightgoat.weather.presentation.city.CityFragment
 import ru.nightgoat.weather.utils.getApiKey
-import ru.nightgoat.weather.widget.GoogleLikeWidgetProvider
-import timber.log.Timber
 import javax.inject.Inject
 
 class ListFragment : BaseFragment(), ListFragmentCallbacks {
@@ -34,7 +28,10 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     private val adapter = ListAdapter(this)
-    private lateinit var API_KEY : String
+
+    private val apiKey by lazy {
+        getApiKey(sharedPreferences)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,22 +43,20 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
-        API_KEY = getApiKey(sharedPreferences)
         initList()
         subscribeViewModel()
         listFabListener()
         setSwipeListener()
         arguments?.getString("name").let {
             if (it != null) {
-                viewModel.getCityFromApiAndPutInDB(it, chooseUnits(), API_KEY)
+                viewModel.getCityFromApiAndPutInDB(it, chooseUnits(), apiKey)
             }
         }
-        viewModel.updateAllFromApi(chooseUnits(), API_KEY)
+        viewModel.updateAllFromApi(chooseUnits(), apiKey)
     }
 
     private fun setSwipeListener() {
-        list_swipeLayout.setOnRefreshListener { viewModel.updateAllFromApi(chooseUnits(), API_KEY) }
+        list_swipeLayout.setOnRefreshListener { viewModel.updateAllFromApi(chooseUnits(), apiKey) }
     }
 
     private fun initList() {
@@ -105,7 +100,7 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     private fun subscribeViewModel() {
-        with (viewModel) {
+        with(viewModel) {
             cityListLiveData.observe(viewLifecycleOwner, Observer {
                 adapter.setList(it)
             })
@@ -121,14 +116,14 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
             })
 
             cityIdLiveData.observe(viewLifecycleOwner, Observer {
-                sharedPreferences.edit().putInt("cityId", it).apply()
+                sharedPreferences?.edit()?.putInt("cityId", it)?.apply()
             })
         }
 
     }
 
     override fun setCurrentCityAndCallCityFragment(cityName: String, cityId: Int) {
-        sharedPreferences.edit().putString("cityName", cityName).putInt("cityId", cityId).apply()
+        sharedPreferences?.edit()?.putString("cityName", cityName)?.putInt("cityId", cityId)?.apply()
         findNavController().navigate(R.id.action_navigation_list_to_navigation_city)
     }
 
@@ -137,7 +132,7 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     override fun getColor(cityEntity: CityEntity): Int {
-        return when (sharedPreferences.getInt("cityId", 0)) {
+        return when (sharedPreferences?.getInt("cityId", 0)) {
             cityEntity.cityId -> R.color.colorPrimary
             else -> R.color.colorBackgroundDark
         }

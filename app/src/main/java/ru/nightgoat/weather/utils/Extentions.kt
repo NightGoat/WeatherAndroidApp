@@ -40,8 +40,8 @@ fun chooseIcon(
     }
 }
 
-fun chooseUnits(sharedPreferences: SharedPreferences): String {
-    return if (sharedPreferences.getInt("degree", R.id.settings_radBtnCelsius)
+fun chooseUnits(sharedPreferences: SharedPreferences?): String {
+    return if (sharedPreferences?.getInt("degree", R.id.settings_radBtnCelsius)
         == R.id.settings_radBtnCelsius
     ) "metric"
     else "imperial"
@@ -64,6 +64,6 @@ fun convertToImg(text: String, context: Context, textSize: Float): Bitmap {
     return btmText
 }
 
-fun getApiKey(sharedPreferences: SharedPreferences) : String {
-    return sharedPreferences.getString("api_key", "0").toString()
+fun getApiKey(sharedPreferences: SharedPreferences?) : String {
+    return sharedPreferences?.getString("api_key", "0").orEmpty()
 }
