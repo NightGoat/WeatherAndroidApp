@@ -2,15 +2,26 @@ package ru.nightgoat.weather.presentation.base
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_list.*
 import ru.nightgoat.weather.R
-import ru.nightgoat.weather.utils.pressureFromHPaToMmHg
-import timber.log.Timber
+import ru.nightgoat.weather.providers.IResManager
+import ru.nightgoat.weather.utils.*
+import javax.inject.Inject
 
 abstract class BaseFragment : DaggerFragment() {
 
+    @Inject
+    lateinit var resManager: IResManager
+
     val sharedPreferences: SharedPreferences? by lazy {
         context?.getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)
+    }
+
+    private val navController by lazy {
+        findNavController()
     }
 
     fun chooseCityId(): Int {
@@ -18,7 +29,7 @@ abstract class BaseFragment : DaggerFragment() {
     }
 
     fun chooseUnits(): String {
-        return ru.nightgoat.weather.utils.chooseUnits(sharedPreferences)
+        return getUnits(sharedPreferences)
     }
 
     fun choosePressure(value: Int): String {
@@ -34,12 +45,14 @@ abstract class BaseFragment : DaggerFragment() {
     }
 
     fun chooseIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
-        return ru.nightgoat.weather.utils.chooseIcon(id, dt, sunrise, sunset, requireContext())
+        return resManager.getWeatherIcon(id, dt, sunrise, sunset)
     }
 
-    companion object {
-        private const val PRESSURE_KEY = "pressure"
-        private const val CITY_ID_KEY = "cityId"
-        private const val SETTINGS_KEY = "settings"
+    fun navigateTo(action: Int) {
+        navController.navigate(action)
+    }
+
+    fun showSnackBar(text: String, length: Int = Snackbar.LENGTH_SHORT) {
+        Snackbar.make(list_fab, text, length).show()
     }
 }

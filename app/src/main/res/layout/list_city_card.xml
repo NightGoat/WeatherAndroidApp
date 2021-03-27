@@ -26,8 +26,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             cardView:layout_constraintStart_toStartOf="parent"
+            cardView:layout_constraintEnd_toStartOf="@id/listCard_country"
             cardView:layout_constraintTop_toTopOf="parent"
+            cardView:layout_constraintHorizontal_bias="0"
+            cardView:layout_constraintHorizontal_chainStyle="packed"
             tools:text="Санкт-Петербург"
+            cardView:layout_constrainedWidth="true"
+            android:ellipsize="end"
+            android:lines="1"
             android:textSize="24sp"
             />
 
@@ -37,9 +43,19 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintStart_toEndOf="@id/listCard_name"
             app:layout_constraintTop_toTopOf="@id/listCard_name"
+            cardView:layout_constraintEnd_toStartOf="@id/barrier"
             tools:text="RU" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            cardView:constraint_referenced_ids="listCard_temp, listCard_icon"
+            cardView:barrierDirection="start"
+            />
 
         <TextView
             android:id="@+id/listCard_temp"

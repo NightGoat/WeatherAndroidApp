@@ -25,6 +25,7 @@
     <string name="cancel">Cancel</string>
     <string name="city_added">City added</string>
     <string name="ms">m/s</string>
+    <string name="windWithMs">%1$dm/s</string>
     <string name="pressure">Pressure:</string>
     <string name="hPa">hPa</string>
     <string name="last_update">Last update:</string>
@@ -38,9 +39,7 @@
     <string name="exit">EXIT</string>
     <string name="yes">Yes</string>
     <string name="icon">Weather icon</string>
-    <string name="max">max: %1$s</string>
-    <string name="min">min: %1$s</string>
-    <string name="feelsLike">Feels like: %1$s</string>
+    <string name="feelsLike">Feels like: %1$s%2$s</string>
     <string name="title_weather">Weather</string>
     <string name="oneLineWidget">One line widget</string>
     <string name="twoLineWidget">Big widget</string>

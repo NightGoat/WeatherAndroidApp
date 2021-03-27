@@ -53,6 +53,7 @@
     <string name="cancel">Отмена</string>
     <string name="city_added">Город добавлен</string>
     <string name="ms">м/с</string>
+    <string name="windWithMs">%1$dм/с</string>
     <string name="pressure">Давление:</string>
     <string name="hPa">гПа</string>
     <string name="last_update">Последние обновление: </string>
@@ -66,9 +67,10 @@
     <string name="exit">EXIT</string>
     <string name="yes">Да</string>
     <string name="icon">Иконка погоды</string>
-    <string name="max">max: %1$s</string>
-    <string name="min">min: %1$s</string>
-    <string name="feelsLike">Чувствуется как: %1$s</string>
+    <string name="max" translatable="false">max: %1$s%2$s</string>
+    <string name="min" translatable="false">min: %1$s%2$s</string>
+    <string name="feelsLike">Чувствуется как: %1$s%2$s</string>
+    <string name="valuePlusParam" translatable="false">%1$d%2$s</string>
     <string name="title_weather">Погода</string>
     <string name="oneLineWidget">Виджет в 1 строку</string>
     <string name="twoLineWidget">Большой виджет</string>

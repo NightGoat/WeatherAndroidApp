@@ -1,15 +1,14 @@
 package ru.nightgoat.weather.presentation.addCity
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import ru.nightgoat.weather.data.entity.SearchEntity
-import ru.nightgoat.weather.domain.Interactor
+import ru.nightgoat.weather.domain.IInteractor
 import ru.nightgoat.weather.presentation.base.BaseViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
-class AddCityViewModel @Inject constructor(private val interactor: Interactor) : BaseViewModel() {
+class AddCityViewModel @Inject constructor(private val interactor: IInteractor) : BaseViewModel() {
 
     val searchListLiveData = MutableLiveData<MutableList<String>>()
 

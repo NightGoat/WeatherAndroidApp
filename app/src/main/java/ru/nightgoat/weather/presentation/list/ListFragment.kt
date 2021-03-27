@@ -4,18 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_list.*
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.presentation.base.BaseFragment
-import ru.nightgoat.weather.utils.getApiKey
+import ru.nightgoat.weather.utils.*
 import javax.inject.Inject
 
 class ListFragment : BaseFragment(), ListFragmentCallbacks {
@@ -47,12 +44,11 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
         subscribeViewModel()
         listFabListener()
         setSwipeListener()
-        arguments?.getString("name").let {
-            if (it != null) {
-                viewModel.getCityFromApiAndPutInDB(it, chooseUnits(), apiKey)
-            }
+        val units = chooseUnits()
+        arguments?.getString(NAME_KEY)?.let {
+            viewModel.getCityFromApiAndPutInDB(it, units, apiKey)
         }
-        viewModel.updateAllFromApi(chooseUnits(), apiKey)
+        viewModel.updateAllFromApi(units, apiKey)
     }
 
     private fun setSwipeListener() {
@@ -96,35 +92,36 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     private fun listFabListener() = list_fab.setOnClickListener {
-        findNavController().navigate(R.id.action_navigation_list_to_navigation_addCity)
+        navigateTo(R.id.action_navigation_list_to_navigation_addCity)
     }
 
     private fun subscribeViewModel() {
         with(viewModel) {
-            cityListLiveData.observe(viewLifecycleOwner, Observer {
-                adapter.setList(it)
+            cityListLiveData.observe(viewLifecycleOwner, { cities ->
+                adapter.setList(cities)
             })
 
-            snackBarLiveData.observe(viewLifecycleOwner, Observer {
-                if (it == "nf")
-                    Snackbar.make(list_fab, R.string.city_not_found, Snackbar.LENGTH_SHORT).show()
-                else Snackbar.make(list_fab, it, Snackbar.LENGTH_SHORT).show()
+            snackBarLiveData.observe(viewLifecycleOwner, { snackBarText ->
+                val message = getString(R.string.city_not_found)
+                    .takeIf { snackBarText == NOT_FOUND_KEY } ?: snackBarText
+                showSnackBar(message)
             })
 
-            refreshLiveData.observe(viewLifecycleOwner, Observer {
-                list_swipeLayout.isRefreshing = it
+            refreshLiveData.observe(viewLifecycleOwner, { isRefreshNeeded ->
+                list_swipeLayout.isRefreshing = isRefreshNeeded
             })
 
-            cityIdLiveData.observe(viewLifecycleOwner, Observer {
-                sharedPreferences?.edit()?.putInt("cityId", it)?.apply()
+            cityIdLiveData.observe(viewLifecycleOwner, { cityId ->
+                sharedPreferences?.edit()?.putInt(CITY_ID_KEY, cityId)?.apply()
             })
         }
 
     }
 
     override fun setCurrentCityAndCallCityFragment(cityName: String, cityId: Int) {
-        sharedPreferences?.edit()?.putString("cityName", cityName)?.putInt("cityId", cityId)?.apply()
-        findNavController().navigate(R.id.action_navigation_list_to_navigation_city)
+        sharedPreferences?.edit()?.putString(CITY_NAME_KEY, cityName)?.putInt(CITY_ID_KEY, cityId)
+            ?.apply()
+        navigateTo(R.id.action_navigation_list_to_navigation_city)
     }
 
     override fun getWeatherIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
@@ -132,9 +129,11 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     override fun getColor(cityEntity: CityEntity): Int {
-        return when (sharedPreferences?.getInt("cityId", 0)) {
-            cityEntity.cityId -> R.color.colorPrimary
-            else -> R.color.colorBackgroundDark
+        val city = sharedPreferences?.getInt(CITY_ID_KEY, 0)
+        return if (city == cityEntity.cityId) {
+            R.color.colorPrimary
+        } else {
+            R.color.colorBackgroundDark
         }
     }
 

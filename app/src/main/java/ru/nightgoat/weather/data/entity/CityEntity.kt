@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class CityEntity(
     @PrimaryKey
     val cityId: Int,
-    val position: Int,
+    var position: Int,
     val date: Long,
     val name: String,
     val country: String?,
