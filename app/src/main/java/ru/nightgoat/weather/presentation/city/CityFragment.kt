@@ -1,34 +1,33 @@
 package ru.nightgoat.weather.presentation.city
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import kotlinx.android.synthetic.main.fragment_city.*
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_city.*
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.presentation.base.BaseFragment
-import ru.nightgoat.weather.utils.getApiKey
-import ru.nightgoat.weather.utils.getNormalDateTime
+import ru.nightgoat.weather.utils.*
 import ru.nightgoat.weather.widget.BigWidgetProvider
 import ru.nightgoat.weather.widget.GoogleLikeWidgetProvider
-import timber.log.Timber
 import javax.inject.Inject
 
 class CityFragment : BaseFragment(), CityFragmentCallbacks {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
     private val adapter = ForecastAdapter(this)
-    private lateinit var api_key : String
+
+    private val apiKey by lazy {
+        getApiKey(sharedPreferences)
+    }
 
     private val viewModel: CityViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(CityViewModel::class.java)
@@ -39,10 +38,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_city, container, false)
-        sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
-        api_key = getApiKey(sharedPreferences)
-        return root
+        return inflater.inflate(R.layout.fragment_city, container, false)
     }
 
     @ExperimentalStdlibApi
@@ -51,10 +47,16 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         setFont()
         initList()
         observeViewModel()
+        loadWeather()
+    }
+
+    private fun loadWeather(){
+        val units = chooseUnits()
+        val cityId = chooseCityId()
         with (viewModel) {
-            loadWeather(chooseCityId(), chooseUnits(), api_key)
+            loadWeather(cityId, units, apiKey)
             city_swipeRefreshLayout.setOnRefreshListener {
-                loadWeather(chooseCityId(), chooseUnits(), api_key)
+                loadWeather(cityId, units, apiKey)
             }
         }
     }
@@ -67,57 +69,72 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
 
     private fun setFont() {
         context?.let {
+            val localAssets = it.assets
             humidityIcon.typeface =
-                Typeface.createFromAsset(it.assets, "fonts/weathericons.ttf")
+                Typeface.createFromAsset(localAssets, FONTS_PATH)
             pressureIcon.typeface =
-                Typeface.createFromAsset(it.assets, "fonts/weathericons.ttf")
+                Typeface.createFromAsset(localAssets, FONTS_PATH)
             windIcon.typeface =
-                Typeface.createFromAsset(it.assets, "fonts/weathericons.ttf")
+                Typeface.createFromAsset(localAssets, FONTS_PATH)
             city_text_weatherIcon.typeface =
-                Typeface.createFromAsset(it.assets, "fonts/weathericons.ttf")
+                Typeface.createFromAsset(localAssets, FONTS_PATH)
         }
-
     }
 
     @ExperimentalStdlibApi
     private fun observeViewModel() {
-        lateinit var degree: String
         with (viewModel) {
-            cityLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                text_name.text = it.name
-                city_text_country.text = it.country
-                degree = if (chooseUnits() == "metric") context?.getString(R.string.celsius).toString()
-                else context?.getString(R.string.fahrenheit).toString()
-                text_temp.text = it.temp.toString().plus(degree)
-                text_feelsLike.text =
-                    resources.getString(R.string.feelsLike, it.feelsTemp.toString()).plus(degree)
-                text_temp_max.text = resources.getString(R.string.max, it.maxTemp.toString()).plus(degree)
-                text_temp_min.text = resources.getString(R.string.min, it.minTemp.toString()).plus(degree)
-                text_date.text = getNormalDateTime(it.date)
-                text_humidity.text = it.humidity.toString().plus("%")
-                text_pressure.text =
-                    it.pressure.let { pressureValue -> choosePressure(pressureValue) }
-                text_wind.text = it.wind.toString().plus(context?.getString(R.string.ms))
-                city_text_description.text = it.description
-                val icon = chooseIcon(it.iconId, it.date, it.sunrise, it.sunset)
-                city_text_weatherIcon.text = icon
-                val intentSmallWidget = Intent(requireContext(), GoogleLikeWidgetProvider::class.java)
-                val intentBigWidget = Intent(requireContext(), BigWidgetProvider::class.java)
-                intentSmallWidget.putExtra("temp", it.temp).putExtra("icon", icon)
-                intentBigWidget.putExtra("temp", it.temp).putExtra("icon", icon)
-                context?.sendBroadcast(intentSmallWidget)
-                context?.sendBroadcast(intentBigWidget)
-
+            cityLiveData.observe(viewLifecycleOwner, { city ->
+                val icon = chooseIcon(city.iconId, city.date, city.sunrise, city.sunset)
+                setDataToScreen(city, icon)
+                sendDataToWidgets(city, icon)
             })
 
-            refreshLiveData.observe(viewLifecycleOwner, Observer {
+            refreshLiveData.observe(viewLifecycleOwner, {
                 city_swipeRefreshLayout.isRefreshing = it
             })
 
-            forecastLiveData.observe(viewLifecycleOwner, Observer {
+            forecastLiveData.observe(viewLifecycleOwner, {
                 adapter.setList(it)
             })
         }
+    }
+
+    @ExperimentalStdlibApi
+    private fun setDataToScreen(city: CityEntity, icon: String) {
+        text_name.text = city.name
+        city_text_country.text = city.country
+        val degree = getDegree()
+        text_temp.text = getString(R.string.valuePlusParam, city.temp, degree)
+        text_feelsLike.text = getString(R.string.feelsLike, city.feelsTemp.toString(), degree)
+        text_temp_max.text = getString(R.string.max, city.maxTemp.toString(), degree)
+        text_temp_min.text = getString(R.string.min, city.minTemp.toString(), degree)
+        text_date.text = getNormalDateTime(city.date)
+        text_humidity.text = getString(R.string.valuePlusParam, city.humidity, PERCENT)
+        text_pressure.text = choosePressure(city.pressure)
+        text_wind.text = getString(R.string.windWithMs, city.wind)
+        city_text_description.text = city.description
+        city_text_weatherIcon.text = icon
+    }
+
+    private fun getDegree(): String {
+        val units = chooseUnits()
+        val degreeRes = if (units == METRIC) {
+            R.string.celsius
+        } else {
+            R.string.fahrenheit
+        }
+        return getString(degreeRes)
+    }
+
+    private fun sendDataToWidgets(city: CityEntity, icon: String){
+        val localContext = requireContext()
+        val intentSmallWidget = Intent(localContext, GoogleLikeWidgetProvider::class.java)
+        val intentBigWidget = Intent(localContext, BigWidgetProvider::class.java)
+        intentSmallWidget.putExtra(TEMP_KEY, city.temp).putExtra(ICON_KEY, icon)
+        intentBigWidget.putExtra(TEMP_KEY, city.temp).putExtra(ICON_KEY, icon)
+        localContext.sendBroadcast(intentSmallWidget)
+        localContext.sendBroadcast(intentBigWidget)
     }
 
     override fun getWeatherIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
@@ -130,6 +147,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     }
 
     companion object {
-        val TAG = "CityFragment"
+        private const val TAG = "CityFragment"
+        private const val FONTS_PATH = "fonts/weathericons.ttf"
     }
 }

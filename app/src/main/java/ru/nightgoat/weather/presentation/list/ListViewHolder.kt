@@ -8,20 +8,23 @@ import kotlinx.android.synthetic.main.list_city_card.view.*
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.data.entity.CityEntity
 
-class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(item: CityEntity, fragment: ListFragmentCallbacks){
+    fun bind(item: CityEntity, fragment: ListFragmentCallbacks) {
         itemView.listCard_name.text = item.name
         itemView.listCard_country.text = item.country
         itemView.listCard_icon.typeface =
-            Typeface.createFromAsset(itemView.context.assets,
-                "fonts/weathericons.ttf")
+            Typeface.createFromAsset(
+                itemView.context.assets,
+                FONTS_PATH
+            )
         itemView.listCard_icon.text =
             fragment.getWeatherIcon(
                 item.iconId,
                 item.date,
                 item.sunrise,
-                item.sunset)
+                item.sunset
+            )
         itemView.listCard_temp.text =
             item.temp.toString().plus(itemView.context.getString(R.string.degree))
         itemView.setOnClickListener {
@@ -29,6 +32,11 @@ class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
             fragment.swapPositionWithFirst(item)
         }
         itemView.listCard.setCardBackgroundColor(
-            ContextCompat.getColor(itemView.context, fragment.getColor(item)))
+            ContextCompat.getColor(itemView.context, fragment.getColor(item))
+        )
+    }
+
+    companion object {
+        private const val FONTS_PATH = "fonts/weathericons.ttf"
     }
 }

@@ -7,6 +7,8 @@ import ru.nightgoat.weather.data.DBRepositoryImpl
 import ru.nightgoat.weather.data.db.CitiesDao
 import ru.nightgoat.weather.data.db.CitiesDatabase
 import ru.nightgoat.weather.domain.DBRepository
+import ru.nightgoat.weather.providers.IResManager
+import ru.nightgoat.weather.providers.ResManager
 import javax.inject.Singleton
 
 @Module
@@ -27,4 +29,8 @@ object DataModule {
     @Provides
     @Singleton
     fun provideDataBase(context: Context): CitiesDatabase = CitiesDatabase.getInstance(context)
+
+    @Provides
+    @Singleton
+    fun provideResManager(context: Context): IResManager = ResManager(context)
 }

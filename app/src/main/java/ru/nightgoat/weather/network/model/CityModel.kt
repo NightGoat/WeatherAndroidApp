@@ -8,39 +8,39 @@ data class CityModel(
 
     @SerializedName("weather")
     @Expose
-    var weather: List<Weather>,
+    val weather: List<Weather>,
 
     @SerializedName("main")
     @Expose
-    var main: Main,
+    val main: Main,
 
     @SerializedName("wind")
     @Expose
-    var wind: Wind,
+    val wind: Wind,
 
     @SerializedName("dt")
     @Expose
-    var dt: Long,
+    val dt: Long,
 
     @SerializedName("sys")
     @Expose
-    var sys: Sys,
+    val sys: Sys,
 
     @SerializedName("id")
     @Expose
-    var id: Int,
+    val id: Int,
 
     @SerializedName("name")
     @Expose
-    var name: String,
+    val name: String,
 
     @SerializedName("list")
     @Expose
-    var list: List<TimeGap>,
+    val list: List<TimeGap>,
 
     @SerializedName("city")
     @Expose
-    var city: City,
+    val city: City,
 
     var position: Int
 ) {
@@ -48,7 +48,7 @@ data class CityModel(
         return CityEntity(
             cityId = id,
             position = position,
-            date = dt*1000,
+            date = dt * DATE_DIV,
             name = name,
             country = sys.country,
             temp = main.temp.toInt(),
@@ -58,10 +58,15 @@ data class CityModel(
             humidity = main.humidity,
             pressure = main.pressure,
             wind = wind.speed.toInt(),
-            description = weather[0].description,
-            iconId = weather[0].id,
-            sunrise = sys.sunrise*1000,
-            sunset = sys.sunset*1000)
+            description = weather.firstOrNull()?.description.orEmpty(),
+            iconId = weather.firstOrNull()?.id ?: 0,
+            sunrise = sys.sunrise * DATE_DIV,
+            sunset = sys.sunset * DATE_DIV
+        )
+    }
+
+    companion object {
+        private const val DATE_DIV = 1000
     }
 }
 

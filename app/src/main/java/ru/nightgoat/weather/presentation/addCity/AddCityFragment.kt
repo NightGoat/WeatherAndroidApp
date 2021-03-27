@@ -2,14 +2,12 @@ package ru.nightgoat.weather.presentation.addCity
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -37,9 +35,9 @@ class AddCityFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val imgr = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         if (addCity_edit.requestFocus()) {
-            imgr.toggleSoftInput(
+            inputManager.toggleSoftInput(
                 InputMethodManager.SHOW_IMPLICIT,
                 InputMethodManager.HIDE_IMPLICIT_ONLY
             )
@@ -51,7 +49,7 @@ class AddCityFragment : BaseFragment() {
                     viewModel.addSearchEntity(it)
                     viewModel.purgeList()
                     addCity_edit.clearFocus()
-                    bundle.putString("name", it)
+                    bundle.putString(NAME_KEY, it)
                     findNavController().navigate(
                         R.id.action_navigation_addCity_to_navigation_list,
                         bundle
@@ -81,5 +79,9 @@ class AddCityFragment : BaseFragment() {
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, listOfSearches)
             addCity_list.adapter = adapter
         })
+    }
+
+    companion object {
+        private const val NAME_KEY = "name"
     }
 }

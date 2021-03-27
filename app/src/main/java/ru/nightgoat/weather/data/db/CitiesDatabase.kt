@@ -16,6 +16,8 @@ abstract class CitiesDatabase : RoomDatabase() {
 
     companion object {
 
+        private const val DB_NAME = "Cities.db"
+
         @Volatile
         private var instance: CitiesDatabase? = null
 
@@ -30,7 +32,7 @@ abstract class CitiesDatabase : RoomDatabase() {
         private fun buildDataBase(context: Context): CitiesDatabase {
             return Room.databaseBuilder(
                 context,
-                CitiesDatabase::class.java, "Cities.db"
+                CitiesDatabase::class.java, DB_NAME
             )
                 .addMigrations(MIGRATION_10_11, MIGRATION_11_12)
                 .build()
@@ -56,6 +58,4 @@ abstract class CitiesDatabase : RoomDatabase() {
             }
         }
     }
-
-
 }

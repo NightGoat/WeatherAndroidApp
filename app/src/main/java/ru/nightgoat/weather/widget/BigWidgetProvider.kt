@@ -3,54 +3,51 @@ package ru.nightgoat.weather.widget
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.*
 import android.provider.AlarmClock
 import android.provider.CalendarContract
-import android.util.Log
 import android.widget.RemoteViews
 import io.reactivex.android.schedulers.AndroidSchedulers
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.di.components.DaggerBroadcastReceiverProvider
-import ru.nightgoat.weather.domain.Interactor
+import ru.nightgoat.weather.domain.IInteractor
 import ru.nightgoat.weather.presentation.MainActivity
-import ru.nightgoat.weather.utils.chooseIcon
-import ru.nightgoat.weather.utils.chooseUnits
-import ru.nightgoat.weather.utils.convertToImg
-import ru.nightgoat.weather.utils.getApiKey
+import ru.nightgoat.weather.presentation.base.BaseAppWidgetProvider
+import ru.nightgoat.weather.utils.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class BigWidgetProvider : AppWidgetProvider() {
+class BigWidgetProvider : BaseAppWidgetProvider() {
     private lateinit var sharedPreferences: SharedPreferences
 
     @Inject
-    lateinit var interactor: Interactor
+    lateinit var interactor: IInteractor
 
     override fun onUpdate(
         context: Context?,
         appWidgetManager: AppWidgetManager?,
         appWidgetIds: IntArray?
     ) {
-        if (context != null) {
+        context?.let {
             DaggerBroadcastReceiverProvider.builder().context(context).build().inject(this)
-        }
-        sharedPreferences = context?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
+            sharedPreferences = context.getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)
 
-        if (appWidgetIds != null) {
-            for (appWidgetId in appWidgetIds) {
-                val views = RemoteViews(
-                    context.packageName,
-                    R.layout.widget_big
-                )
-                onTempClickListener(views, context)
-                onIconClickListener(views, context)
-                onDateClickListener(views, context)
-                onTimeClickListener(views, context)
-                updateWeather(views, context, appWidgetManager, appWidgetId)
-                appWidgetManager?.updateAppWidget(appWidgetId, views)
-            }
-        }
+            appWidgetIds?.let {
+                for (appWidgetId in appWidgetIds) {
+                    val views = RemoteViews(
+                        context.packageName,
+                        R.layout.widget_big
+                    )
+                    onTempClickListener(views, context)
+                    onIconClickListener(views, context)
+                    onDateClickListener(views, context)
+                    onTimeClickListener(views, context)
+                    updateWeather(views, context, appWidgetManager, appWidgetId)
+                    appWidgetManager?.updateAppWidget(appWidgetId, views)
+                }
+            } ?: Timber.e("onUpdate: appWidgetIds null")
+        } ?: Timber.e("onUpdate: context null")
+
     }
 
     private fun onTimeClickListener(views: RemoteViews, context: Context) {
@@ -68,7 +65,7 @@ class BigWidgetProvider : AppWidgetProvider() {
     private fun onDateClickListener(views: RemoteViews, context: Context) {
 
         val builder = CalendarContract.CONTENT_URI.buildUpon()
-        builder.appendPath("time")
+        builder.appendPath(TIME_KEY)
         ContentUris.appendId(builder, System.currentTimeMillis())
         val intent = Intent(Intent.ACTION_VIEW).setData(builder.build())
         views.setOnClickPendingIntent(
@@ -95,7 +92,7 @@ class BigWidgetProvider : AppWidgetProvider() {
         )
     }
 
-    private fun onTempClickListener(views : RemoteViews, context: Context) {
+    private fun onTempClickListener(views: RemoteViews, context: Context) {
         views.setOnClickPendingIntent(
             R.id.twoLineWidget_temp,
             PendingIntent
@@ -109,33 +106,37 @@ class BigWidgetProvider : AppWidgetProvider() {
     }
 
     @SuppressLint("CheckResult")
-    private fun updateWeather(views: RemoteViews, context: Context, appWidgetManager: AppWidgetManager?, appWidgetId: Int) {
-        val degree = when (chooseUnits(sharedPreferences)) {
-            "metric" -> context.getString(R.string.celsius)
+    private fun updateWeather(
+        views: RemoteViews,
+        context: Context,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetId: Int
+    ) {
+        val degree = when (getUnits(sharedPreferences)) {
+            METRIC -> context.getString(R.string.celsius)
             else -> context.getString(R.string.fahrenheit)
         }
         interactor.getCityFromDataBaseAndUpdateFromApi(
-            sharedPreferences.getInt("cityId", 551487),
-            chooseUnits(sharedPreferences),
+            sharedPreferences.getInt(CITY_ID_KEY, DEFAULT_CITY_ID),
+            getUnits(sharedPreferences),
             getApiKey(sharedPreferences)
         )
             .observeOn(AndroidSchedulers.mainThread(), true)
-            .subscribe({
+            .subscribe({ city ->
                 views.setTextViewText(
                     R.id.twoLineWidget_temp,
-                    it.temp.toString().plus(degree)
+                    "${city.temp}$degree"
+                )
+                val icon = getWeatherIcon(
+                    id = city.iconId,
+                    dt = city.date,
+                    sunrise = city.sunrise,
+                    sunset = city.sunset,
+                    context = context
                 )
                 views.setImageViewBitmap(
                     R.id.twoLineWidget_icon,
-                    convertToImg(
-                        chooseIcon(
-                            it.iconId,
-                            it.date,
-                            it.sunrise,
-                            it.sunset,
-                            context
-                        ), context, 128F
-                    )
+                    convertToImg(icon, BIG_TEXT_SIZE, context)
                 )
                 appWidgetManager?.updateAppWidget(appWidgetId, views)
             }, {
@@ -146,25 +147,33 @@ class BigWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         context?.let { mContext ->
-            sharedPreferences = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
-            val temp = intent?.getIntExtra("temp", 0)
-            val icon = intent?.getStringExtra("icon").toString()
+            sharedPreferences = mContext.getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)
+            val temp = intent?.getIntExtra(TEMP_KEY, 0)
+            val icon = intent?.getStringExtra(ICON_KEY).toString()
             val views = RemoteViews(mContext.packageName, R.layout.widget_big)
-            val degree = when (chooseUnits(sharedPreferences)) {
-                "metric" -> context.getString(R.string.celsius)
+            val degree = when (getUnits(sharedPreferences)) {
+                METRIC -> context.getString(R.string.celsius)
                 else -> context.getString(R.string.fahrenheit)
             }
             views.setTextViewText(
                 R.id.twoLineWidget_temp,
-                temp.toString().plus(degree)
+                "$temp$degree"
             )
+
+            val img = convertToImg(icon, SMALL_TEXT_SIZE, context)
             views.setImageViewBitmap(
                 R.id.twoLineWidget_icon,
-                convertToImg(icon, mContext, 30F)
+                img
             )
             AppWidgetManager.getInstance(mContext).updateAppWidget(
                 ComponentName(mContext, BigWidgetProvider::class.java), views
             )
         }
+    }
+
+    companion object {
+        private const val SMALL_TEXT_SIZE = 30F
+        private const val BIG_TEXT_SIZE = 128F
+        private const val DEFAULT_CITY_ID = 551487
     }
 }

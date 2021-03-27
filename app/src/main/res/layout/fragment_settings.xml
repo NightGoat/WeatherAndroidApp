@@ -17,6 +17,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:endIconMode="custom"
+                android:hint="@string/api_key"
                 app:endIconDrawable="@drawable/ic_help_black_24dp"
                 >
 
@@ -24,7 +25,6 @@
                     android:id="@+id/settings_edit_api"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/api_key"
                     android:inputType="text"
                     android:imeOptions="actionDone"
                     />
