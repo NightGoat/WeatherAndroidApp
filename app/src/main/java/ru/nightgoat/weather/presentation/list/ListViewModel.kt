@@ -3,10 +3,10 @@ package ru.nightgoat.weather.presentation.list
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import ru.nightgoat.weather.core.utils.NOT_FOUND_KEY
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.domain.IInteractor
 import ru.nightgoat.weather.presentation.base.BaseViewModel
-import ru.nightgoat.weather.utils.NOT_FOUND_KEY
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -26,20 +26,18 @@ class AddCityViewModel @Inject constructor(private val interactor: IInteractor) 
     }
 
     fun addSearchEntity(name: String) {
-        Timber.tag(TAG).d("addSearchEntity")
         compositeDisposable.add(
             interactor.insertSearchEntity(SearchEntity(0, name)).subscribe()
         )
     }
 
     fun purgeList() {
-        Timber.tag(TAG).d("purgeList")
         compositeDisposable.add(
             interactor.purgeSearchList().subscribe()
         )
     }
 
     companion object {
-        val TAG = AddCityViewModel::class.java.simpleName
+        val TAG: String = AddCityViewModel::class.java.simpleName
     }
 }

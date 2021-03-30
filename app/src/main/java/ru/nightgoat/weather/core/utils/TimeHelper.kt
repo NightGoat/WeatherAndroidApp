@@ -1,4 +1,4 @@
-package ru.nightgoat.weather.utils
+package ru.nightgoat.weather.core.utils
 
 import org.joda.time.format.DateTimeFormat
 import java.util.*

@@ -9,8 +9,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.support.DaggerAppCompatActivity
 import ru.nightgoat.weather.R
-import ru.nightgoat.weather.utils.FIRST_TIME_OPEN_KEY
-import ru.nightgoat.weather.utils.SETTINGS_KEY
+import ru.nightgoat.weather.core.utils.FIRST_TIME_OPEN_KEY
+import ru.nightgoat.weather.core.utils.SETTINGS_KEY
 
 class MainActivity : DaggerAppCompatActivity() {
 
@@ -22,8 +22,9 @@ class MainActivity : DaggerAppCompatActivity() {
         navView.setupWithNavController(navController)
 
         val sharedPreferences = getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)
+        val isFirstTimeOpen = sharedPreferences.getBoolean(FIRST_TIME_OPEN_KEY, false)
 
-        if (!sharedPreferences.getBoolean(FIRST_TIME_OPEN_KEY, false)) {
+        if (!isFirstTimeOpen) {
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putBoolean(FIRST_TIME_OPEN_KEY, true)
             editor.apply()

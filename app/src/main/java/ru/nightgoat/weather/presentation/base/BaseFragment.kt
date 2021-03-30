@@ -2,13 +2,14 @@ package ru.nightgoat.weather.presentation.base
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Bundle
+import android.view.View
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_list.*
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.core.utils.*
 import ru.nightgoat.weather.providers.IResManager
-import ru.nightgoat.weather.utils.*
 import javax.inject.Inject
 
 abstract class BaseFragment : DaggerFragment() {
@@ -24,13 +25,15 @@ abstract class BaseFragment : DaggerFragment() {
         findNavController()
     }
 
-    fun chooseCityId(): Int {
-        return sharedPreferences?.getInt(CITY_ID_KEY, 0) ?: 0
-    }
+    val apiKey: String
+        get() = sharedPreferences.getApiKey()
 
-    fun chooseUnits(): String {
-        return getUnits(sharedPreferences)
-    }
+    val cityId: Int
+        get() = sharedPreferences.getCityId()
+
+    val units: String
+        get() = sharedPreferences.getUnits()
+
 
     fun choosePressure(value: Int): String {
         val pressure = sharedPreferences?.getInt(PRESSURE_KEY, R.id.settings_radBtnMmHg)
@@ -52,7 +55,11 @@ abstract class BaseFragment : DaggerFragment() {
         navController.navigate(action)
     }
 
-    fun showSnackBar(text: String, length: Int = Snackbar.LENGTH_SHORT) {
-        Snackbar.make(list_fab, text, length).show()
+    fun navigateTo(action: Int, bundle: Bundle) {
+        navController.navigate(action, bundle)
+    }
+
+    fun showSnackBar(text: String, length: Int = Snackbar.LENGTH_SHORT, view: View) {
+        Snackbar.make(view, text, length).show()
     }
 }
