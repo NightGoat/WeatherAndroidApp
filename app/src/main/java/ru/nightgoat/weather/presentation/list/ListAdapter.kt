@@ -55,7 +55,7 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
         return cityList
     }
 
-    inner class ListViewHolder(private val binding: ListCityCardBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ListViewHolder(val binding: ListCityCardBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: CityEntity, fragment: ListFragmentCallbacks) {
             binding.listCardName.text = item.name

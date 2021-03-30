@@ -34,7 +34,7 @@ class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
         notifyDataSetChanged()
     }
 
-    inner class ForecastViewHolder(private val binding: CityForecastCardBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ForecastViewHolder(val binding: CityForecastCardBinding) : RecyclerView.ViewHolder(binding.root) {
 
         @ExperimentalStdlibApi
         fun bind(item: ForecastEntity, fragment: CityFragmentCallbacks) {
