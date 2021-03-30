@@ -1,6 +1,7 @@
-package ru.nightgoat.weather.utils
+package ru.nightgoat.weather.core.utils
 
 const val BASE_URL: String = "https://api.openweathermap.org/"
+const val FONTS_PATH = "fonts/weathericons.ttf"
 
 //KEYS
 const val METRIC = "metric"

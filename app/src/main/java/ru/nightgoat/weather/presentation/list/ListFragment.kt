@@ -8,11 +8,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_list.*
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.core.delegates.viewBinding
+import ru.nightgoat.weather.core.utils.CITY_ID_KEY
+import ru.nightgoat.weather.core.utils.CITY_NAME_KEY
+import ru.nightgoat.weather.core.utils.NAME_KEY
+import ru.nightgoat.weather.core.utils.NOT_FOUND_KEY
 import ru.nightgoat.weather.data.entity.CityEntity
+import ru.nightgoat.weather.databinding.FragmentListBinding
 import ru.nightgoat.weather.presentation.base.BaseFragment
-import ru.nightgoat.weather.utils.*
 import javax.inject.Inject
 
 class ListFragment : BaseFragment(), ListFragmentCallbacks {
@@ -20,15 +24,13 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    private val binding: FragmentListBinding by viewBinding()
+
     private val viewModel: ListViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(ListViewModel::class.java)
     }
 
     private val adapter = ListAdapter(this)
-
-    private val apiKey by lazy {
-        getApiKey(sharedPreferences)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +46,6 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
         subscribeViewModel()
         listFabListener()
         setSwipeListener()
-        val units = chooseUnits()
         arguments?.getString(NAME_KEY)?.let {
             viewModel.getCityFromApiAndPutInDB(it, units, apiKey)
         }
@@ -52,12 +53,17 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     private fun setSwipeListener() {
-        list_swipeLayout.setOnRefreshListener { viewModel.updateAllFromApi(chooseUnits(), apiKey) }
+        binding.listSwipeLayout.setOnRefreshListener {
+            viewModel.updateAllFromApi(
+                units,
+                apiKey
+            )
+        }
     }
 
     private fun initList() {
-        list_recyclerView.layoutManager = LinearLayoutManager(context)
-        list_recyclerView.adapter = adapter
+        binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.listRecyclerView.adapter = adapter
         initDragAndSwipe()
     }
 
@@ -88,10 +94,10 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
                 super.clearView(recyclerView, viewHolder)
                 viewModel.updateAllInRepository(adapterList)
             }
-        }).attachToRecyclerView(list_recyclerView)
+        }).attachToRecyclerView(binding.listRecyclerView)
     }
 
-    private fun listFabListener() = list_fab.setOnClickListener {
+    private fun listFabListener() = binding.listFab.setOnClickListener {
         navigateTo(R.id.action_navigation_list_to_navigation_addCity)
     }
 
@@ -104,11 +110,11 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
             snackBarLiveData.observe(viewLifecycleOwner, { snackBarText ->
                 val message = getString(R.string.city_not_found)
                     .takeIf { snackBarText == NOT_FOUND_KEY } ?: snackBarText
-                showSnackBar(message)
+                showSnackBar(text = message, view = binding.listFab)
             })
 
             refreshLiveData.observe(viewLifecycleOwner, { isRefreshNeeded ->
-                list_swipeLayout.isRefreshing = isRefreshNeeded
+                binding.listSwipeLayout.isRefreshing = isRefreshNeeded
             })
 
             cityIdLiveData.observe(viewLifecycleOwner, { cityId ->

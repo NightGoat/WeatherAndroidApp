@@ -10,11 +10,11 @@ import android.content.SharedPreferences
 import android.widget.RemoteViews
 import io.reactivex.android.schedulers.AndroidSchedulers
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.core.utils.*
 import ru.nightgoat.weather.di.components.DaggerBroadcastReceiverProvider
 import ru.nightgoat.weather.domain.IInteractor
 import ru.nightgoat.weather.presentation.MainActivity
 import ru.nightgoat.weather.presentation.base.BaseAppWidgetProvider
-import ru.nightgoat.weather.utils.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -97,15 +97,15 @@ class GoogleLikeWidgetProvider : BaseAppWidgetProvider() {
         appWidgetManager: AppWidgetManager?,
         appWidgetId: Int
     ) {
-
-        val degree = when (getUnits(sharedPreferences)) {
+        val units = sharedPreferences.getUnits()
+        val degree = when (units) {
             METRIC -> context.getString(R.string.celsius)
             else -> context.getString(R.string.fahrenheit)
         }
         interactor.getCityFromDataBaseAndUpdateFromApi(
             sharedPreferences.getInt(CITY_ID_KEY, DEFAULT_CITY_ID),
-            getUnits(sharedPreferences),
-            getApiKey(sharedPreferences)
+            units,
+            sharedPreferences.getApiKey()
         )
             .observeOn(AndroidSchedulers.mainThread(), true)
             .subscribe({ city ->
@@ -139,7 +139,7 @@ class GoogleLikeWidgetProvider : BaseAppWidgetProvider() {
             val temp = intent?.getIntExtra(TEMP_KEY, 0)
             val icon = intent?.getStringExtra(ICON_KEY).toString()
             val views = RemoteViews(mContext.packageName, R.layout.widget_google_like)
-            val degree = when (getUnits(sharedPreferences)) {
+            val degree = when (sharedPreferences.getUnits()) {
                 METRIC -> context.getString(R.string.celsius)
                 else -> context.getString(R.string.fahrenheit)
             }

@@ -3,7 +3,7 @@ package ru.nightgoat.weather.providers
 import android.content.Context
 import android.graphics.*
 import ru.nightgoat.weather.R
-import ru.nightgoat.weather.utils.*
+import ru.nightgoat.weather.core.utils.*
 
 class ResManager(val context: Context): IResManager {
 
@@ -45,7 +45,7 @@ class ResManager(val context: Context): IResManager {
         val paint = Paint()
         paint.isAntiAlias = true
         paint.isSubpixelText = true
-        paint.typeface = Typeface.createFromAsset(context.assets, "fonts/weathericons.ttf")
+        paint.typeface = Typeface.createFromAsset(context.assets, FONTS_PATH)
         paint.style = Paint.Style.FILL
         paint.color = Color.WHITE
         paint.textSize = textSize

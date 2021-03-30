@@ -1,20 +1,24 @@
 package ru.nightgoat.weather.presentation.settings
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import kotlinx.android.synthetic.main.fragment_settings.*
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.core.delegates.viewBinding
+import ru.nightgoat.weather.core.utils.API_KEY
+import ru.nightgoat.weather.core.utils.DEGREE_KEY
+import ru.nightgoat.weather.core.utils.PRESSURE_KEY
+import ru.nightgoat.weather.core.utils.getApiKey
+import ru.nightgoat.weather.databinding.FragmentSettingsBinding
 import ru.nightgoat.weather.presentation.WelcomeActivity
 import ru.nightgoat.weather.presentation.base.BaseFragment
-import ru.nightgoat.weather.utils.API_KEY
-import ru.nightgoat.weather.utils.DEGREE_KEY
-import ru.nightgoat.weather.utils.PRESSURE_KEY
 
 class SettingsFragment : BaseFragment() {
+
+    private val binding: FragmentSettingsBinding by viewBinding()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +33,7 @@ class SettingsFragment : BaseFragment() {
         checkRadioGroupDegreeAndSetListener()
         checkRadioGroupPressureAndSetListener()
         putApiKeyAndSetClickListenerInEdit()
-        settings_textInputLayout_api.setEndIconOnClickListener {
+        binding.settingsTextInputLayoutApi.setEndIconOnClickListener {
             val intent = Intent(activity, WelcomeActivity::class.java)
             startActivity(intent)
         }
@@ -37,28 +41,30 @@ class SettingsFragment : BaseFragment() {
 
     private fun putApiKeyAndSetClickListenerInEdit() {
         sharedPreferences?.run {
-            val key = getString(API_KEY, "")
-            settings_edit_api.setText(key)
-            settings_edit_api.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    settings_edit_api.clearFocus()
-                    val newKey = settings_edit_api.text.toString()
-                    edit().putString(API_KEY, newKey).apply()
+            val key = getApiKey()
+            binding.settingsEditApi.run {
+                setText(key)
+                onFocusChangeListener = View.OnFocusChangeListener { _, _ ->
+                    saveApiKey()
                 }
-                false
             }
         }
     }
 
+    private fun SharedPreferences.saveApiKey() {
+        val newKey = binding.settingsEditApi.text.toString()
+        edit().putString(API_KEY, newKey).apply()
+    }
+
     private fun checkRadioGroupPressureAndSetListener() {
         sharedPreferences?.run {
-            settings_radGrpPressure.check(
+            binding.settingsRadGrpPressure.check(
                 getInt(
                     PRESSURE_KEY,
                     R.id.settings_radBtnMmHg
                 )
             )
-            settings_radGrpPressure.setOnCheckedChangeListener { _, checkedId ->
+            binding.settingsRadGrpPressure.setOnCheckedChangeListener { _, checkedId ->
                 edit().putInt(PRESSURE_KEY, checkedId).apply()
             }
         }
@@ -66,13 +72,13 @@ class SettingsFragment : BaseFragment() {
 
     private fun checkRadioGroupDegreeAndSetListener() {
         sharedPreferences?.run {
-            settings_radGrpDegree.check(
+            binding.settingsRadGrpDegree.check(
                 getInt(
                     DEGREE_KEY,
                     R.id.settings_radBtnCelsius
                 )
             )
-            settings_radGrpDegree.setOnCheckedChangeListener { _, checkedId ->
+            binding.settingsRadGrpDegree.setOnCheckedChangeListener { _, checkedId ->
                 edit().putInt(DEGREE_KEY, checkedId).apply()
             }
         }
