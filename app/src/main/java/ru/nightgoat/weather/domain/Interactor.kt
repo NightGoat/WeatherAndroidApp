@@ -5,6 +5,8 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import ru.nightgoat.weather.core.extentions.orZero
+import ru.nightgoat.weather.core.utils.orIfNull
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
@@ -20,7 +22,7 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
 
     private var cityList: MutableList<CityEntity> = mutableListOf()
 
-    private val defaultSheduler = Schedulers.io()
+    private val defaultScheduler = Schedulers.io()
 
     override fun getAllCities(): Flowable<MutableList<CityEntity>> {
         return repository.getAllCities().subscribeOn(Schedulers.io()).doOnNext { cityList = it }
@@ -35,18 +37,22 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
         city: String,
         units: String,
         api_key: String
-    ): Single<CityEntity> {
+    ): Single<CityEntity?> {
         return api.getCurrentWeather(
             city,
             api_key,
             units,
             Locale.getDefault().country
         )
-            .subscribeOn(defaultSheduler)
-            .map { cityModel: CityModel -> cityModel.convertToCityEntity() }
-            .doOnSuccess {
-                it.position = cityList.size
-                repository.insertCity(it).subscribe()
+            .subscribeOn(defaultScheduler)
+            .map { cityModel: CityModel ->
+                cityModel.convertToCityEntity()
+            }
+            .doOnSuccess { entity ->
+                entity?.let {
+                    it.position = cityList.size
+                    repository.insertCity(it).subscribe()
+                }
             }
     }
 
@@ -60,7 +66,7 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
                     API_KEY,
                     units,
                     Locale.getDefault().country
-                ).observeOn(defaultSheduler)
+                ).observeOn(defaultScheduler)
                     .doOnSuccess {
                         it.position = cityEntity.position
                     }
@@ -75,20 +81,19 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
     }
 
     override fun swapPositionWithFirst(cityToSwap: CityEntity): Completable {
-        val cityFirst = cityList.firstOrNull { it.position == DEFAULT_POSITION }
-        return if (cityFirst != null) {
-            cityFirst.position = cityToSwap.position
+        return cityList.firstOrNull { it.position == DEFAULT_POSITION }?.let { firstCity ->
+            firstCity.position = cityToSwap.position
             cityToSwap.position = DEFAULT_POSITION
-            repository.updateCity(cityFirst)
-                .andThen(repository.updateCity(cityToSwap)).subscribeOn(defaultSheduler)
-        } else {
+            repository.updateCity(firstCity)
+                .andThen(repository.updateCity(cityToSwap)).subscribeOn(defaultScheduler)
+        }.orIfNull {
             cityToSwap.position = DEFAULT_POSITION
-            repository.updateCity(cityToSwap).subscribeOn(defaultSheduler)
+            repository.updateCity(cityToSwap).subscribeOn(defaultScheduler)
         }
     }
 
     override fun updateCityInDB(city: CityEntity): Completable {
-        return repository.insertCity(city).subscribeOn(defaultSheduler)
+        return repository.insertCity(city).subscribeOn(defaultScheduler)
     }
 
     override fun getCityFromDataBaseAndUpdateFromApi(
@@ -107,29 +112,31 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
             }
                 .toMaybe()
                 .timeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
-                .doOnSuccess {
-                    repository.insertCity(it).subscribeOn(defaultSheduler).subscribe()
+                .doOnSuccess { entity ->
+                    entity?.let {
+                        repository.insertCity(it).subscribeOn(defaultScheduler).subscribe()
+                    }
                 }
                 .doOnError {
                     Timber.e(it)
                 })
-            .subscribeOn(defaultSheduler)
+            .subscribeOn(defaultScheduler)
     }
 
     override fun getSearchList(): Single<MutableList<String>> {
-        return repository.getSearchList().subscribeOn(defaultSheduler)
+        return repository.getSearchList().subscribeOn(defaultScheduler)
     }
 
     override fun insertSearchEntity(city: SearchEntity): Completable {
-        return repository.insertSearchEntity(city).subscribeOn(defaultSheduler)
+        return repository.insertSearchEntity(city).subscribeOn(defaultScheduler)
     }
 
     override fun purgeSearchList(): Completable {
-        return repository.purgeSearchList().subscribeOn(defaultSheduler)
+        return repository.purgeSearchList().subscribeOn(defaultScheduler)
     }
 
     override fun getForecast(cityId: Int): Flowable<MutableList<ForecastEntity>> {
-        return repository.getForecast(cityId).subscribeOn(defaultSheduler)
+        return repository.getForecast(cityId).subscribeOn(defaultScheduler)
     }
 
     override fun updateForecast(cityId: Int, units: String, API_KEY: String): Disposable {
@@ -139,22 +146,31 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
             units = units,
             lang = Locale.getDefault().country
         )
-            .subscribeOn(defaultSheduler)
+            .subscribeOn(defaultScheduler)
             .subscribe(
-                {
-                    for (gap in it.list) {
-                        if (gap.dtTxt.contains(MIDDLE_DAY_STRING)) {
-                            repository.insertForecast(
-                                ForecastEntity(
-                                    cityId = it.city.cityId,
-                                    name = it.city.name,
-                                    date = gap.dt * TIME_DIF,
-                                    temp = gap.main.temp.roundToInt(),
-                                    iconId = gap.weather.firstOrNull()?.id ?: 0
-                                )
-                            ).subscribe()
+                { cityModel ->
+                    cityModel.list?.let { gaps ->
+                        for (gap in gaps) {
+                            if (gap.dtTxt?.contains(MIDDLE_DAY_STRING) == true) {
+                                val cityValue = cityModel.city
+                                cityValue?.cityId?.let { cityIdValue ->
+                                    cityValue.name?.let { cityNameValue ->
+                                        gap.main?.temp?.let { tempValue ->
+                                            repository.insertForecast(
+                                                ForecastEntity(
+                                                    cityId = cityIdValue,
+                                                    name = cityNameValue,
+                                                    date = gap.dt.orZero() * TIME_DIF,
+                                                    temp = tempValue.roundToInt().orZero(),
+                                                    iconId = gap.weather?.firstOrNull()?.id.orZero()
+                                                )
+                                            ).subscribe()
+                                        } ?: Timber.e("updateForecast(): temp null")
+                                    } ?: Timber.e("updateForecast(): city name null")
+                                } ?: Timber.e("updateForecast(): cityId null")
+                            }
                         }
-                    }
+                    } ?: Timber.e("updateForecast(): forecast null")
                 }, {
                     Timber.e(it)
                 })

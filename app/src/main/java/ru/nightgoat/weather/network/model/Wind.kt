@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 data class Wind(
     @SerializedName("speed")
     @Expose
-    val speed: Float
+    val speed: Double
 )

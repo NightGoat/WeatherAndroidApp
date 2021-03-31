@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import ru.nightgoat.weather.core.utils.NOT_FOUND_KEY
+import ru.nightgoat.weather.core.utils.orIfNull
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.domain.IInteractor
 import ru.nightgoat.weather.presentation.base.BaseViewModel
@@ -34,13 +35,20 @@ class ListViewModel @Inject constructor(private val interactor: IInteractor) : B
         compositeDisposable.add(
             interactor.getCityFromApiAndPutInDB(name, units, api_key)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    cityIdLiveData.value = it.cityId
+                .subscribe({ entity ->
+                    entity?.let {
+                        cityIdLiveData.value = it.cityId
+                    }.orIfNull {
+                        snackBarLiveData.value = NOT_FOUND_KEY
+                    }
                 }, {
                     Timber.e(it)
-                    if (it.message?.contains(BAD_ANSWER, ignoreCase = true) == true)
+                    val isThisIsBadAnswer = it.message?.contains(BAD_ANSWER, ignoreCase = true)
+                    if (isThisIsBadAnswer == true) {
                         snackBarLiveData.value = NOT_FOUND_KEY
-                    else snackBarLiveData.value = it.message
+                    } else {
+                        snackBarLiveData.value = it.message
+                    }
                 })
         )
     }

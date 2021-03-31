@@ -6,13 +6,13 @@ import com.google.gson.annotations.SerializedName
 data class Weather(
     @SerializedName("id")
     @Expose
-    val id: Int,
+    val id: Int?,
 
     @SerializedName("description")
     @Expose
-    val description: String,
+    val description: String?,
 
     @SerializedName("icon")
     @Expose
-    val icon: String
+    val icon: String?
 )

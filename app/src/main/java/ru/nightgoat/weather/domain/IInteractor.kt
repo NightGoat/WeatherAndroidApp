@@ -14,7 +14,7 @@ interface IInteractor {
 
     fun deleteCity(cityEntity: CityEntity): Completable
 
-    fun getCityFromApiAndPutInDB(city: String, units: String, api_key: String): Single<CityEntity>
+    fun getCityFromApiAndPutInDB(city: String, units: String, api_key: String): Single<CityEntity?>
 
     fun updateAllFromApi(units: String, API_KEY: String): Completable
 

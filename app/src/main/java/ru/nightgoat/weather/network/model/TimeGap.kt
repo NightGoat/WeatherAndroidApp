@@ -7,19 +7,19 @@ data class TimeGap(
 
     @SerializedName("dt")
     @Expose
-    val dt: Long,
+    val dt: Long?,
 
     @SerializedName("main")
     @Expose
-    val main: Main,
+    val main: Main?,
 
     @SerializedName("weather")
     @Expose
-    val weather: List<Weather>,
+    val weather: List<Weather>?,
 
     @SerializedName("dt_txt")
     @Expose
-    val dtTxt: String,
+    val dtTxt: String?,
 
     val sunrise: Long,
     val sunset: Long
