@@ -137,7 +137,7 @@ class GoogleLikeWidgetProvider : BaseAppWidgetProvider() {
         context?.let { mContext ->
             sharedPreferences = mContext.getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)
             val temp = intent?.getIntExtra(TEMP_KEY, 0)
-            val icon = intent?.getStringExtra(ICON_KEY).toString()
+            val icon = intent?.getStringExtra(ICON_KEY)
             val views = RemoteViews(mContext.packageName, R.layout.widget_google_like)
             val degree = when (sharedPreferences.getUnits()) {
                 METRIC -> context.getString(R.string.celsius)
@@ -147,11 +147,13 @@ class GoogleLikeWidgetProvider : BaseAppWidgetProvider() {
                 R.id.oneLineWidget_temp,
                 "$temp$degree"
             )
-            val img = convertToImg(icon, SMALL_TEXT_SIZE, context)
-            views.setImageViewBitmap(
-                R.id.oneLineWidget_icon,
-                img
-            )
+            if (!icon.isNullOrEmpty()) {
+                val img = convertToImg(icon, SMALL_TEXT_SIZE, context)
+                views.setImageViewBitmap(
+                        R.id.oneLineWidget_icon,
+                        img
+                )
+            }
             AppWidgetManager.getInstance(mContext).updateAppWidget(
                 ComponentName(mContext, GoogleLikeWidgetProvider::class.java), views
             )
@@ -159,7 +161,7 @@ class GoogleLikeWidgetProvider : BaseAppWidgetProvider() {
     }
 
     companion object {
-        val TAG = GoogleLikeWidgetProvider::class.java.simpleName
+        val TAG: String = GoogleLikeWidgetProvider::class.java.simpleName
         private const val DATE_CLICK_INTENT = "vnd.android.cursor.item/event"
         private const val SMALL_TEXT_SIZE = 30F
         private const val DEFAULT_CITY_ID = 551487
