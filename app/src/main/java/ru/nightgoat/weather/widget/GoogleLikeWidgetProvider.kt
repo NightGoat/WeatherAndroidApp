@@ -45,8 +45,8 @@ class GoogleLikeWidgetProvider : BaseAppWidgetProvider() {
                     updateWeather(views, context, appWidgetManager, appWidgetId)
                     appWidgetManager?.updateAppWidget(appWidgetId, views)
                 }
-            } ?: Timber.e("onUpdate: appWidgetIds null")
-        } ?: Timber.e("onUpdate: context null")
+            }.logIfNull("onUpdate: appWidgetIds null")
+        }.logIfNull("onUpdate: context null")
 
     }
 

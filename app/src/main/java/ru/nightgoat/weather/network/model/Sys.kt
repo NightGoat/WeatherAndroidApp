@@ -6,17 +6,17 @@ import com.google.gson.annotations.SerializedName
 data class Sys(
     @SerializedName("id")
     @Expose
-    val id: Int,
+    val id: Int?,
 
     @SerializedName("country")
     @Expose
-    val country: String,
+    val country: String?,
 
     @SerializedName("sunrise")
     @Expose
-    val sunrise: Long,
+    val sunrise: Long?,
 
     @SerializedName("sunset")
     @Expose
-    val sunset: Long
+    val sunset: Long?
 )

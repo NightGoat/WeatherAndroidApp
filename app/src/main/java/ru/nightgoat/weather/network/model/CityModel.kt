@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ru.nightgoat.weather.core.extentions.orZero
 import ru.nightgoat.weather.core.extentions.toIntOrZero
+import ru.nightgoat.weather.core.utils.logIfNull
 import ru.nightgoat.weather.data.entity.CityEntity
 
 data class CityModel(
@@ -54,7 +55,7 @@ data class CityModel(
                     position = position,
                     date = dt.orZero() * DATE_DIV,
                     name = nameValue,
-                    country = sys?.country,
+                    country = sys?.country.orEmpty(),
                     temp = tempValue.toInt(),
                     feelsTemp = main.feelsLike.toIntOrZero(),
                     maxTemp = main.tempMax.toIntOrZero(),
@@ -67,8 +68,8 @@ data class CityModel(
                     sunrise = sys?.sunrise.orZero() * DATE_DIV,
                     sunset = sys?.sunset.orZero() * DATE_DIV
                 )
-            }
-        }
+            }.logIfNull("convertToCityEntity(): name null")
+        }.logIfNull("convertToCityEntity(): temp null")
     }
 
     companion object {

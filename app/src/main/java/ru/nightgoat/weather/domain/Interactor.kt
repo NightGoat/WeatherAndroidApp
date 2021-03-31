@@ -6,6 +6,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ru.nightgoat.weather.core.extentions.orZero
+import ru.nightgoat.weather.core.utils.logIfNull
 import ru.nightgoat.weather.core.utils.orIfNull
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.data.entity.ForecastEntity
@@ -25,7 +26,11 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
     private val defaultScheduler = Schedulers.io()
 
     override fun getAllCities(): Flowable<MutableList<CityEntity>> {
-        return repository.getAllCities().subscribeOn(Schedulers.io()).doOnNext { cityList = it }
+        return repository.getAllCities().subscribeOn(Schedulers.io()).map {
+            it.onEach { entity ->
+                entity.position = it.indexOf(entity)
+            }
+        }.doOnNext { cityList = it }
     }
 
     override fun deleteCity(cityEntity: CityEntity): Completable {
@@ -81,13 +86,13 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
     }
 
     override fun swapPositionWithFirst(cityToSwap: CityEntity): Completable {
-        return cityList.firstOrNull { it.position == DEFAULT_POSITION }?.let { firstCity ->
+        return cityList.firstOrNull { it.position == FIRST_POSITION }?.let { firstCity ->
             firstCity.position = cityToSwap.position
-            cityToSwap.position = DEFAULT_POSITION
+            cityToSwap.position = FIRST_POSITION
             repository.updateCity(firstCity)
                 .andThen(repository.updateCity(cityToSwap)).subscribeOn(defaultScheduler)
         }.orIfNull {
-            cityToSwap.position = DEFAULT_POSITION
+            cityToSwap.position = FIRST_POSITION
             repository.updateCity(cityToSwap).subscribeOn(defaultScheduler)
         }
     }
@@ -165,12 +170,12 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
                                                     iconId = gap.weather?.firstOrNull()?.id.orZero()
                                                 )
                                             ).subscribe()
-                                        } ?: Timber.e("updateForecast(): temp null")
-                                    } ?: Timber.e("updateForecast(): city name null")
-                                } ?: Timber.e("updateForecast(): cityId null")
+                                        }.logIfNull("updateForecast(): temp null")
+                                    }.logIfNull("updateForecast(): city name null")
+                                }.logIfNull("updateForecast(): cityId null")
                             }
                         }
-                    } ?: Timber.e("updateForecast(): forecast null")
+                    }.logIfNull("updateForecast(): forecast null")
                 }, {
                     Timber.e(it)
                 })
@@ -181,7 +186,7 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
     }
 
     companion object {
-        private const val DEFAULT_POSITION = 0
+        private const val FIRST_POSITION = 0
         private const val DEFAULT_TIME_OUT = 10L
         private const val TIME_DIF = 1000
         private const val MIDDLE_DAY_STRING = "12:00:00"
