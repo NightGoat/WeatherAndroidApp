@@ -1,4 +1,4 @@
-## Timesheet android app.
+## Weather android app.
 ![App logo](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/WeatherEngCard.png)
 ##### Features:
 * Kotlin
