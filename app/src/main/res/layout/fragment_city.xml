@@ -17,20 +17,20 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-                android:layout_marginTop="17dp"
-                android:backgroundTint="@color/colorPrimary"
-                style="@style/Card">
+                style="@style/Card"
+                android:layout_marginTop="@dimen/size_17dp"
+                android:backgroundTint="@color/colorPrimary">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp">
+                    android:padding="@dimen/size_16dp">
 
                     <TextView
                         android:id="@+id/text_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="24sp"
+                        android:textSize="@dimen/text_24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="Санкт-Петербург" />
@@ -39,8 +39,8 @@
                         android:id="@+id/city_text_country"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="@dimen/size_4dp"
+                        android:textSize="@dimen/text_12sp"
                         app:layout_constraintStart_toEndOf="@id/text_name"
                         app:layout_constraintTop_toTopOf="@id/text_name"
                         tools:text="RU" />
@@ -49,7 +49,7 @@
                         android:id="@+id/text_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14sp"
                         app:layout_constraintStart_toStartOf="@id/text_name"
                         app:layout_constraintTop_toBottomOf="@id/text_name"
                         tools:text="Вторник 21.04.2020 10:28" />
@@ -66,16 +66,16 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="42dp">
+                    android:layout_marginTop="@dimen/size_24dp"
+                    android:layout_marginBottom="@dimen/size_42dp">
 
                     <TextView
                         android:id="@+id/text_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginEnd="@dimen/size_16dp"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="84sp"
+                        android:textSize="@dimen/text_84sp"
                         app:layout_constraintEnd_toStartOf="@id/city_text_weatherIcon"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +87,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAlignment="textEnd"
-                        android:textSize="84sp"
+                        android:textSize="@dimen/text_84sp"
                         app:layout_constraintBottom_toBottomOf="@id/text_temp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/text_temp"
@@ -98,9 +98,9 @@
                         android:id="@+id/city_text_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="@dimen/size_8dp"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="24sp"
+                        android:textSize="@dimen/text_24sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/text_temp"
@@ -110,8 +110,8 @@
                         android:id="@+id/text_feelsLike"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textSize="16sp"
+                        android:layout_marginTop="@dimen/size_8dp"
+                        android:textSize="@dimen/text_16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/city_text_description"
@@ -121,7 +121,7 @@
                         android:id="@+id/text_temp_max"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_16sp"
                         app:layout_constraintBottom_toBottomOf="@id/text_temp_min"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/text_temp_min"
@@ -131,9 +131,9 @@
                         android:id="@+id/text_temp_min"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:textSize="16sp"
+                        android:layout_marginTop="@dimen/size_8dp"
+                        android:layout_marginEnd="@dimen/size_8dp"
+                        android:textSize="@dimen/text_16sp"
                         app:layout_constraintEnd_toStartOf="@+id/text_temp_max"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
@@ -151,70 +151,70 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginTop="@dimen/size_16dp"
+                    android:layout_marginBottom="@dimen/size_16dp">
 
                     <TextView
                         android:id="@+id/humidityIcon"
+                        style="@style/WeatherProperties.Icon"
                         android:text="@string/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/text_humidity"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        style="@style/WeatherProperties.Icon"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
                     <TextView
                         android:id="@+id/text_humidity"
+                        style="@style/WeatherProperties.Text"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/pressureIcon"
                         app:layout_constraintStart_toEndOf="@id/humidityIcon"
-                        tools:text="99&#37;"
-                        style="@style/WeatherProperties.Text"/>
+                        tools:text="99&#37;" />
 
                     <TextView
                         android:id="@+id/pressureIcon"
+                        style="@style/WeatherProperties.Icon"
                         android:text="@string/barometer"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/text_pressure"
-                        app:layout_constraintStart_toEndOf="@id/text_humidity"
-                        style="@style/WeatherProperties.Icon"/>
+                        app:layout_constraintStart_toEndOf="@id/text_humidity" />
 
                     <TextView
                         android:id="@+id/text_pressure"
+                        style="@style/WeatherProperties.Text"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/windIcon"
                         app:layout_constraintStart_toEndOf="@id/pressureIcon"
-                        tools:text="1014Pa"
-                        style="@style/WeatherProperties.Text"/>
+                        tools:text="1014Pa" />
 
                     <TextView
                         android:id="@+id/windIcon"
+                        style="@style/WeatherProperties.Icon"
                         android:text="@string/weather_squall"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toStartOf="@id/text_wind"
-                        app:layout_constraintStart_toEndOf="@id/text_pressure"
-                        style="@style/WeatherProperties.Icon"/>
+                        app:layout_constraintStart_toEndOf="@id/text_pressure" />
 
                     <TextView
                         android:id="@+id/text_wind"
+                        style="@style/WeatherProperties.Text"
+                        android:layout_marginEnd="0dp"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/windIcon"
-                        tools:text="2m/s"
-                        android:layout_marginEnd="0dp"
-                        style="@style/WeatherProperties.Text"/>
+                        tools:text="2m/s" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/city_forecast_card"
+                style="@style/Card"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="4dp"
-                app:cardUseCompatPadding="true"
-                style="@style/Card">
+                android:layout_marginTop="@dimen/size_7dp"
+                android:layout_marginEnd="@dimen/size_4dp"
+                app:cardUseCompatPadding="true">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/city_recycler"

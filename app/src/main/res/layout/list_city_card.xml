@@ -6,18 +6,18 @@
     android:id="@+id/listCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    cardView:cardElevation="4dp"
-    cardView:cardCornerRadius="8dp"
+    cardView:cardElevation="@dimen/size_4dp"
+    cardView:cardCornerRadius="@dimen/size_8dp"
     cardView:cardUseCompatPadding="true"
-    android:layout_marginStart="4dp"
-    android:layout_marginEnd="4dp"
+    android:layout_marginStart="@dimen/size_4dp"
+    android:layout_marginEnd="@dimen/size_4dp"
     app:cardBackgroundColor="@color/colorBackgroundDark"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="@dimen/size_16dp"
         android:background="?android:attr/selectableItemBackground"
         >
 
@@ -34,16 +34,16 @@
             cardView:layout_constrainedWidth="true"
             android:ellipsize="end"
             android:lines="1"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_24sp"
             />
 
         <TextView
             android:id="@+id/listCard_country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="8dp"
+            android:textSize="@dimen/text_12sp"
+            android:layout_marginStart="@dimen/size_4dp"
+            android:layout_marginEnd="@dimen/size_8dp"
             app:layout_constraintStart_toEndOf="@id/listCard_name"
             app:layout_constraintTop_toTopOf="@id/listCard_name"
             cardView:layout_constraintEnd_toStartOf="@id/barrier"
@@ -64,8 +64,8 @@
             cardView:layout_constraintEnd_toStartOf="@id/listCard_icon"
             cardView:layout_constraintTop_toTopOf="@id/listCard_name"
             tools:text="4&#8451;"
-            android:layout_marginEnd="8dp"
-            android:textSize="37sp"/>
+            android:layout_marginEnd="@dimen/size_8dp"
+            android:textSize="@dimen/text_37sp"/>
 
         <TextView
             android:id="@+id/listCard_icon"
@@ -74,8 +74,8 @@
             cardView:layout_constraintTop_toTopOf="@id/listCard_temp"
             cardView:layout_constraintEnd_toEndOf="parent"
             cardView:layout_constraintBottom_toBottomOf="@id/listCard_temp"
-            android:layout_marginStart="8dp"
-            android:textSize="37sp"
+            android:layout_marginStart="@dimen/size_8dp"
+            android:textSize="@dimen/text_37sp"
             tools:text="❆"/>
 
 

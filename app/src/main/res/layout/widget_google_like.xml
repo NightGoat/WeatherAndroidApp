@@ -20,19 +20,19 @@
     <TextView
         android:id="@+id/oneLineWidget_line"
         android:gravity="center_horizontal"
-        android:layout_width="1dp"
+        android:layout_width="@dimen/size_1dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:layout_marginStart="@dimen/size_16dp"
+        android:paddingTop="@dimen/size_4dp"
+        android:paddingBottom="@dimen/size_4dp"
         android:background="@android:color/white"
         android:textColor="@android:color/white"/>
 
     <ImageView
         android:id="@+id/oneLineWidget_icon"
-        android:layout_width="30dp"
+        android:layout_width="@dimen/size_30dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/size_16dp"
         android:scaleType="fitCenter"
         android:contentDescription="@string/icon"
         />
@@ -41,7 +41,7 @@
         android:id="@+id/oneLineWidget_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/size_8dp"
         tools:text="32&#8451;"
         style="@style/OneLineWidgetText"
         android:textColor="@android:color/white"/>

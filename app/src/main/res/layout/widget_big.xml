@@ -14,7 +14,7 @@
         style="@style/OneLineWidgetText"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:textSize="94sp" />
+        android:textSize="@dimen/text_94sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:format24Hour="EEE, dd MMM "
             style="@style/OneLineWidgetText"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16sp"
             android:textAllCaps="true"
             />
 
@@ -39,18 +39,18 @@
             android:id="@+id/twoLineWidget_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/size_8dp"
             android:contentDescription="@string/icon" />
 
         <TextView
             android:id="@+id/twoLineWidget_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/size_8dp"
             tools:text="32&#8451;"
             style="@style/OneLineWidgetText"
             android:textColor="@android:color/white"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/text_18sp"/>
 
     </LinearLayout>
 

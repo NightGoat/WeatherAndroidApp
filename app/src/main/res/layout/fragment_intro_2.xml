@@ -8,39 +8,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/size_16dp"
         android:text="@string/second_settings"
-        android:textSize="32sp" />
+        android:textSize="@dimen/text_32sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/size_32dp"
         android:autoLink="web"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/intro_text_5"
-        android:textSize="16sp" />
+        android:textSize="@dimen/text_16sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="@dimen/size_16dp"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:layout_marginTop="@dimen/size_16dp"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="@dimen/size_8dp"
         android:autoLink="web"
         android:layout_gravity="center"
         android:text="@string/intro_text_6"
-        android:textSize="16sp" />
+        android:textSize="@dimen/text_16sp" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="@dimen/size_22dp"
+        android:layout_marginStart="@dimen/size_16dp"
+        android:layout_marginEnd="@dimen/size_16dp"
         android:scaleType="fitStart"
         android:src="@drawable/openweatherkeys"
         android:contentDescription="@string/openweather_logo" />

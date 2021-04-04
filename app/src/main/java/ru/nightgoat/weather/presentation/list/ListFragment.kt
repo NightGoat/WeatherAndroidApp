@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,9 +27,7 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
 
     private val binding: FragmentListBinding by viewBinding()
 
-    private val viewModel: ListViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(ListViewModel::class.java)
-    }
+    private val viewModel: ListViewModel by viewModels(factoryProducer = { viewModelFactory })
 
     private val adapter = ListAdapter(this)
 

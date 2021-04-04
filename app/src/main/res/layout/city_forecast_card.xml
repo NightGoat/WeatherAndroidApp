@@ -14,7 +14,7 @@
         android:id="@+id/cityCard_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16sp"
         cardView:layout_constraintStart_toStartOf="parent"
         cardView:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/cityCard_temp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="@dimen/size_8dp"
         cardView:layout_constraintEnd_toStartOf="@id/cityCard_icon"
         cardView:layout_constraintTop_toTopOf="parent"
         cardView:layout_constraintBottom_toBottomOf="parent"

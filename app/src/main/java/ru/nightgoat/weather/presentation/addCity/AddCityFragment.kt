@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.core.delegates.viewBinding
@@ -23,9 +24,7 @@ class AddCityFragment : BaseFragment() {
 
     private val binding: FragmentAddCityBinding by viewBinding()
 
-    private val viewModel: AddCityViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(AddCityViewModel::class.java)
-    }
+    private val viewModel: AddCityViewModel by viewModels(factoryProducer = { viewModelFactory })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

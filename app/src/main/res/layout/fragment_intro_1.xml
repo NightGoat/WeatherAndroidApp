@@ -8,24 +8,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/size_16dp"
         android:text="@string/first_settings"
-        android:textSize="32sp" />
+        android:textSize="@dimen/text_32sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/size_32dp"
         android:autoLink="web"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/intro_text_1"
-        android:textSize="16sp" />
+        android:textSize="@dimen/text_16sp" />
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="@dimen/size_64dp"
+        android:layout_marginTop="@dimen/size_16dp"
         android:src="@drawable/openweatherlogo"
         android:contentDescription="@string/openweather_logo"
         />
@@ -33,23 +33,23 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/size_16dp"
         android:autoLink="web"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/intro_text_3"
-        android:textSize="16sp" />
+        android:textSize="@dimen/text_16sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:padding="8dp"
+        android:layout_marginTop="@dimen/size_16dp"
+        android:padding="@dimen/size_8dp"
         android:autoLink="web"
         android:gravity="center"
         android:layout_gravity="center"
         android:text="@string/intro_text_4"
-        android:textSize="16sp" />
+        android:textSize="@dimen/text_16sp" />
 
 
 
