@@ -3,7 +3,9 @@ package ru.nightgoat.weather.presentation.list
 
 import android.graphics.Typeface
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ru.nightgoat.weather.R
@@ -42,48 +44,55 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(cityList, i, i + 1)
-
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
                 Collections.swap(cityList, i, i - 1)
             }
         }
-        cityList[fromPosition].position = fromPosition
-        cityList[toPosition].position = toPosition
+        cityList.getOrNull(fromPosition)?.position = fromPosition
+        cityList.getOrNull(toPosition)?.position = toPosition
         notifyItemMoved(fromPosition, toPosition)
         return cityList
     }
 
     inner class ListViewHolder(val binding: ListCityCardBinding) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(item: CityEntity, fragment: ListFragmentCallbacks) {
-            binding.listCardName.text = item.name
-            binding.listCardCountry.text = item.country
-            binding.listCardIcon.typeface =
-                Typeface.createFromAsset(
-                    itemView.context.assets,
-                    FONTS_PATH
-                )
-            binding.listCardIcon.text =
-                fragment.getWeatherIcon(
-                    item.iconId,
-                    item.date,
-                    item.sunrise,
-                    item.sunset
-                )
-            binding.listCardTemp.text =
-                item.temp.toString().plus(itemView.context.getString(R.string.degree))
-            itemView.setOnClickListener {
+            with(binding) {
+                val context = itemView.context
+                listCardName.text = item.name
+                listCardCountry.text = item.country
+                listCardIcon.typeface =
+                    Typeface.createFromAsset(
+                        context.assets,
+                        FONTS_PATH
+                    )
+                listCardIcon.text =
+                    fragment.getWeatherIcon(
+                        item.iconId,
+                        item.date,
+                        item.sunrise,
+                        item.sunset
+                    )
+                val degree = context.getString(R.string.degree)
+                listCardTemp.text = context.getString(R.string.valuePlusParam, item.temp, degree)
+                itemView.setOnItemClickListener(item)
+                listCard.setItemBackgroundColor(item)
+            }
+        }
+
+        private fun View.setOnItemClickListener(item: CityEntity) {
+            this.setOnClickListener {
                 fragment.setCurrentCityAndCallCityFragment(item.name, item.cityId)
                 fragment.swapPositionWithFirst(item)
             }
-            binding.listCard.setCardBackgroundColor(
-                ContextCompat.getColor(itemView.context, fragment.getColor(item))
-            )
         }
 
-
+        private fun CardView.setItemBackgroundColor(item: CityEntity) {
+            this.setCardBackgroundColor(
+                ContextCompat.getColor(context, fragment.getColor(item))
+            )
+        }
     }
 
     companion object {

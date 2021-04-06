@@ -48,8 +48,8 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         loadWeather()
     }
 
-    private fun loadWeather(){
-        with (viewModel) {
+    private fun loadWeather() {
+        with(viewModel) {
             loadWeather(cityId, units, apiKey)
             binding.citySwipeRefreshLayout.setOnRefreshListener {
                 loadWeather(cityId, units, apiKey)
@@ -58,28 +58,37 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     }
 
     private fun initList() {
-        binding.cityRecycler.layoutManager = LinearLayoutManager(context)
-        binding.cityRecycler.adapter = adapter
-        binding.cityRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        with(binding.cityRecycler) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = adapter
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
     }
 
     private fun setFont() {
         context?.let {
-            val localAssets = it.assets
-            binding.humidityIcon.typeface =
-                Typeface.createFromAsset(localAssets, FONTS_PATH)
-            binding.pressureIcon.typeface =
-                Typeface.createFromAsset(localAssets, FONTS_PATH)
-            binding.windIcon.typeface =
-                Typeface.createFromAsset(localAssets, FONTS_PATH)
-            binding.cityTextWeatherIcon.typeface =
-                Typeface.createFromAsset(localAssets, FONTS_PATH)
+            with(binding) {
+                val localAssets = it.assets
+                humidityIcon.typeface =
+                    Typeface.createFromAsset(localAssets, FONTS_PATH)
+                pressureIcon.typeface =
+                    Typeface.createFromAsset(localAssets, FONTS_PATH)
+                windIcon.typeface =
+                    Typeface.createFromAsset(localAssets, FONTS_PATH)
+                cityTextWeatherIcon.typeface =
+                    Typeface.createFromAsset(localAssets, FONTS_PATH)
+            }
         }
     }
 
     @ExperimentalStdlibApi
     private fun observeViewModel() {
-        with (viewModel) {
+        with(viewModel) {
             cityLiveData.observe(viewLifecycleOwner, { city ->
                 val icon = chooseIcon(city.iconId, city.date, city.sunrise, city.sunset)
                 setDataToScreen(city, icon)
@@ -98,19 +107,22 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
 
     @ExperimentalStdlibApi
     private fun setDataToScreen(city: CityEntity, icon: String) {
-        binding.textName.text = city.name
-        binding.cityTextCountry.text = city.country
-        val degree = getDegree()
-        binding.textTemp.text = getString(R.string.valuePlusParam, city.temp, degree)
-        binding.textFeelsLike.text = getString(R.string.feelsLike, city.feelsTemp.toString(), degree)
-        binding.textTempMax.text = getString(R.string.max, city.maxTemp.toString(), degree)
-        binding.textTempMin.text = getString(R.string.min, city.minTemp.toString(), degree)
-        binding.textDate.text = getNormalDateTime(city.date)
-        binding.textHumidity.text = getString(R.string.valuePlusParam, city.humidity, PERCENT)
-        binding.textPressure.text = choosePressure(city.pressure)
-        binding.textWind.text = getString(R.string.windWithMs, city.wind)
-        binding.cityTextDescription.text = city.description
-        binding.cityTextWeatherIcon.text = icon
+        with(binding){
+            textName.text = city.name
+            cityTextCountry.text = city.country
+            val degree = getDegree()
+            textTemp.text = getString(R.string.valuePlusParam, city.temp, degree)
+            textFeelsLike.text =
+                getString(R.string.feelsLike, city.feelsTemp.toString(), degree)
+            textTempMax.text = getString(R.string.max, city.maxTemp.toString(), degree)
+            textTempMin.text = getString(R.string.min, city.minTemp.toString(), degree)
+            textDate.text = getNormalDateTime(city.date)
+            textHumidity.text = getString(R.string.valuePlusParam, city.humidity, PERCENT)
+            textPressure.text = choosePressure(city.pressure)
+            textWind.text = getString(R.string.windWithMs, city.wind)
+            cityTextDescription.text = city.description
+            cityTextWeatherIcon.text = icon
+        }
     }
 
     private fun getDegree(): String {
@@ -122,7 +134,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         return getString(degreeRes)
     }
 
-    private fun sendDataToWidgets(city: CityEntity, icon: String){
+    private fun sendDataToWidgets(city: CityEntity, icon: String) {
         val localContext = requireContext()
         val intentSmallWidget = Intent(localContext, GoogleLikeWidgetProvider::class.java)
         val intentBigWidget = Intent(localContext, BigWidgetProvider::class.java)

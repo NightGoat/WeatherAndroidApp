@@ -29,7 +29,7 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
 
     private val viewModel: ListViewModel by viewModels(factoryProducer = { viewModelFactory })
 
-    private val adapter = ListAdapter(this)
+    private val listAdapter = ListAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,9 +61,12 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     private fun initList() {
-        binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.listRecyclerView.adapter = adapter
+        binding.listRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = listAdapter
+        }
         initDragAndSwipe()
+
     }
 
     private fun initDragAndSwipe() {
@@ -78,12 +81,13 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                adapterList = adapter.onRowMoved(viewHolder.adapterPosition, target.adapterPosition)
+                adapterList =
+                    listAdapter.onRowMoved(viewHolder.adapterPosition, target.adapterPosition)
                 return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                viewModel.deleteCity(adapter.getEntity(viewHolder.adapterPosition))
+                viewModel.deleteCity(listAdapter.getEntity(viewHolder.adapterPosition))
             }
 
             override fun clearView(
@@ -103,7 +107,7 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     private fun subscribeViewModel() {
         with(viewModel) {
             cityListLiveData.observe(viewLifecycleOwner, { cities ->
-                adapter.setList(cities)
+                listAdapter.setList(cities)
             })
 
             snackBarLiveData.observe(viewLifecycleOwner, { snackBarText ->
@@ -124,8 +128,9 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
     }
 
     override fun setCurrentCityAndCallCityFragment(cityName: String, cityId: Int) {
-        sharedPreferences?.edit()?.putString(CITY_NAME_KEY, cityName)?.putInt(CITY_ID_KEY, cityId)
-            ?.apply()
+        sharedPreferences?.apply {
+            edit().putString(CITY_NAME_KEY, cityName).putInt(CITY_ID_KEY, cityId).apply()
+        }
         navigateTo(R.id.action_navigation_list_to_navigation_city)
     }
 
