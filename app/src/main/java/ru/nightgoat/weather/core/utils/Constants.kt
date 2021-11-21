@@ -48,3 +48,4 @@ const val DATE_PATTERN_EEEE = "EEEE"
 //OTHER
 const val pressureFromHPaToMmHgDiv = 1.33322387415
 const val PERCENT = "%"
+const val DEFAULT_CITY_ID = 551487

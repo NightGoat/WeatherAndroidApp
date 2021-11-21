@@ -74,6 +74,7 @@
     <string name="title_weather">Погода</string>
     <string name="oneLineWidget">Виджет в 1 строку</string>
     <string name="twoLineWidget">Большой виджет</string>
+    <string name="smallWidget">Маленький виджет</string>
     <string name="api_key">Ключ</string>
     <string name="hello">Привет!</string>
     <string name="intro_text_1">Это приложение использует данные с сайта:</string>

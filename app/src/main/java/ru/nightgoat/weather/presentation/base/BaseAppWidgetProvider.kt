@@ -2,11 +2,35 @@ package ru.nightgoat.weather.presentation.base
 
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.graphics.*
+import ru.nightgoat.kextensions.unsafeLazy
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.core.extentions.getApiKey
+import ru.nightgoat.weather.core.extentions.getCityId
+import ru.nightgoat.weather.core.extentions.getUnits
 import ru.nightgoat.weather.core.utils.*
 
 abstract class BaseAppWidgetProvider: AppWidgetProvider() {
+
+    var sharedPreferences: SharedPreferences? = null
+
+    val apiKey by unsafeLazy {
+        sharedPreferences.getApiKey()
+    }
+
+    val units by unsafeLazy {
+        sharedPreferences.getUnits()
+    }
+
+    val cityId by unsafeLazy {
+        sharedPreferences.getCityId()
+    }
+
+    fun Context.setSharedPreferences() {
+        sharedPreferences = getSharedPreferences(SETTINGS_KEY, MODE_PRIVATE)
+    }
 
     fun getWeatherIcon(
         id: Int,

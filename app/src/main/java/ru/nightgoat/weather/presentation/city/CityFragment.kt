@@ -18,6 +18,7 @@ import ru.nightgoat.weather.databinding.FragmentCityBinding
 import ru.nightgoat.weather.presentation.base.BaseFragment
 import ru.nightgoat.weather.widget.BigWidgetProvider
 import ru.nightgoat.weather.widget.GoogleLikeWidgetProvider
+import ru.nightgoat.weather.widget.SmallWidgetProvider
 import javax.inject.Inject
 
 class CityFragment : BaseFragment(), CityFragmentCallbacks {
@@ -134,11 +135,14 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
 
     private fun sendDataToWidgets(city: CityEntity, icon: String) {
         requireContext().run {
-            val intentSmallWidget = Intent(this, GoogleLikeWidgetProvider::class.java)
+            val intentGoogleLikeWidget = Intent(this, GoogleLikeWidgetProvider::class.java)
             val intentBigWidget = Intent(this, BigWidgetProvider::class.java)
+            val intentSmallWidget = Intent(this, SmallWidgetProvider::class.java)
             intentSmallWidget.putExtra(TEMP_KEY, city.temp).putExtra(ICON_KEY, icon)
             intentBigWidget.putExtra(TEMP_KEY, city.temp).putExtra(ICON_KEY, icon)
+            intentGoogleLikeWidget.putExtra(TEMP_KEY, city.temp).putExtra(ICON_KEY, icon)
             sendBroadcast(intentSmallWidget)
+            sendBroadcast(intentGoogleLikeWidget)
             sendBroadcast(intentBigWidget)
         }
     }

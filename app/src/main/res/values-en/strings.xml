@@ -43,6 +43,7 @@
     <string name="title_weather">Weather</string>
     <string name="oneLineWidget">One line widget</string>
     <string name="twoLineWidget">Big widget</string>
+    <string name="smallWidget">Small widget</string>
     <string name="api_key">Key</string>
     <string name="hello">Hello!</string>
     <string name="intro_text_1">This app uses data from:</string>

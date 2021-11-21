@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.nightgoat.weather">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App"
@@ -15,18 +15,31 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".presentation.MainActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".presentation.WelcomeActivity" />
+
+        <receiver
+            android:name=".widget.SmallWidgetProvider"
+            android:exported="true"
+            android:label="@string/smallWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_small" />
+        </receiver>
 
         <receiver
             android:name=".widget.GoogleLikeWidgetProvider"
-            android:label="@string/oneLineWidget"
-            android:exported="true">
+            android:exported="true"
+            android:label="@string/oneLineWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -34,10 +47,11 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_google_like" />
         </receiver>
+
         <receiver
             android:name=".widget.BigWidgetProvider"
-            android:label="@string/twoLineWidget"
-            android:exported="true">
+            android:exported="true"
+            android:label="@string/twoLineWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -45,7 +59,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_big" />
         </receiver>
-        <activity android:name=".presentation.WelcomeActivity"/>
+
     </application>
 
 </manifest>
