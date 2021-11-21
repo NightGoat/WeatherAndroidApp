@@ -1,8 +1,9 @@
-package ru.nightgoat.weather.core.utils
+package ru.nightgoat.weather.core.extentions
 
 import android.content.SharedPreferences
+import ru.nightgoat.kextensions.orZero
 import ru.nightgoat.weather.R
-import ru.nightgoat.weather.core.extentions.orZero
+import ru.nightgoat.weather.core.utils.*
 
 fun SharedPreferences?.getUnits(): String {
     val degreeKey = this?.getInt(DEGREE_KEY, R.id.settings_radBtnCelsius)

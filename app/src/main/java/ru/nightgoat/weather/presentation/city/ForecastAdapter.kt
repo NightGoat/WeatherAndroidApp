@@ -24,9 +24,11 @@ class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
         return timeGaps.size
     }
 
-    @ExperimentalStdlibApi
+    @OptIn(ExperimentalStdlibApi::class)
     override fun onBindViewHolder(holder: ForecastViewHolder, position: Int) {
-        holder.bind(item = timeGaps[position], fragment = fragment)
+        timeGaps.getOrNull(position)?.let {
+            holder.bind(item = it, fragment = fragment)
+        }
     }
 
     fun setList(list: MutableList<ForecastEntity>) {

@@ -8,7 +8,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import ru.nightgoat.weather.R
-import ru.nightgoat.weather.core.utils.*
+import ru.nightgoat.weather.core.extentions.getApiKey
+import ru.nightgoat.weather.core.extentions.getCityId
+import ru.nightgoat.weather.core.extentions.getUnits
+import ru.nightgoat.weather.core.utils.PRESSURE_KEY
+import ru.nightgoat.weather.core.utils.SETTINGS_KEY
+import ru.nightgoat.weather.core.utils.pressureFromHPaToMmHg
 import ru.nightgoat.weather.providers.IResManager
 import javax.inject.Inject
 

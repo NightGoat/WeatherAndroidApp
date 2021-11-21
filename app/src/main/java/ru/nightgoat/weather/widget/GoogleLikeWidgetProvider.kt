@@ -8,10 +8,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.widget.RemoteViews
-import io.reactivex.android.schedulers.AndroidSchedulers
+import dagger.android.AndroidInjection
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import ru.nightgoat.kextensions.logIfNull
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.core.extentions.getApiKey
+import ru.nightgoat.weather.core.extentions.getUnits
 import ru.nightgoat.weather.core.utils.*
-import ru.nightgoat.weather.di.components.DaggerBroadcastReceiverProvider
 import ru.nightgoat.weather.domain.IInteractor
 import ru.nightgoat.weather.presentation.MainActivity
 import ru.nightgoat.weather.presentation.base.BaseAppWidgetProvider
@@ -30,7 +33,7 @@ class GoogleLikeWidgetProvider : BaseAppWidgetProvider() {
         appWidgetIds: IntArray?
     ) {
         context?.let {
-            DaggerBroadcastReceiverProvider.builder().context(context).build().inject(this)
+            AndroidInjection.inject(this, context)
             sharedPreferences = context.getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)
 
             appWidgetIds?.let {

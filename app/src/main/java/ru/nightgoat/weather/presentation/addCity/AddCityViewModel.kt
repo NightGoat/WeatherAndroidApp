@@ -1,7 +1,7 @@
 package ru.nightgoat.weather.presentation.addCity
 
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import ru.nightgoat.weather.data.entity.SearchEntity
 import ru.nightgoat.weather.domain.IInteractor
 import ru.nightgoat.weather.presentation.base.BaseViewModel

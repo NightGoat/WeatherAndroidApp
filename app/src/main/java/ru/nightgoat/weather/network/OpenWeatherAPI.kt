@@ -1,6 +1,6 @@
 package ru.nightgoat.weather.network
 
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.nightgoat.weather.network.model.CityModel

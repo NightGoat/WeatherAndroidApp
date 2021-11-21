@@ -2,9 +2,8 @@ package ru.nightgoat.weather.network.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ru.nightgoat.weather.core.extentions.orZero
-import ru.nightgoat.weather.core.extentions.toIntOrZero
-import ru.nightgoat.weather.core.utils.logIfNull
+import ru.nightgoat.kextensions.orZero
+import ru.nightgoat.weather.core.utils.toIntOrZero
 import ru.nightgoat.weather.data.entity.CityEntity
 
 data class CityModel(
@@ -47,29 +46,25 @@ data class CityModel(
 
     var position: Int
 ) {
-    fun convertToCityEntity(): CityEntity? {
-        return main?.temp?.let { tempValue ->
-            name?.let { nameValue ->
-                CityEntity(
-                    cityId = id.orZero(),
-                    position = position,
-                    date = dt.orZero() * DATE_DIV,
-                    name = nameValue,
-                    country = sys?.country.orEmpty(),
-                    temp = tempValue.toInt(),
-                    feelsTemp = main.feelsLike.toIntOrZero(),
-                    maxTemp = main.tempMax.toIntOrZero(),
-                    minTemp = main.tempMin.toIntOrZero(),
-                    humidity = main.humidity.orZero(),
-                    pressure = main.pressure.orZero(),
-                    wind = wind?.speed.toIntOrZero(),
-                    description = weather?.firstOrNull()?.description.orEmpty(),
-                    iconId = weather?.firstOrNull()?.id ?: 0,
-                    sunrise = sys?.sunrise.orZero() * DATE_DIV,
-                    sunset = sys?.sunset.orZero() * DATE_DIV
-                )
-            }.logIfNull("convertToCityEntity(): name null")
-        }.logIfNull("convertToCityEntity(): temp null")
+    fun convertToCityEntity(): CityEntity {
+        return CityEntity(
+            cityId = id.orZero(),
+            position = position,
+            date = dt.orZero() * DATE_DIV,
+            name = name.orEmpty(),
+            country = sys?.country.orEmpty(),
+            temp = main?.temp.toIntOrZero(),
+            feelsTemp = main?.feelsLike.toIntOrZero(),
+            maxTemp = main?.tempMax.toIntOrZero(),
+            minTemp = main?.tempMin.toIntOrZero(),
+            humidity = main?.humidity.orZero(),
+            pressure = main?.pressure.orZero(),
+            wind = wind?.speed.toIntOrZero(),
+            description = weather?.firstOrNull()?.description.orEmpty(),
+            iconId = weather?.firstOrNull()?.id ?: 0,
+            sunrise = sys?.sunrise.orZero() * DATE_DIV,
+            sunset = sys?.sunset.orZero() * DATE_DIV
+        )
     }
 
     companion object {

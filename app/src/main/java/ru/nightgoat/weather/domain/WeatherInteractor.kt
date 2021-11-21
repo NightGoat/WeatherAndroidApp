@@ -1,13 +1,13 @@
 package ru.nightgoat.weather.domain
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import ru.nightgoat.weather.core.extentions.orZero
-import ru.nightgoat.weather.core.utils.logIfNull
-import ru.nightgoat.weather.core.utils.orIfNull
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import ru.nightgoat.kextensions.logIfNull
+import ru.nightgoat.kextensions.orIfNull
+import ru.nightgoat.kextensions.orZero
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
@@ -18,7 +18,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
-class Interactor(private val repository: DBRepository, private val api: OpenWeatherAPI) :
+class WeatherInteractor(private val repository: DBRepository, private val api: OpenWeatherAPI) :
     IInteractor {
 
     private var cityList: MutableList<CityEntity> = mutableListOf()
@@ -42,28 +42,25 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
         city: String,
         units: String,
         api_key: String
-    ): Single<CityEntity?> {
+    ): Single<CityEntity> {
         return api.getCurrentWeather(
             city,
             api_key,
             units,
             Locale.getDefault().country
-        )
-            .subscribeOn(defaultScheduler)
+        ).subscribeOn(defaultScheduler)
             .map { cityModel: CityModel ->
                 cityModel.convertToCityEntity()
             }
             .doOnSuccess { entity ->
-                entity?.let {
-                    it.position = cityList.size
-                    repository.insertCity(it).subscribe()
-                }
+                entity.position = cityList.size
+                repository.insertCity(entity).subscribe()
             }
     }
 
     override fun updateAllFromApi(units: String, API_KEY: String): Completable {
         return repository.getAllCitiesSingle()
-            .observeOn(Schedulers.io())
+            .observeOn(defaultScheduler)
             .flattenAsObservable { Iterable { it.iterator() } }
             .flatMapSingle { cityEntity ->
                 api.getCurrentWeatherById(
@@ -118,9 +115,7 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
                 .toMaybe()
                 .timeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
                 .doOnSuccess { entity ->
-                    entity?.let {
-                        repository.insertCity(it).subscribeOn(defaultScheduler).subscribe()
-                    }
+                    repository.insertCity(entity).subscribeOn(defaultScheduler).subscribe()
                 }
                 .doOnError {
                     Timber.e(it)
@@ -150,8 +145,7 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
             app_id = API_KEY,
             units = units,
             lang = Locale.getDefault().country
-        )
-            .subscribeOn(defaultScheduler)
+        ).subscribeOn(defaultScheduler)
             .subscribe(
                 { cityModel ->
                     cityModel.list?.let { gaps ->
@@ -182,7 +176,7 @@ class Interactor(private val repository: DBRepository, private val api: OpenWeat
     }
 
     override fun purgeForecast(cityId: Int): Completable {
-        return repository.purgeForecast(cityId)
+        return repository.purgeForecast(cityId).subscribeOn(defaultScheduler)
     }
 
     companion object {

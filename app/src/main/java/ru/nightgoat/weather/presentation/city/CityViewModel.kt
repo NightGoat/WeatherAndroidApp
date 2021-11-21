@@ -1,8 +1,8 @@
 package ru.nightgoat.weather.presentation.city
 
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.domain.IInteractor
@@ -16,14 +16,13 @@ class CityViewModel @Inject constructor(private val interactor: IInteractor) : B
     val forecastLiveData = MutableLiveData<MutableList<ForecastEntity>>()
     val refreshLiveData = MutableLiveData<Boolean>()
 
-    fun loadWeather(id: Int, units: String, API_KEY: String) {
+    fun loadWeather(id: Int, units: String, apiKey: String) {
         compositeDisposable.addAll(
             interactor.getCityFromDataBaseAndUpdateFromApi(
-                id,
-                units,
-                API_KEY
-            )
-                .observeOn(AndroidSchedulers.mainThread(), true)
+                cityId = id,
+                units = units,
+                API_KEY = apiKey
+            ).observeOn(AndroidSchedulers.mainThread(), true)
                 .doOnSubscribe {
                     refreshLiveData.value = true
                 }
@@ -37,6 +36,8 @@ class CityViewModel @Inject constructor(private val interactor: IInteractor) : B
                         refreshLiveData.value = false
                     }),
 
+            interactor.purgeForecast(id).observeOn(AndroidSchedulers.mainThread()).subscribe(),
+
             interactor.getForecast(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -45,7 +46,7 @@ class CityViewModel @Inject constructor(private val interactor: IInteractor) : B
                     Timber.e("forecast ${it.message}")
                 }),
 
-            interactor.updateForecast(id, units, API_KEY)
+            interactor.updateForecast(id, units, apiKey)
         )
     }
 

@@ -8,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.core.delegates.viewBinding
+import ru.nightgoat.weather.core.extentions.getApiKey
 import ru.nightgoat.weather.core.utils.API_KEY
 import ru.nightgoat.weather.core.utils.DEGREE_KEY
 import ru.nightgoat.weather.core.utils.PRESSURE_KEY
-import ru.nightgoat.weather.core.utils.getApiKey
 import ru.nightgoat.weather.databinding.FragmentSettingsBinding
 import ru.nightgoat.weather.presentation.WelcomeActivity
 import ru.nightgoat.weather.presentation.base.BaseFragment

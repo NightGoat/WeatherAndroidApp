@@ -1,9 +1,10 @@
 package ru.nightgoat.weather.domain
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.disposables.Disposable
+
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.Disposable
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
@@ -14,7 +15,7 @@ interface IInteractor {
 
     fun deleteCity(cityEntity: CityEntity): Completable
 
-    fun getCityFromApiAndPutInDB(city: String, units: String, api_key: String): Single<CityEntity?>
+    fun getCityFromApiAndPutInDB(city: String, units: String, api_key: String): Single<CityEntity>
 
     fun updateAllFromApi(units: String, API_KEY: String): Completable
 

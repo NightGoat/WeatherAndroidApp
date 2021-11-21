@@ -1,14 +1,16 @@
 package ru.nightgoat.weather.core.utils
 
 import org.joda.time.format.DateTimeFormat
+import ru.nightgoat.kextensions.normalize
 import java.util.*
 
-@ExperimentalStdlibApi
-fun getNormalDateTime(dt: Long): String = "${DateTimeFormat.forPattern(DATE_PATTERN_EEEE).print(dt).capitalize(Locale.getDefault())} " +
-        DateTimeFormat.shortDateTime().withLocale(Locale.getDefault()).print(dt)
+fun getNormalDateTime(dt: Long): String =
+    "${DateTimeFormat.forPattern(DATE_PATTERN_EEEE).print(dt).normalize()} " +
+            DateTimeFormat.shortDateTime().withLocale(Locale.getDefault()).print(dt)
 
 fun getNormalDateTimeNotCapitalized(dt: Long): String = "${DateTimeFormat.forPattern(DATE_PATTERN_EEEE).print(dt)} " +
         DateTimeFormat.shortDateTime().withLocale(Locale.getDefault()).print(dt)
 
 @ExperimentalStdlibApi
-fun getDayOfWeekAndDate(dt: Long): String = DateTimeFormat.forPattern(DATE_PATTERN_EEEE_D_MMM).print(dt).capitalize(Locale.getDefault())
+fun getDayOfWeekAndDate(dt: Long): String =
+    DateTimeFormat.forPattern(DATE_PATTERN_EEEE_D_MMM).print(dt).normalize()

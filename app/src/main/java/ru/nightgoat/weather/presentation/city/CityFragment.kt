@@ -27,7 +27,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
 
     private val binding: FragmentCityBinding by viewBinding()
 
-    private val adapter = ForecastAdapter(this)
+    private val forecastAdapter = ForecastAdapter(this)
 
     private val viewModel: CityViewModel by viewModels(factoryProducer = { viewModelFactory })
 
@@ -39,7 +39,6 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         return inflater.inflate(R.layout.fragment_city, container, false)
     }
 
-    @ExperimentalStdlibApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFont()
@@ -60,7 +59,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     private fun initList() {
         with(binding.cityRecycler) {
             layoutManager = LinearLayoutManager(context)
-            adapter = adapter
+            adapter = forecastAdapter
             addItemDecoration(
                 DividerItemDecoration(
                     context,
@@ -86,7 +85,6 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         }
     }
 
-    @ExperimentalStdlibApi
     private fun observeViewModel() {
         with(viewModel) {
             cityLiveData.observe(viewLifecycleOwner, { city ->
@@ -100,12 +98,12 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
             })
 
             forecastLiveData.observe(viewLifecycleOwner, {
-                adapter.setList(it)
+                forecastAdapter.setList(it)
             })
         }
     }
 
-    @ExperimentalStdlibApi
+
     private fun setDataToScreen(city: CityEntity, icon: String) {
         with(binding){
             textName.text = city.name
@@ -135,13 +133,14 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     }
 
     private fun sendDataToWidgets(city: CityEntity, icon: String) {
-        val localContext = requireContext()
-        val intentSmallWidget = Intent(localContext, GoogleLikeWidgetProvider::class.java)
-        val intentBigWidget = Intent(localContext, BigWidgetProvider::class.java)
-        intentSmallWidget.putExtra(TEMP_KEY, city.temp).putExtra(ICON_KEY, icon)
-        intentBigWidget.putExtra(TEMP_KEY, city.temp).putExtra(ICON_KEY, icon)
-        localContext.sendBroadcast(intentSmallWidget)
-        localContext.sendBroadcast(intentBigWidget)
+        requireContext().run {
+            val intentSmallWidget = Intent(this, GoogleLikeWidgetProvider::class.java)
+            val intentBigWidget = Intent(this, BigWidgetProvider::class.java)
+            intentSmallWidget.putExtra(TEMP_KEY, city.temp).putExtra(ICON_KEY, icon)
+            intentBigWidget.putExtra(TEMP_KEY, city.temp).putExtra(ICON_KEY, icon)
+            sendBroadcast(intentSmallWidget)
+            sendBroadcast(intentBigWidget)
+        }
     }
 
     override fun getWeatherIcon(id: Int, dt: Long, sunrise: Long, sunset: Long): String {
