@@ -6,7 +6,7 @@
 * Dagger2
 * Retrofit (OpenWeatherMap.org API)
 * Room
-* RxJava2
+* RxJava3
 * Joda time
 ##### Links:
 * [Screenshot 1](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_1.png)
