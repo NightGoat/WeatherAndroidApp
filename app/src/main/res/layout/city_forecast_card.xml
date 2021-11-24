@@ -1,40 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:cardView="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ClickableFocusable"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:padding="16dp"
-    >
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/cityCard_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         cardView:layout_constraintStart_toStartOf="parent"
         cardView:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="Вторник, 21 апр."/>
+        tools:text="Вторник, 21 апр." />
 
     <TextView
         android:id="@+id/cityCard_temp"
+        style="@style/ForecastCardItem"
         android:layout_marginEnd="@dimen/size_8dp"
+        cardView:layout_constraintBottom_toBottomOf="parent"
         cardView:layout_constraintEnd_toStartOf="@id/cityCard_icon"
         cardView:layout_constraintTop_toTopOf="parent"
-        cardView:layout_constraintBottom_toBottomOf="parent"
-        tools:text="4&#8451;"
-        style="@style/ForecastCardItem"/>
+        tools:text="4&#8451;" />
 
     <TextView
         android:id="@+id/cityCard_icon"
+        style="@style/ForecastCardItem"
         cardView:layout_constraintBottom_toBottomOf="@id/cityCard_temp"
         cardView:layout_constraintEnd_toEndOf="parent"
         cardView:layout_constraintTop_toTopOf="@id/cityCard_temp"
-        tools:text="❅"
-        style="@style/ForecastCardItem"/>
+        tools:text="❅" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

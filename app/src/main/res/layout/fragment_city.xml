@@ -22,6 +22,7 @@
                 android:backgroundTint="@color/colorPrimary">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    style="@style/ClickableFocusable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/size_16dp">
@@ -63,11 +64,13 @@
                 android:id="@+id/city_topCard"
                 style="@style/Card">
 
+
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    style="@style/ClickableFocusable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_24dp"
-                    android:layout_marginBottom="@dimen/size_42dp">
+                    android:paddingTop="@dimen/size_24dp"
+                    android:paddingBottom="@dimen/size_42dp">
 
                     <TextView
                         android:id="@+id/text_temp"
@@ -76,6 +79,7 @@
                         android:layout_marginEnd="@dimen/size_16dp"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/text_84sp"
+
                         app:layout_constraintEnd_toStartOf="@id/city_text_weatherIcon"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
@@ -149,10 +153,11 @@
                 style="@style/Card">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    style="@style/ClickableFocusable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_16dp"
-                    android:layout_marginBottom="@dimen/size_16dp">
+                    android:paddingTop="@dimen/size_16dp"
+                    android:paddingBottom="@dimen/size_16dp">
 
                     <TextView
                         android:id="@+id/humidityIcon"
