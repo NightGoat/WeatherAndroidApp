@@ -11,7 +11,7 @@ fun SharedPreferences?.getUnits(): String {
 }
 
 fun SharedPreferences?.getApiKey(): String {
-    return this?.getString(API_KEY, "0").orEmpty()
+    return this?.getString(API_KEY, "").orEmpty()
 }
 
 fun SharedPreferences?.getCityId(): Int = this?.getInt(
