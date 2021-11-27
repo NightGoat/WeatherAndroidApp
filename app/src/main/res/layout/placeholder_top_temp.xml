@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/topPlaceHolder"
+    style="@style/ClickableFocusable"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/size_24dp"
+    android:paddingBottom="@dimen/size_42dp">
+
+    <View
+        android:id="@+id/topPlaceHolder_text_temp"
+        app:layout_constraintEnd_toStartOf="@id/topPlaceHolder_city_text_weatherIcon"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="144dp"
+        android:layout_height="112dp"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:background="@color/colorGrey" />
+
+    <View
+        android:id="@+id/topPlaceHolder_city_text_weatherIcon"
+        app:layout_constraintBottom_toBottomOf="@id/topPlaceHolder_text_temp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/topPlaceHolder_text_temp"
+        app:layout_constraintTop_toTopOf="@id/topPlaceHolder_text_temp"
+        android:layout_width="64dp"
+        android:layout_height="112dp"
+        android:background="@color/colorGrey" />
+
+    <View
+        android:id="@+id/topPlaceHolder_city_text_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topPlaceHolder_text_temp"
+        android:layout_width="254dp"
+        android:layout_height="@dimen/size_32dp"
+        android:layout_marginTop="@dimen/size_8dp"
+        android:background="@color/colorGrey"
+        android:textColor="@color/colorPrimary" />
+
+    <View
+        android:id="@+id/topPlaceHolder_text_feelsLike"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topPlaceHolder_city_text_description"
+        android:layout_width="98dp"
+        android:layout_height="@dimen/size_22dp"
+        android:layout_marginTop="@dimen/size_8dp"
+        android:background="@color/colorGrey" />
+
+    <View
+        android:id="@+id/topPlaceHolder_text_temp_min"
+        app:layout_constraintEnd_toStartOf="@+id/topPlaceHolder_text_temp_max"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topPlaceHolder_text_feelsLike"
+        android:layout_width="64dp"
+        android:layout_height="@dimen/size_22dp"
+        android:layout_marginTop="@dimen/size_8dp"
+        android:layout_marginEnd="@dimen/size_8dp"
+        android:background="@color/colorGrey" />
+
+    <View
+        android:id="@+id/topPlaceHolder_text_temp_max"
+        app:layout_constraintBottom_toBottomOf="@id/topPlaceHolder_text_temp_min"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/topPlaceHolder_text_temp_min"
+        android:layout_width="64dp"
+        android:layout_height="@dimen/size_22dp"
+        android:background="@color/colorGrey" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

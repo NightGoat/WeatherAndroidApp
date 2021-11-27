@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/size_16dp"
+    android:paddingTop="@dimen/size_16dp"
+    android:paddingEnd="@dimen/size_16dp">
+
+    <View
+        android:layout_width="250dp"
+        android:layout_height="26dp"
+        android:layout_marginBottom="@dimen/size_4dp"
+        android:background="@android:color/white" />
+
+    <View
+        android:layout_width="128dp"
+        android:layout_height="20dp"
+        android:background="@android:color/white" />
+</LinearLayout>

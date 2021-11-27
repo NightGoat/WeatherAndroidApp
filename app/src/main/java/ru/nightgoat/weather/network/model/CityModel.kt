@@ -61,7 +61,7 @@ data class CityModel(
             pressure = main?.pressure.orZero(),
             wind = wind?.speed.toIntOrZero(),
             description = weather?.firstOrNull()?.description.orEmpty(),
-            iconId = weather?.firstOrNull()?.id ?: 0,
+            iconId = weather?.firstOrNull()?.id.orZero(),
             sunrise = sys?.sunrise.orZero() * DATE_DIV,
             sunset = sys?.sunset.orZero() * DATE_DIV
         )
