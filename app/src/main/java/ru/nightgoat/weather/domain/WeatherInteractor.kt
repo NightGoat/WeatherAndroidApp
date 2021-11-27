@@ -3,9 +3,7 @@ package ru.nightgoat.weather.domain
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import ru.nightgoat.kextensions.logIfNull
 import ru.nightgoat.kextensions.orIfNull
 import ru.nightgoat.kextensions.orZero
 import ru.nightgoat.weather.data.entity.CityEntity
@@ -111,8 +109,7 @@ class WeatherInteractor(private val repository: DBRepository, private val api: O
                 lang = Locale.getDefault().country
             ).map {
                 it.convertToCityEntity()
-            }
-                .toMaybe()
+            }.toMaybe()
                 .timeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
                 .doOnSuccess { entity ->
                     repository.insertCity(entity).subscribeOn(defaultScheduler).subscribe()
@@ -139,40 +136,53 @@ class WeatherInteractor(private val repository: DBRepository, private val api: O
         return repository.getForecast(cityId).subscribeOn(defaultScheduler)
     }
 
-    override fun updateForecast(cityId: Int, units: String, API_KEY: String): Disposable {
+    override fun updateForecast(cityId: Int, units: String, apiKey: String): Completable {
         return api.getForecast(
             id = cityId,
-            app_id = API_KEY,
+            app_id = apiKey,
             units = units,
             lang = Locale.getDefault().country
         ).subscribeOn(defaultScheduler)
-            .subscribe(
-                { cityModel ->
-                    cityModel.list?.let { gaps ->
-                        for (gap in gaps) {
-                            if (gap.dtTxt?.contains(MIDDLE_DAY_STRING) == true) {
-                                val cityValue = cityModel.city
-                                cityValue?.cityId?.let { cityIdValue ->
-                                    cityValue.name?.let { cityNameValue ->
-                                        gap.main?.temp?.let { tempValue ->
-                                            repository.insertForecast(
-                                                ForecastEntity(
-                                                    cityId = cityIdValue,
-                                                    name = cityNameValue,
-                                                    date = gap.dt.orZero() * TIME_DIF,
-                                                    temp = tempValue.roundToInt().orZero(),
-                                                    iconId = gap.weather?.firstOrNull()?.id.orZero()
-                                                )
-                                            ).subscribe()
-                                        }.logIfNull("updateForecast(): temp null")
-                                    }.logIfNull("updateForecast(): city name null")
-                                }.logIfNull("updateForecast(): cityId null")
+            .flatMapCompletable { cityModel ->
+                var error: Throwable? = null
+                cityModel.list?.let { gaps ->
+                    loop@ for (gap in gaps) {
+                        if (gap.dtTxt?.contains(MIDDLE_DAY_STRING) == true) {
+                            val cityValue = cityModel.city
+                            cityValue?.cityId?.let { cityIdValue ->
+                                cityValue.name?.let { cityNameValue ->
+                                    gap.main?.temp?.let { tempValue ->
+                                        repository.insertForecast(
+                                            ForecastEntity(
+                                                cityId = cityIdValue,
+                                                name = cityNameValue,
+                                                date = gap.dt.orZero() * TIME_DIF,
+                                                temp = tempValue.roundToInt().orZero(),
+                                                iconId = gap.weather?.firstOrNull()?.id.orZero()
+                                            )
+                                        ).doOnError {
+                                            error = it
+                                        }
+                                    }.orIfNull {
+                                        error = NullPointerException("updateForecast(): temp null")
+                                    }
+                                }.orIfNull {
+                                    error = NullPointerException("updateForecast(): city name null")
+                                }
+                            }.orIfNull {
+                                error = NullPointerException("updateForecast(): cityId null")
                             }
                         }
-                    }.logIfNull("updateForecast(): forecast null")
-                }, {
-                    Timber.e(it)
-                })
+                    }
+                }.orIfNull {
+                    error = NullPointerException("updateForecast(): forecast null")
+                }
+                error?.let {
+                    Completable.error(it)
+                }.orIfNull {
+                    Completable.complete()
+                }
+            }
     }
 
     override fun purgeForecast(cityId: Int): Completable {
