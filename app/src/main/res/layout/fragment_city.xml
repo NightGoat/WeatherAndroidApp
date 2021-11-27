@@ -18,10 +18,20 @@
 
             <androidx.cardview.widget.CardView
                 style="@style/Card"
-                android:layout_marginTop="@dimen/size_17dp"
+                android:layout_marginTop="@dimen/size_16dp"
                 android:backgroundTint="@color/colorPrimary">
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include layout="@layout/placeholder_top_city" />
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraint_top_city"
                     style="@style/ClickableFocusable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -64,8 +74,17 @@
                 android:id="@+id/city_topCard"
                 style="@style/Card">
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_top_temp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include layout="@layout/placeholder_top_temp" />
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraint_top_temp"
                     style="@style/ClickableFocusable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -79,7 +98,6 @@
                         android:layout_marginEnd="@dimen/size_16dp"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/text_84sp"
-
                         app:layout_constraintEnd_toStartOf="@id/city_text_weatherIcon"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
@@ -152,7 +170,17 @@
                 android:id="@+id/city_parameters_card"
                 style="@style/Card">
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_parameters"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include layout="@layout/placeholder_parameters" />
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraint_parameters"
                     style="@style/ClickableFocusable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -204,7 +232,6 @@
                     <TextView
                         android:id="@+id/text_wind"
                         style="@style/WeatherProperties.Text"
-                        android:layout_marginEnd="0dp"
                         app:layout_constraintBottom_toBottomOf="@id/humidityIcon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/windIcon"
@@ -216,16 +243,26 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/city_forecast_card"
                 style="@style/Card"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="@dimen/size_7dp"
-                android:layout_marginEnd="@dimen/size_4dp"
-                app:cardUseCompatPadding="true">
+                android:layout_marginBottom="@dimen/size_16dp">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/fake_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/placeholder_forecast_item" />
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/city_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:listitem="@layout/city_forecast_card" />
+                    tools:listitem="@layout/item_city_forecast_card" />
 
             </androidx.cardview.widget.CardView>
         </LinearLayout>

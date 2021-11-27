@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.nightgoat.kextensions.android.setInvisible
+import ru.nightgoat.kextensions.normalize
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.core.delegates.viewBinding
 import ru.nightgoat.weather.core.utils.*
@@ -58,6 +60,11 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     }
 
     private fun initList() {
+        initShimmeringRecycler()
+        initForecastRecycler()
+    }
+
+    private fun initForecastRecycler() {
         with(binding.cityRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = forecastAdapter
@@ -67,6 +74,15 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
                     DividerItemDecoration.VERTICAL
                 )
             )
+        }
+    }
+
+    private fun initShimmeringRecycler() {
+        with(binding.fakeRecycler) {
+            val shadapter = ShimmerAdapter()
+            adapter = shadapter
+            layoutManager = LinearLayoutManager(context)
+            shadapter.notifyDataSetChanged()
         }
     }
 
@@ -88,25 +104,54 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
 
     private fun observeViewModel() {
         with(viewModel) {
-            cityLiveData.observe(viewLifecycleOwner, { city ->
-                val icon = chooseIcon(city.iconId, city.date, city.sunrise, city.sunset)
-                setDataToScreen(city, icon)
-                sendDataToWidgets(city, icon)
-            })
-
-            refreshLiveData.observe(viewLifecycleOwner, {
-                binding.citySwipeRefreshLayout.isRefreshing = it
-            })
-
-            forecastLiveData.observe(viewLifecycleOwner, {
-                forecastAdapter.setList(it)
-            })
+            observeCityData()
+            observeLoading()
+            observeForecast()
         }
+    }
+
+    private fun CityViewModel.observeForecast() {
+        forecastLiveData.observe(viewLifecycleOwner, {
+            forecastAdapter.setList(it)
+        })
+    }
+
+    private fun CityViewModel.observeLoading() {
+        refreshLiveData.observe(viewLifecycleOwner, { isLoading ->
+            with(binding) {
+                citySwipeRefreshLayout.isRefreshing = isLoading
+                listOf(
+                    constraintTopTemp,
+                    constraintTopCity,
+                    constraintParameters,
+                    cityRecycler
+                ).forEach { layout ->
+                    layout.setInvisible(isLoading)
+                }
+
+                listOf(
+                    shimmerTopTemp,
+                    shimmerCity,
+                    shimmerParameters,
+                    shimmerRecycler
+                ).forEach { shimmer ->
+                    shimmer.setInvisible(!isLoading)
+                }
+            }
+        })
+    }
+
+    private fun CityViewModel.observeCityData() {
+        cityLiveData.observe(viewLifecycleOwner, { city ->
+            val icon = chooseIcon(city.iconId, city.date, city.sunrise, city.sunset)
+            setDataToScreen(city, icon)
+            sendDataToWidgets(city, icon)
+        })
     }
 
 
     private fun setDataToScreen(city: CityEntity, icon: String) {
-        with(binding){
+        with(binding) {
             textName.text = city.name
             cityTextCountry.text = city.country
             val degree = getDegree()
@@ -119,7 +164,7 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
             textHumidity.text = getString(R.string.valuePlusParam, city.humidity, PERCENT)
             textPressure.text = choosePressure(city.pressure)
             textWind.text = getString(R.string.windWithMs, city.wind)
-            cityTextDescription.text = city.description
+            cityTextDescription.text = city.description.normalize()
             cityTextWeatherIcon.text = icon
         }
     }

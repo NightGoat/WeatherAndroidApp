@@ -7,16 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.core.utils.getDayOfWeekAndDate
 import ru.nightgoat.weather.data.entity.ForecastEntity
-import ru.nightgoat.weather.databinding.CityForecastCardBinding
+import ru.nightgoat.weather.databinding.ItemCityForecastCardBinding
 
 class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
     RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder>() {
 
-    private var timeGaps = mutableListOf<ForecastEntity>()
+    private var timeGaps = mutableMapOf<Int, ForecastEntity>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastViewHolder {
-        val binding = CityForecastCardBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemCityForecastCardBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
         return ForecastViewHolder(binding)
     }
 
@@ -26,30 +27,36 @@ class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
 
     @OptIn(ExperimentalStdlibApi::class)
     override fun onBindViewHolder(holder: ForecastViewHolder, position: Int) {
-        timeGaps.getOrNull(position)?.let {
+        val localGaps = timeGaps.values.toMutableList()
+        localGaps.getOrNull(position)?.let {
             holder.bind(item = it, fragment = fragment)
         }
     }
 
     fun setList(list: MutableList<ForecastEntity>) {
-        this.timeGaps = list
-        notifyDataSetChanged()
+        list.forEachIndexed { index, entity ->
+            val savedTimeGap = timeGaps[index]
+            if (savedTimeGap?.temp != entity.temp || savedTimeGap.iconId != entity.iconId) {
+                timeGaps[index] = entity
+                notifyItemChanged(index)
+            }
+        }
     }
 
-    inner class ForecastViewHolder(val binding: CityForecastCardBinding) : RecyclerView.ViewHolder(binding.root) {
-
+    inner class ForecastViewHolder(val binding: ItemCityForecastCardBinding): RecyclerView.ViewHolder(binding.root) {
         @ExperimentalStdlibApi
         fun bind(item: ForecastEntity, fragment: CityFragmentCallbacks) {
-            binding.cityCardDate.text = getDayOfWeekAndDate(item.date)
-            binding.cityCardTemp.text = item.temp.toString()
-                .plus(itemView.context.getString(R.string.degree))
-            binding.cityCardIcon.typeface =
-                Typeface.createFromAsset(itemView.context.assets, FONTS_PATH)
-            binding.cityCardIcon.text = fragment.getWeatherIcon(
-                item.iconId,
-                item.date,
-                DEFAULT_TIME, DEFAULT_TIME
-            )
+            with(binding) {
+                cityCardDate.text = getDayOfWeekAndDate(item.date)
+                cityCardTemp.text = itemView.context.getString(R.string.temp_with_degree, item.temp)
+                cityCardIcon.typeface =
+                    Typeface.createFromAsset(itemView.context.assets, FONTS_PATH)
+                cityCardIcon.text = fragment.getWeatherIcon(
+                    item.iconId,
+                    item.date,
+                    DEFAULT_TIME, DEFAULT_TIME
+                )
+            }
         }
     }
 

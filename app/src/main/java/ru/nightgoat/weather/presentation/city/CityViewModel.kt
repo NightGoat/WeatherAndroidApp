@@ -18,35 +18,33 @@ class CityViewModel @Inject constructor(private val interactor: IInteractor) : B
 
     fun loadWeather(id: Int, units: String, apiKey: String) {
         compositeDisposable.addAll(
-            interactor.getCityFromDataBaseAndUpdateFromApi(
-                cityId = id,
-                units = units,
-                API_KEY = apiKey
-            ).observeOn(AndroidSchedulers.mainThread(), true)
+            interactor.purgeForecast(id)
                 .doOnSubscribe {
                     refreshLiveData.value = true
                 }
-                .subscribe(
-                    {
-                        cityLiveData.value = it
-                        refreshLiveData.value = false
-
-                    }, {
-                        Timber.e("city ${it.message}")
-                        refreshLiveData.value = false
-                    }),
-
-            interactor.purgeForecast(id).observeOn(AndroidSchedulers.mainThread()).subscribe(),
-
-            interactor.getForecast(id)
+                .andThen(interactor.updateForecast(id, units, apiKey))
+                .andThen(
+                    interactor.getCityFromDataBaseAndUpdateFromApi(
+                        cityId = id,
+                        units = units,
+                        API_KEY = apiKey
+                    )
+                )
+                .doOnNext {
+                    cityLiveData.postValue(it)
+                }
+                .flatMap {
+                    interactor.getForecast(id)
+                }.doOnNext {
+                    forecastLiveData.postValue(it.asReversed())
+                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    forecastLiveData.value = it.asReversed()
+                    refreshLiveData.value = false
                 }, {
-                    Timber.e("forecast ${it.message}")
+                    Timber.e(it)
+                    refreshLiveData.value = false
                 }),
-
-            interactor.updateForecast(id, units, apiKey)
         )
     }
 
