@@ -60,6 +60,9 @@ class DBRepositoryImpl(private val dao: CitiesDao) : DBRepository {
     override fun insertForecast(forecast: ForecastEntity): Completable {
         return dao.insertForecast(forecast)
     }
+    override fun insertForecast(forecast: List<ForecastEntity>): Completable {
+        return dao.insertForecast(forecast)
+    }
 
     override fun deleteAllForecastForCity(cityId: Int): Completable {
         return dao.deleteForecast(cityId)

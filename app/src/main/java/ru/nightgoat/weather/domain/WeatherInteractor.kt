@@ -2,6 +2,7 @@ package ru.nightgoat.weather.domain
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import ru.nightgoat.kextensions.orIfNull
@@ -143,44 +144,35 @@ class WeatherInteractor(private val repository: DBRepository, private val api: O
             units = units,
             lang = Locale.getDefault().country
         ).subscribeOn(defaultScheduler)
-            .flatMapCompletable { cityModel ->
-                var error: Throwable? = null
-                cityModel.list?.let { gaps ->
-                    loop@ for (gap in gaps) {
-                        if (gap.dtTxt?.contains(MIDDLE_DAY_STRING) == true) {
-                            val cityValue = cityModel.city
-                            cityValue?.cityId?.let { cityIdValue ->
-                                cityValue.name?.let { cityNameValue ->
-                                    gap.main?.temp?.let { tempValue ->
-                                        repository.insertForecast(
-                                            ForecastEntity(
-                                                cityId = cityIdValue,
-                                                name = cityNameValue,
-                                                date = gap.dt.orZero() * TIME_DIF,
-                                                temp = tempValue.roundToInt().orZero(),
-                                                iconId = gap.weather?.firstOrNull()?.id.orZero()
-                                            )
-                                        ).doOnError {
-                                            error = it
-                                        }
-                                    }.orIfNull {
-                                        error = NullPointerException("updateForecast(): temp null")
-                                    }
-                                }.orIfNull {
-                                    error = NullPointerException("updateForecast(): city name null")
+            .flatMapMaybe { cityModel ->
+                val mappedGaps = cityModel.list.orEmpty().mapNotNull { gap ->
+                    if (gap.dtTxt?.contains(MIDDLE_DAY_STRING) == true) {
+                        val cityValue = cityModel.city
+                        cityValue?.cityId?.let { cityIdValue ->
+                            cityValue.name?.let { cityNameValue ->
+                                gap.main?.temp?.let { tempValue ->
+                                    ForecastEntity(
+                                        cityId = cityIdValue,
+                                        name = cityNameValue,
+                                        date = gap.dt.orZero() * TIME_DIF,
+                                        temp = tempValue.roundToInt().orZero(),
+                                        iconId = gap.weather?.firstOrNull()?.id.orZero()
+                                    )
                                 }
-                            }.orIfNull {
-                                error = NullPointerException("updateForecast(): cityId null")
                             }
                         }
+                    } else {
+                        null
                     }
-                }.orIfNull {
-                    error = NullPointerException("updateForecast(): forecast null")
                 }
-                error?.let {
-                    Completable.error(it)
-                }.orIfNull {
-                    Completable.complete()
+                Maybe.just(mappedGaps)
+            }.flatMapCompletable {
+                if (it.isNotEmpty()) {
+                    repository.insertForecast(it)
+                } else {
+                    Completable.error {
+                        IllegalStateException("list is empty")
+                    }
                 }
             }
     }

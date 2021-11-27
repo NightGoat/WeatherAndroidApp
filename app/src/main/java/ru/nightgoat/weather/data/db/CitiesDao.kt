@@ -44,6 +44,9 @@ interface CitiesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertForecast(forecast: ForecastEntity): Completable
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertForecast(forecast: List<ForecastEntity>): Completable
+
     @Query("DELETE FROM ForecastEntity WHERE cityId = :cityId")
     fun deleteForecast(cityId: Int): Completable
 
