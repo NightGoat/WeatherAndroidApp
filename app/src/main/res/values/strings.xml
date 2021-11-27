@@ -88,5 +88,4 @@
     <string name="first_settings">Настройки: шаг 1</string>
     <string name="second_settings">Настройки: шаг 2</string>
     <string name="third_settings">Настройки: шаг 3</string>
-    <string name="temp_with_degree" translatable="false">%1$d&#186;</string>
 </resources>
