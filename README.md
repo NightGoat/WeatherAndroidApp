@@ -16,4 +16,4 @@
 * [Screenshot 2](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_2.png)
 * [Screenshot 3](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_3.png)
 
-[<img src="https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/google-play-badge.png" height=100 width=auto>](https://play.google.com/store/apps/details?id=ru.nightgoat.weather/)
+[<img src="https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/google-play-badge.png" height=100 width=auto>](https://play.google.com/store/apps/details?id=ru.nightgoat.weather)
