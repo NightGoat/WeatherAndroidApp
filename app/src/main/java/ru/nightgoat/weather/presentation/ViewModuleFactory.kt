@@ -7,8 +7,6 @@ import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
 
-const val TAG = "ViewModelFactory"
-
 @Singleton
 class ViewModelFactory
 @Inject constructor(

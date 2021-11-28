@@ -1,8 +1,12 @@
 package ru.nightgoat.weather.providers
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.core.extentions.createTypeFace
 import ru.nightgoat.weather.core.utils.*
 
 class ResManager(val context: Context): IResManager {
@@ -42,14 +46,15 @@ class ResManager(val context: Context): IResManager {
     }
 
     override fun convertToImg(text: String, textSize: Float): Bitmap {
-        val paint = Paint()
-        paint.isAntiAlias = true
-        paint.isSubpixelText = true
-        paint.typeface = Typeface.createFromAsset(context.assets, FONTS_PATH)
-        paint.style = Paint.Style.FILL
-        paint.color = Color.WHITE
+        val paint = Paint().apply {
+            isAntiAlias = true
+            isSubpixelText = true
+            typeface = context.createTypeFace()
+            style = Paint.Style.FILL
+            color = Color.WHITE
+            textAlign = Paint.Align.LEFT
+        }
         paint.textSize = textSize
-        paint.textAlign = Paint.Align.LEFT
         val baseline = -paint.ascent()
         val paintDif = 0.5f
         val btmText = Bitmap.createBitmap(

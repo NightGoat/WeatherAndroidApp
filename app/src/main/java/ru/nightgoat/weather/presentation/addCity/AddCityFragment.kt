@@ -35,6 +35,14 @@ class AddCityFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showKeyboard()
+        addCityClickListener()
+        cancelBtnClickListener()
+        initList()
+        observeViewModel()
+    }
+
+    private fun showKeyboard() {
         val inputManager =
             context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         if (binding.addCityEdit.requestFocus()) {
@@ -43,30 +51,31 @@ class AddCityFragment : BaseFragment() {
                 InputMethodManager.HIDE_IMPLICIT_ONLY
             )
         }
-        binding.addCityBtnAdd.setOnClickListener {
-            val bundle = Bundle()
-            binding.addCityEdit.text.toString().let {
-                if (it.isNotEmpty()) {
-                    viewModel.addSearchEntity(it)
-                    viewModel.purgeList()
-                    binding.addCityEdit.clearFocus()
-                    bundle.putString(NAME_KEY, it)
-                    navigateTo(
-                        R.id.action_navigation_addCity_to_navigation_list,
-                        bundle
-                    )
-                }
-            }
-        }
+    }
 
+    private fun cancelBtnClickListener() {
         binding.addCityBtnCancel.setOnClickListener {
             viewModel.purgeList()
             binding.addCityEdit.clearFocus()
             navigateTo(R.id.action_navigation_addCity_to_navigation_list)
         }
+    }
 
-        initList()
-        observeViewModel()
+    private fun addCityClickListener() {
+        binding.addCityBtnAdd.setOnClickListener {
+            val bundle = Bundle()
+            val cityName = binding.addCityEdit.text.toString()
+            if (cityName.isNotEmpty()) {
+                viewModel.addSearchEntity(cityName)
+                viewModel.purgeList()
+                binding.addCityEdit.clearFocus()
+                bundle.putString(NAME_KEY, cityName)
+                navigateTo(
+                    R.id.action_navigation_addCity_to_navigation_list,
+                    bundle
+                )
+            }
+        }
     }
 
     private fun initList() {

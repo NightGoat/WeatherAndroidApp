@@ -4,9 +4,13 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import ru.nightgoat.kextensions.unsafeLazy
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.core.extentions.createTypeFace
 import ru.nightgoat.weather.core.extentions.getApiKey
 import ru.nightgoat.weather.core.extentions.getCityId
 import ru.nightgoat.weather.core.extentions.getUnits
@@ -71,7 +75,7 @@ abstract class BaseAppWidgetProvider: AppWidgetProvider() {
         val paint = Paint()
         paint.isAntiAlias = true
         paint.isSubpixelText = true
-        paint.typeface = Typeface.createFromAsset(context.assets, FONTS_PATH)
+        paint.typeface = context.createTypeFace()
         paint.style = Paint.Style.FILL
         paint.color = Color.WHITE
         paint.textSize = textSize

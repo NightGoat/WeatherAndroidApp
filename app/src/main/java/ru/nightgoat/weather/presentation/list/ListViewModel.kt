@@ -3,7 +3,6 @@ package ru.nightgoat.weather.presentation.list
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
-import ru.nightgoat.kextensions.orIfNull
 import ru.nightgoat.weather.core.utils.NOT_FOUND_KEY
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.domain.IInteractor
@@ -31,16 +30,12 @@ class ListViewModel @Inject constructor(private val interactor: IInteractor) : B
         )
     }
 
-    fun getCityFromApiAndPutInDB(name: String, units: String, api_key: String) {
+    fun getCityFromApiAndPutInDB(name: String, units: String, apiKey: String) {
         compositeDisposable.add(
-            interactor.getCityFromApiAndPutInDB(name, units, api_key)
+            interactor.getCityFromApiAndPutInDB(name, units, apiKey)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ entity ->
-                    entity?.let {
-                        cityIdLiveData.value = it.cityId
-                    }.orIfNull {
-                        snackBarLiveData.value = NOT_FOUND_KEY
-                    }
+                    cityIdLiveData.value = entity.cityId
                 }, {
                     Timber.e(it)
                     val isThisIsBadAnswer = it.message?.contains(BAD_ANSWER, ignoreCase = true)
@@ -62,10 +57,10 @@ class ListViewModel @Inject constructor(private val interactor: IInteractor) : B
             )
     }
 
-    fun updateAllFromApi(units: String, API_KEY: String) {
+    fun updateAllFromApi(units: String, apiKey: String) {
         Timber.d("update() call")
         compositeDisposable.add(
-            interactor.updateAllFromApi(units, API_KEY).subscribeOn(Schedulers.io())
+            interactor.updateAllFromApi(units, apiKey).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     refreshLiveData.value = false

@@ -22,16 +22,26 @@ class MainActivity : DaggerAppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setupWithNavController(navController)
-
         val sharedPreferences = getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)
-        val isFirstTimeOpen = sharedPreferences.getBoolean(FIRST_TIME_OPEN_KEY, false)
+        val isWasAlreadyOpened = sharedPreferences.getBoolean(FIRST_TIME_OPEN_KEY, false)
+        reactToFirstTimeOpen(isWasAlreadyOpened, sharedPreferences)
+    }
 
-        if (!isFirstTimeOpen) {
-            val editor: SharedPreferences.Editor = sharedPreferences.edit()
-            editor.putBoolean(FIRST_TIME_OPEN_KEY, true)
-            editor.apply()
-            val intent = Intent(this, WelcomeActivity::class.java)
-            startActivity(intent)
+    private fun reactToFirstTimeOpen(
+        isWasAlreadyOpened: Boolean,
+        sharedPreferences: SharedPreferences
+    ) {
+        if (!isWasAlreadyOpened) {
+            sharedPreferences.edit().run {
+                putBoolean(FIRST_TIME_OPEN_KEY, true)
+                apply()
+            }
+            openWelcomeActivity()
         }
+    }
+
+    private fun openWelcomeActivity() {
+        val intent = Intent(this, WelcomeActivity::class.java)
+        startActivity(intent)
     }
 }

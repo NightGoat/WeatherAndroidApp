@@ -20,7 +20,7 @@ class AddCityViewModel @Inject constructor(private val interactor: IInteractor) 
                     Timber.tag(TAG).d(listOfSearchEntities.toString())
                     searchListLiveData.value = listOfSearchEntities
                 }, {
-                    Timber.tag(TAG).e(it.message.toString())
+                    Timber.tag(TAG).e(it)
                 })
         )
     }

@@ -1,10 +1,10 @@
 package ru.nightgoat.weather.presentation.city
 
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.core.extentions.createTypeFace
 import ru.nightgoat.weather.core.utils.getDayOfWeekAndDate
 import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.databinding.ItemCityForecastCardBinding
@@ -49,8 +49,7 @@ class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
             with(binding) {
                 cityCardDate.text = getDayOfWeekAndDate(item.date)
                 cityCardTemp.text = itemView.context.getString(R.string.temp_with_degree, item.temp)
-                cityCardIcon.typeface =
-                    Typeface.createFromAsset(itemView.context.assets, FONTS_PATH)
+                cityCardIcon.typeface = itemView.context.createTypeFace()
                 cityCardIcon.text = fragment.getWeatherIcon(
                     item.iconId,
                     item.date,

@@ -1,7 +1,6 @@
 package ru.nightgoat.weather.presentation.city
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,7 @@ import ru.nightgoat.kextensions.android.setInvisible
 import ru.nightgoat.kextensions.normalize
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.core.delegates.viewBinding
+import ru.nightgoat.weather.core.extentions.createTypeFace
 import ru.nightgoat.weather.core.utils.*
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.databinding.FragmentCityBinding
@@ -89,15 +89,11 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     private fun setFont() {
         context?.let {
             with(binding) {
-                val localAssets = it.assets
-                humidityIcon.typeface =
-                    Typeface.createFromAsset(localAssets, FONTS_PATH)
-                pressureIcon.typeface =
-                    Typeface.createFromAsset(localAssets, FONTS_PATH)
-                windIcon.typeface =
-                    Typeface.createFromAsset(localAssets, FONTS_PATH)
-                cityTextWeatherIcon.typeface =
-                    Typeface.createFromAsset(localAssets, FONTS_PATH)
+                val typeFace = it.createTypeFace()
+                humidityIcon.typeface = typeFace
+                pressureIcon.typeface = typeFace
+                windIcon.typeface = typeFace
+                cityTextWeatherIcon.typeface = typeFace
             }
         }
     }

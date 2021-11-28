@@ -45,10 +45,14 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
         subscribeViewModel()
         listFabListener()
         setSwipeListener()
+        getCityFromApiAndPutInDB()
+        viewModel.updateAllFromApi(units, apiKey)
+    }
+
+    private fun getCityFromApiAndPutInDB() {
         arguments?.getString(NAME_KEY)?.let {
             viewModel.getCityFromApiAndPutInDB(it, units, apiKey)
         }
-        viewModel.updateAllFromApi(units, apiKey)
     }
 
     private fun setSwipeListener() {

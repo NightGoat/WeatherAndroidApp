@@ -43,10 +43,10 @@ class WeatherInteractor(private val repository: DBRepository, private val api: O
         api_key: String
     ): Single<CityEntity> {
         return api.getCurrentWeather(
-            city,
-            api_key,
-            units,
-            Locale.getDefault().country
+            city = city,
+            app_id = api_key,
+            units = units,
+            lang = Locale.getDefault().country
         ).subscribeOn(defaultScheduler)
             .map { cityModel: CityModel ->
                 cityModel.convertToCityEntity()
@@ -63,10 +63,10 @@ class WeatherInteractor(private val repository: DBRepository, private val api: O
             .flattenAsObservable { Iterable { it.iterator() } }
             .flatMapSingle { cityEntity ->
                 api.getCurrentWeatherById(
-                    cityEntity.cityId,
-                    API_KEY,
-                    units,
-                    Locale.getDefault().country
+                    id = cityEntity.cityId,
+                    app_id = API_KEY,
+                    units = units,
+                    lang = Locale.getDefault().country
                 ).observeOn(defaultScheduler)
                     .doOnSuccess {
                         it.position = cityEntity.position

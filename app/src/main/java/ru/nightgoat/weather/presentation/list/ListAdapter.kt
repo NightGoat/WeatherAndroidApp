@@ -1,7 +1,6 @@
 package ru.nightgoat.weather.presentation.list
 
 
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ru.nightgoat.weather.R
+import ru.nightgoat.weather.core.extentions.createTypeFace
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.databinding.ListCityCardBinding
 import java.util.*
@@ -62,11 +62,7 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
                 val context = itemView.context
                 listCardName.text = item.name
                 listCardCountry.text = item.country
-                listCardIcon.typeface =
-                    Typeface.createFromAsset(
-                        context.assets,
-                        FONTS_PATH
-                    )
+                listCardIcon.typeface = context.createTypeFace()
                 listCardIcon.text =
                     fragment.getWeatherIcon(
                         item.iconId,
@@ -93,10 +89,6 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
                 ContextCompat.getColor(context, fragment.getColor(item))
             )
         }
-    }
-
-    companion object {
-        private const val FONTS_PATH = "fonts/weathericons.ttf"
     }
 }
 
