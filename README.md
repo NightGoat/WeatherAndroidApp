@@ -1,4 +1,4 @@
-## Weather android app.
+# Weather Android App.
 ![App logo](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/WeatherEngCard.png)
 ##### Features:
 * Kotlin
@@ -15,4 +15,5 @@
 * [Screenshot 1](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_1.png)
 * [Screenshot 2](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_2.png)
 * [Screenshot 3](https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/Screenshot_3.png)
-* [GooglePlayStore](https://play.google.com/store/apps/details?id=ru.nightgoat.weather)
+
+[<img src="https://github.com/NightGoat/WeatherAndroidApp/blob/master/git%20images/google-play-badge.png" height=100 width=auto>](https://play.google.com/store/apps/details?id=ru.nightgoat.weather/)
