@@ -8,9 +8,9 @@
     android:layout_height="wrap_content"
     cardView:cardElevation="@dimen/size_4dp"
     cardView:cardCornerRadius="@dimen/size_8dp"
-    cardView:cardUseCompatPadding="true"
-    android:layout_marginStart="@dimen/size_4dp"
-    android:layout_marginEnd="@dimen/size_4dp"
+    android:layout_marginStart="@dimen/size_16dp"
+    android:layout_marginEnd="@dimen/size_16dp"
+    android:layout_marginTop="@dimen/size_16dp"
     app:cardBackgroundColor="@color/colorBackgroundDark"
     >
 

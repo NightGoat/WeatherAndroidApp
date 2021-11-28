@@ -13,14 +13,14 @@
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="@dimen/size_8dp">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_recyclerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:listitem="@layout/list_city_card"
+            android:paddingBottom="@dimen/size_16dp"
             />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
