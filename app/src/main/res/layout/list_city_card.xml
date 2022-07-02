@@ -34,7 +34,7 @@
             cardView:layout_constrainedWidth="true"
             android:ellipsize="end"
             android:lines="1"
-            android:textSize="@dimen/text_24sp"
+            android:textSize="@dimen/text_22sp"
             />
 
         <TextView

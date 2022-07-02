@@ -9,8 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            style="@style/Card">
+        <androidx.cardview.widget.CardView style="@style/Card">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/settings_textInputLayout_api"
@@ -18,8 +17,8 @@
                 android:layout_height="wrap_content"
                 app:endIconMode="custom"
                 android:hint="@string/api_key"
-                app:endIconDrawable="@drawable/ic_help_black_24dp"
-                >
+                android:layout_marginBottom="@dimen/size_2dp"
+                app:endIconDrawable="@drawable/ic_help_black_24dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/settings_edit_api"
