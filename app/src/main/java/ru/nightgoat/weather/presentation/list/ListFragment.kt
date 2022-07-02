@@ -91,7 +91,7 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                viewModel.deleteCity(listAdapter.getEntity(viewHolder.adapterPosition))
+                listAdapter.getEntity(viewHolder.adapterPosition)?.let(viewModel::deleteCity)
             }
 
             override fun clearView(
@@ -110,23 +110,23 @@ class ListFragment : BaseFragment(), ListFragmentCallbacks {
 
     private fun subscribeViewModel() {
         with(viewModel) {
-            cityListLiveData.observe(viewLifecycleOwner, { cities ->
+            cityListLiveData.observe(viewLifecycleOwner) { cities ->
                 listAdapter.setList(cities)
-            })
+            }
 
-            snackBarLiveData.observe(viewLifecycleOwner, { snackBarText ->
+            snackBarLiveData.observe(viewLifecycleOwner) { snackBarText ->
                 val message = getString(R.string.city_not_found)
                     .takeIf { snackBarText == NOT_FOUND_KEY } ?: snackBarText
                 showSnackBar(text = message, view = binding.listFab)
-            })
+            }
 
-            refreshLiveData.observe(viewLifecycleOwner, { isRefreshNeeded ->
+            refreshLiveData.observe(viewLifecycleOwner) { isRefreshNeeded ->
                 binding.listSwipeLayout.isRefreshing = isRefreshNeeded
-            })
+            }
 
-            cityIdLiveData.observe(viewLifecycleOwner, { cityId ->
+            cityIdLiveData.observe(viewLifecycleOwner) { cityId ->
                 sharedPreferences?.edit()?.putInt(CITY_ID_KEY, cityId)?.apply()
-            })
+            }
         }
 
     }

@@ -43,7 +43,8 @@ class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
         }
     }
 
-    inner class ForecastViewHolder(val binding: ItemCityForecastCardBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ForecastViewHolder(val binding: ItemCityForecastCardBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         @ExperimentalStdlibApi
         fun bind(item: ForecastEntity, fragment: CityFragmentCallbacks) {
             with(binding) {
@@ -60,7 +61,6 @@ class ForecastAdapter(private val fragment: CityFragmentCallbacks) :
     }
 
     companion object {
-        private const val FONTS_PATH = "fonts/weathericons.ttf"
         private const val DEFAULT_TIME = 0L
     }
 }

@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.github.nightgoat.kexcore.normalize
 import ru.nightgoat.kextensions.android.setInvisible
-import ru.nightgoat.kextensions.normalize
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.core.delegates.viewBinding
 import ru.nightgoat.weather.core.extentions.createTypeFace
@@ -107,13 +107,13 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     }
 
     private fun CityViewModel.observeForecast() {
-        forecastLiveData.observe(viewLifecycleOwner, {
+        forecastLiveData.observe(viewLifecycleOwner) {
             forecastAdapter.setList(it)
-        })
+        }
     }
 
     private fun CityViewModel.observeLoading() {
-        refreshLiveData.observe(viewLifecycleOwner, { isLoading ->
+        refreshLiveData.observe(viewLifecycleOwner) { isLoading ->
             with(binding) {
                 citySwipeRefreshLayout.isRefreshing = isLoading
                 listOf(
@@ -134,15 +134,15 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
                     shimmer.setInvisible(!isLoading)
                 }
             }
-        })
+        }
     }
 
     private fun CityViewModel.observeCityData() {
-        cityLiveData.observe(viewLifecycleOwner, { city ->
+        cityLiveData.observe(viewLifecycleOwner) { city ->
             val icon = chooseIcon(city.iconId, city.date, city.sunrise, city.sunset)
             setDataToScreen(city, icon)
             sendDataToWidgets(city, icon)
-        })
+        }
     }
 
 
@@ -195,10 +195,5 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
     override fun onStop() {
         super.onStop()
         viewModel.purgeForecast(cityId)
-    }
-
-    companion object {
-        private const val TAG = "CityFragment"
-        private const val FONTS_PATH = "fonts/weathericons.ttf"
     }
 }

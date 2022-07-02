@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.nightgoat.weather.databinding.PlaceholderForecastItemBinding
 
-class ShimmerAdapter: RecyclerView.Adapter<ShimmerAdapter.ShimmerViewHolder>() {
+class ShimmerAdapter : RecyclerView.Adapter<ShimmerAdapter.ShimmerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShimmerViewHolder {
         val binding = PlaceholderForecastItemBinding.inflate(
@@ -14,9 +14,8 @@ class ShimmerAdapter: RecyclerView.Adapter<ShimmerAdapter.ShimmerViewHolder>() {
         return ShimmerViewHolder(binding)
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     override fun onBindViewHolder(holder: ShimmerAdapter.ShimmerViewHolder, position: Int) {
-        List(5) {
+        List(FAKE_ITEMS_COUNT) {
             holder
         }
     }
@@ -25,7 +24,8 @@ class ShimmerAdapter: RecyclerView.Adapter<ShimmerAdapter.ShimmerViewHolder>() {
         return FAKE_ITEMS_COUNT
     }
 
-    inner class ShimmerViewHolder(val binding: PlaceholderForecastItemBinding): RecyclerView.ViewHolder(binding.root)
+    inner class ShimmerViewHolder(val binding: PlaceholderForecastItemBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     companion object {
         const val FAKE_ITEMS_COUNT = 5

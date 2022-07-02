@@ -19,7 +19,8 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
     private var cityList = mutableListOf<CityEntity>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val binding = ListCityCardBinding.inflate( LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ListCityCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ListViewHolder(binding)
     }
 
@@ -28,7 +29,9 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.bind(cityList[position], fragment = fragment)
+        cityList.getOrNull(position)?.let { entity ->
+            holder.bind(item = entity, fragment = fragment)
+        }
     }
 
     fun setList(list: MutableList<CityEntity>) {
@@ -36,8 +39,8 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
         notifyDataSetChanged()
     }
 
-    fun getEntity(adapterPosition: Int): CityEntity {
-        return cityList[adapterPosition]
+    fun getEntity(adapterPosition: Int): CityEntity? {
+        return cityList.getOrNull(adapterPosition)
     }
 
     fun onRowMoved(fromPosition: Int, toPosition: Int): MutableList<CityEntity> {
@@ -56,7 +59,8 @@ class ListAdapter(private val fragment: ListFragmentCallbacks) :
         return cityList
     }
 
-    inner class ListViewHolder(val binding: ListCityCardBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ListViewHolder(val binding: ListCityCardBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CityEntity, fragment: ListFragmentCallbacks) {
             with(binding) {
                 val context = itemView.context

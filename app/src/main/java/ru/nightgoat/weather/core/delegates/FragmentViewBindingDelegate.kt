@@ -21,7 +21,7 @@ import kotlin.reflect.KProperty
 inline fun <reified T : ViewBinding> Fragment.viewBinding() = FragmentViewBindingDelegate(T::class.java, this)
 
 class FragmentViewBindingDelegate<T : ViewBinding>(
-    private val bindingClass: Class<T>,
+    bindingClass: Class<T>,
     val fragment: Fragment
 ) : ReadOnlyProperty<Fragment, T> {
     private val clearBindingHandler by lazy(LazyThreadSafetyMode.NONE) { Handler(Looper.getMainLooper()) }
@@ -45,7 +45,8 @@ class FragmentViewBindingDelegate<T : ViewBinding>(
 
     override fun getValue(thisRef: Fragment, property: KProperty<*>): T {
         // onCreateView may be called between onDestroyView and next Main thread cycle.
-        // In this case [binding] refers to the previous fragment view. Check that binding's root view matches current fragment view
+        // In this case [binding] refers to the previous fragment view.
+        // Check that binding's root view matches current fragment view
         if (binding != null && binding?.root !== thisRef.view) {
             binding = null
         }

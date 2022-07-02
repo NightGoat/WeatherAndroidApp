@@ -10,7 +10,7 @@ interface OpenWeatherAPI {
     @GET("data/2.5/weather?")
     fun getCurrentWeather(
         @Query("q") city: String,
-        @Query("APPID") app_id: String,
+        @Query("APPID") appId: String,
         @Query("units") units: String,
         @Query("lang") lang: String
     ): Single<CityModel>
@@ -18,7 +18,7 @@ interface OpenWeatherAPI {
     @GET("data/2.5/weather?")
     fun getCurrentWeatherById(
         @Query("id") id: Int,
-        @Query("APPID") app_id: String,
+        @Query("APPID") appId: String,
         @Query("units") units: String,
         @Query("lang") lang: String
     ): Single<CityModel>
@@ -26,7 +26,7 @@ interface OpenWeatherAPI {
     @GET("data/2.5/forecast?")
     fun getForecast(
         @Query("id") id: Int,
-        @Query("APPID") app_id: String,
+        @Query("APPID") appId: String,
         @Query("units") units: String,
         @Query("lang") lang: String
     ): Single<CityModel>

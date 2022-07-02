@@ -3,9 +3,10 @@ package ru.nightgoat.weather
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
+import io.github.nightgoat.kexcore.utils.Kex
 import io.reactivex.rxjava3.exceptions.UndeliverableException
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
-import ru.nightgoat.kextensions.utils.Kex
+import ru.nightgoat.kextensions.utils.logging.TimberLogger
 import ru.nightgoat.weather.di.components.DaggerAppComponent
 import java.net.UnknownHostException
 
@@ -22,7 +23,7 @@ class App : DaggerApplication() {
         setRxErrorHandler()
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
-            Kex.setTimber()
+            Kex.setCustomLogger(TimberLogger)
         }
     }
 

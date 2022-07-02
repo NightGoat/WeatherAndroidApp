@@ -9,7 +9,7 @@ import ru.nightgoat.weather.R
 import ru.nightgoat.weather.core.extentions.createTypeFace
 import ru.nightgoat.weather.core.utils.*
 
-class ResManager(val context: Context): IResManager {
+class ResManager(val context: Context) : IResManager {
 
     override fun getWeatherIcon(
         id: Int,
@@ -32,18 +32,29 @@ class ResManager(val context: Context): IResManager {
             VOLCANIC_ASH -> return context.getString(R.string.weather_volcano) //Volcanic ash
             SQUALL -> return context.getString(R.string.weather_squall) //Squall
             TORNADO -> return context.getString(R.string.weather_tornado) //Tornado
-            CLEAR_SKY -> {
-                if ((sunrise == 0L) or (dt in sunrise until sunset)) context.getString(R.string.weather_sunny) //sunny
-                else context.getString(R.string.weather_clear_night) //night
-            }
-            CLOUDY_SKY -> {
-                if ((sunrise == 0L) or (dt in sunrise until sunset)) context.getString(R.string.weather_sun_clouds)
-                else context.getString(R.string.weather_moon_clouds)
-            }
+            CLEAR_SKY -> getSkyIcon(sunrise, dt, sunset) //night
+            CLOUDY_SKY -> getCloudIcon(sunrise, dt, sunset)
             in CLOUDS_INTERVAL -> return context.getString(R.string.weather_clouds) //clouds
             else -> ""
         }
     }
+
+    private fun getCloudIcon(
+        sunrise: Long,
+        dt: Long,
+        sunset: Long
+    ) = if ((sunrise == 0L) or (dt in sunrise until sunset)) {
+        context.getString(R.string.weather_sun_clouds)
+    } else {
+        context.getString(R.string.weather_moon_clouds)
+    }
+
+    private fun getSkyIcon(sunrise: Long, dt: Long, sunset: Long) =
+        if ((sunrise == 0L) or (dt in sunrise until sunset)) {
+            context.getString(R.string.weather_sunny) //sunny
+        } else {
+            context.getString(R.string.weather_clear_night)
+        }
 
     override fun convertToImg(text: String, textSize: Float): Bitmap {
         val paint = Paint().apply {
@@ -56,14 +67,17 @@ class ResManager(val context: Context): IResManager {
         }
         paint.textSize = textSize
         val baseline = -paint.ascent()
-        val paintDif = 0.5f
         val btmText = Bitmap.createBitmap(
-            (paint.measureText(text) + paintDif).toInt(),
-            (baseline + paint.descent() + paintDif).toInt(), Bitmap.Config.ARGB_8888
+            (paint.measureText(text) + PAINT_DIF).toInt(),
+            (baseline + paint.descent() + PAINT_DIF).toInt(), Bitmap.Config.ARGB_8888
         )
         val cnvText = Canvas(btmText)
         cnvText.drawText(text, 0F, baseline, paint)
         return btmText
+    }
+
+    companion object {
+        const val PAINT_DIF = 0.5f
     }
 }
 

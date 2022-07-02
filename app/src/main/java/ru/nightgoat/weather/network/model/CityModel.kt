@@ -2,7 +2,7 @@ package ru.nightgoat.weather.network.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ru.nightgoat.kextensions.orZero
+import io.github.nightgoat.kexcore.orZero
 import ru.nightgoat.weather.core.utils.toIntOrZero
 import ru.nightgoat.weather.data.entity.CityEntity
 

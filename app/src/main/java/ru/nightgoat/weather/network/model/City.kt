@@ -19,5 +19,4 @@ data class City(
     @SerializedName("name")
     @Expose
     val name: String?
-
 )

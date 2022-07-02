@@ -1,12 +1,12 @@
 package ru.nightgoat.weather.domain
 
+import io.github.nightgoat.kexcore.orIfNull
+import io.github.nightgoat.kexcore.orZero
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import ru.nightgoat.kextensions.orIfNull
-import ru.nightgoat.kextensions.orZero
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.data.entity.ForecastEntity
 import ru.nightgoat.weather.data.entity.SearchEntity
@@ -40,11 +40,11 @@ class WeatherInteractor(private val repository: DBRepository, private val api: O
     override fun getCityFromApiAndPutInDB(
         city: String,
         units: String,
-        api_key: String
+        apiKey: String
     ): Single<CityEntity> {
         return api.getCurrentWeather(
             city = city,
-            app_id = api_key,
+            appId = apiKey,
             units = units,
             lang = Locale.getDefault().country
         ).subscribeOn(defaultScheduler)
@@ -57,14 +57,14 @@ class WeatherInteractor(private val repository: DBRepository, private val api: O
             }
     }
 
-    override fun updateAllFromApi(units: String, API_KEY: String): Completable {
+    override fun updateAllFromApi(units: String, apiKey: String): Completable {
         return repository.getAllCitiesSingle()
             .observeOn(defaultScheduler)
             .flattenAsObservable { Iterable { it.iterator() } }
             .flatMapSingle { cityEntity ->
                 api.getCurrentWeatherById(
                     id = cityEntity.cityId,
-                    app_id = API_KEY,
+                    appId = apiKey,
                     units = units,
                     lang = Locale.getDefault().country
                 ).observeOn(defaultScheduler)
@@ -100,12 +100,12 @@ class WeatherInteractor(private val repository: DBRepository, private val api: O
     override fun getCityFromDataBaseAndUpdateFromApi(
         cityId: Int,
         units: String,
-        API_KEY: String
+        apiKey: String
     ): Flowable<CityEntity> {
         return repository.getCityById(cityId)
             .concatWith(api.getCurrentWeatherById(
                 id = cityId,
-                app_id = API_KEY,
+                appId = apiKey,
                 units = units,
                 lang = Locale.getDefault().country
             ).map {
@@ -140,7 +140,7 @@ class WeatherInteractor(private val repository: DBRepository, private val api: O
     override fun updateForecast(cityId: Int, units: String, apiKey: String): Completable {
         return api.getForecast(
             id = cityId,
-            app_id = apiKey,
+            appId = apiKey,
             units = units,
             lang = Locale.getDefault().country
         ).subscribeOn(defaultScheduler)

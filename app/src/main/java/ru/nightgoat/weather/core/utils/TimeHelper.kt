@@ -1,7 +1,7 @@
 package ru.nightgoat.weather.core.utils
 
+import io.github.nightgoat.kexcore.normalize
 import org.joda.time.format.DateTimeFormat
-import ru.nightgoat.kextensions.normalize
 import java.util.*
 
 fun getNormalDateTime(dt: Long): String =

@@ -1,7 +1,7 @@
 package ru.nightgoat.weather.core.extentions
 
 import android.content.SharedPreferences
-import ru.nightgoat.kextensions.orZero
+import io.github.nightgoat.kexcore.orZero
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.core.utils.*
 

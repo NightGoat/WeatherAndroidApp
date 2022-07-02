@@ -27,7 +27,7 @@ class CityViewModel @Inject constructor(private val interactor: IInteractor) : B
                     interactor.getCityFromDataBaseAndUpdateFromApi(
                         cityId = id,
                         units = units,
-                        API_KEY = apiKey
+                        apiKey = apiKey
                     )
                 )
                 .doOnNext {

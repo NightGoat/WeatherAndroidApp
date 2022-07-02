@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import dagger.android.AndroidInjection
+import io.github.nightgoat.kexcore.logIfNull
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import ru.nightgoat.kextensions.logIfNull
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.core.utils.ICON_KEY
 import ru.nightgoat.weather.core.utils.METRIC
@@ -57,7 +57,7 @@ class SmallWidgetProvider : BaseAppWidgetProvider() {
         interactor.getCityFromDataBaseAndUpdateFromApi(
             cityId = cityId,
             units = units,
-            API_KEY = apiKey,
+            apiKey = apiKey,
         ).observeOn(AndroidSchedulers.mainThread(), true)
             .subscribe({ city ->
                 views.setTextViewText(

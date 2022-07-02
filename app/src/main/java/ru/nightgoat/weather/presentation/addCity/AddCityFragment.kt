@@ -63,12 +63,12 @@ class AddCityFragment : BaseFragment() {
 
     private fun addCityClickListener() {
         binding.addCityBtnAdd.setOnClickListener {
-            val bundle = Bundle()
             val cityName = binding.addCityEdit.text.toString()
             if (cityName.isNotEmpty()) {
                 viewModel.addSearchEntity(cityName)
                 viewModel.purgeList()
                 binding.addCityEdit.clearFocus()
+                val bundle = Bundle()
                 bundle.putString(NAME_KEY, cityName)
                 navigateTo(
                     R.id.action_navigation_addCity_to_navigation_list,
@@ -85,11 +85,11 @@ class AddCityFragment : BaseFragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.searchListLiveData.observe(viewLifecycleOwner, { listOfSearches ->
+        viewModel.searchListLiveData.observe(viewLifecycleOwner) { listOfSearches ->
             val adapter =
                 ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, listOfSearches)
             binding.addCityList.adapter = adapter
-        })
+        }
     }
 
 }

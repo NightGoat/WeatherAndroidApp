@@ -8,7 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import ru.nightgoat.kextensions.unsafeLazy
+import io.github.nightgoat.kexcore.unsafeLazy
 import ru.nightgoat.weather.R
 import ru.nightgoat.weather.core.extentions.createTypeFace
 import ru.nightgoat.weather.core.extentions.getApiKey
@@ -81,13 +81,16 @@ abstract class BaseAppWidgetProvider: AppWidgetProvider() {
         paint.textSize = textSize
         paint.textAlign = Paint.Align.LEFT
         val baseline = -paint.ascent()
-        val paintDif = 0.5f
         val btmText = Bitmap.createBitmap(
-            (paint.measureText(text) + paintDif).toInt(),
-            (baseline + paint.descent() + paintDif).toInt(), Bitmap.Config.ARGB_8888
+            (paint.measureText(text) + PAINT_DIF).toInt(),
+            (baseline + paint.descent() + PAINT_DIF).toInt(), Bitmap.Config.ARGB_8888
         )
         val cnvText = Canvas(btmText)
         cnvText.drawText(text, 0F, baseline, paint)
         return btmText
+    }
+
+    companion object {
+        const val PAINT_DIF = 0.5f
     }
 }
