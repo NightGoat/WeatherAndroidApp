@@ -17,7 +17,10 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/city_card"
                 style="@style/Card"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_marginTop="@dimen/size_16dp"
                 android:backgroundTint="@color/colorPrimary">
 
@@ -32,7 +35,6 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraint_top_city"
-                    style="@style/ClickableFocusable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/size_16dp">
@@ -71,7 +73,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/city_topCard"
+                android:id="@+id/city_weather_card"
                 style="@style/Card">
 
                 <com.facebook.shimmer.ShimmerFrameLayout

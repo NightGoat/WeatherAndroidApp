@@ -17,6 +17,7 @@ import ru.nightgoat.weather.core.extentions.createTypeFace
 import ru.nightgoat.weather.core.utils.*
 import ru.nightgoat.weather.data.entity.CityEntity
 import ru.nightgoat.weather.databinding.FragmentCityBinding
+import ru.nightgoat.weather.presentation.MainActivity
 import ru.nightgoat.weather.presentation.base.BaseFragment
 import ru.nightgoat.weather.widget.BigWidgetProvider
 import ru.nightgoat.weather.widget.GoogleLikeWidgetProvider
@@ -48,6 +49,13 @@ class CityFragment : BaseFragment(), CityFragmentCallbacks {
         initList()
         observeViewModel()
         loadWeather()
+        setOnCityNameClickListener()
+    }
+
+    private fun setOnCityNameClickListener() {
+        binding.cityCard.setOnClickListener {
+            (activity as MainActivity).navigateToList()
+        }
     }
 
     private fun loadWeather() {
