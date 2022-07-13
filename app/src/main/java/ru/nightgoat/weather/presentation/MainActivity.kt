@@ -37,8 +37,8 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     private fun reactToFirstTimeOpen() {
-        val isWasAlreadyOpened = preferences?.getBoolean(FIRST_TIME_OPEN_KEY, false)
-        if (isWasAlreadyOpened == false) {
+        val isWasAlreadyOpened = preferences?.getBoolean(FIRST_TIME_OPEN_KEY, false) == false
+        if (isWasAlreadyOpened) {
             preferences?.edit()?.run {
                 putBoolean(FIRST_TIME_OPEN_KEY, true)
                 apply()
@@ -54,5 +54,12 @@ class MainActivity : DaggerAppCompatActivity() {
 
     fun navigateToList() {
         navView?.selectedItemId = R.id.navigation_list
+    }
+
+    override fun onDestroy() {
+        preferences = null
+        navController = null
+        navView = null
+        super.onDestroy()
     }
 }
