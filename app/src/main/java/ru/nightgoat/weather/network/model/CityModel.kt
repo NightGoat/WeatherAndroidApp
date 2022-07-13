@@ -3,7 +3,7 @@ package ru.nightgoat.weather.network.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import io.github.nightgoat.kexcore.orZero
-import ru.nightgoat.weather.core.utils.toIntOrZero
+import io.github.nightgoat.kexcore.toIntOrZero
 import ru.nightgoat.weather.data.entity.CityEntity
 
 data class CityModel(
